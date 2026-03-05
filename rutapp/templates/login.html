@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUTAPP - Inicio de sesión</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+    <div class="login-container">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+        <h1>RUTAPP</h1>
+        <p>Bienvenido al sistema de gestión de rutas escolares RUTAPP.</p>
+
+        <form>
+            <label>Correo electrónico:</label><br>
+            <input type="email"><br><br>
+
+            <label>Contraseña:</label><br>
+            <input type="password"><br><br>
+
+            <button> Iniciar sesión</button>
+        </form>
+    </div>  
+
+</body>
+</html>

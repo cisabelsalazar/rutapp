@@ -6,6 +6,7 @@
     <title>RUTAPP - Inicio de sesión</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
+
 <body>
 
     <div class="login-container">
@@ -13,14 +14,16 @@
         <h1>RUTAPP</h1>
         <p>Bienvenido al sistema de gestión de rutas escolares RUTAPP.</p>
 
-        <form>
-            <label>Correo electrónico:</label><br>
-            <input type="email"><br><br>
+        <form action="/validar_login" method="POST">
 
-            <label>Contraseña:</label><br>
-            <input type="password"><br><br>
+        <label>Correo electrónico:</label><br>
+        <input type="email" name="correo"><br><br>
 
-            <button> Iniciar sesión</button>
+        <label>Contraseña:</label><br>
+        <input type="password" name="password"><br><br>
+
+        <button>Iniciar sesión</button>
+
         </form>
     </div>  
 

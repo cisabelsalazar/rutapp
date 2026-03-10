@@ -6,12 +6,18 @@
     <title>RUTAPP - Panel Conductor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
+
 <body>
 
     <div class="conductor-layout">
 
         <div class="conductor-menu">
-            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+            <img
+             src="{{ url_for('static', filename='img/logo.png') }}"
+             alt="Logo RUTAPP"
+             class="logo"
+            >
+
             <h2>Panel Conductor</h2>
 
             <ul>
@@ -28,13 +34,16 @@
             <h2>Bienvenido</h2>
             <p>Visualice el recorrido y gestione las alertas para los padres de familia.</p>
 
-                <img src="img/mapa.png" alt="Mapa de rutas en tiempo real" class="mapa">
+                <img
+                 src="{{ url_for('static', filename='img/mapa.png') }}" 
+                 alt="Mapa de rutas en tiempo real"
+                 class="mapa-conductor"
+                >
 
             <div class="conductor-buttons">
-                <button>Compartir Ubicación</button>
-                <button>Ejecutar Ruta</button>
-                <button>Gestionar Estudiantes</button>
-                <button>Generar Alertas</button>
+                <a href="{{url_for('compartir_ruta') }}" class ="btn">Compartir ruta</a>
+                <a href="{{ url_for('generar_alerta') }}" class="btn">Generar alertas</a>
+                <a href="{{ url_for('recibir_alertas') }}" class="btn">Recibir alertas</a>
             </div>
 
         </div>

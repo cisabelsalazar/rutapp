@@ -6,12 +6,18 @@
     <title>RUTAPP - Panel Padre de Familia</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
+
 <body>
-    <!-- Vista Padre de familia -->
+    
     <div class="padre-layout">
 
         <div class="padre-menu">
-            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+            <img
+             src="{{ url_for('static', filename='img/logo.png') }}"
+             alt="Logo RUTAPP"
+             class="logo"
+            >
+
             <h2>Panel Padre de Familia</h2>
 
             <ul>
@@ -28,13 +34,16 @@
             <h2>Bienvenido</h2>
             <p>Consulte la información del conductor y el estado de la ruta escolar.</p>
 
-            <img src="img/mapa.png" alt="Mapa de la ruta" class="mapa">
+            <img
+             src="{{url_for('static', filename='img/mapa.png') }}"
+             alt="Mapa de la ruta"
+             class="mapa-padre de familia"
+            >
 
             <div class="padre-buttons">
-                <button>Ver conductor</button>
-                <button>Ver ruta</button>
-                <button>Ver estudiantes</button>
-                <button>Reportar inasistencia</button>
+                <a href="{{ url_for('ver_conductor') }}" class="btn">Ver conductor</a>
+                <a href="{{ url_for('ver_ruta') }}" class="btn">Ver ruta</a>
+                <a hrer="{{ url_for('reportar_inansistencia') }}" class="btn">Reportar inasistencia</a>
             </div>
         </div>
 

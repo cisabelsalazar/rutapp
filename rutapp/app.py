@@ -24,7 +24,7 @@ conexion = mysql.connector.connect(
 #============================================
 
 
-@app.route('/')
+@app.route('/') #Esta es la ruta principal
 def login():
     return render_template('login.html')
 
@@ -113,10 +113,10 @@ def valida_login():
     usuario = cursor.fetchone()
 
     if usuario:
-        id_rol = usuario[6] # Esta es la posición en donde esta el usuario en la tabla BD
+        id_rol = usuario['id_rol'] # Esta es la posición en donde esta el usuario en la tabla BD
 
-        session['usuario'] = usuario[0]
-        session['rol'] = id_rol
+        session['usuario'] = usuario['id_rol']
+        session['rol'] = usuario['id_rol']
 
         if id_rol == 1:
             return redirect(url_for('administrador'))
@@ -147,6 +147,7 @@ def logout():
 # - Edición de rutas
 # - Asignación de vehículo o conductor a la ruta
 
+
 #==========================================
 #GESTIÓN DE ESTUDIANTES Y ASIGNACIÓN A RUTA
 #RESPONSABLE: VICTOR VELANDIA
@@ -158,6 +159,8 @@ def logout():
 #- Asignación de estudiantes a rutas
 #- Consultar estudiantes por ruta
 #- Listar estudiantes por conductor o ruta
+
+
 
 # ==========================================
 # INTERFAZ DE USUARIO Y VISUALIZACIÓN DEL SISTEMA

@@ -25,7 +25,9 @@
                 <li>Usuarios</li>
                 <li>Rutas</li>
                 <li>Ubicación en tiempo real</li>
+                <li>
                 <a href="{{ url_for('logout') }}" class="btn-logout">Cerrar sesión</a>
+                </li>
             </ul>
         </div>
 
@@ -41,11 +43,11 @@
 
             <div class="admin-buttons">
                 <a href="{{ url_for('usuarios') }}" class="btn">Gestionar usuarios</a>
-                <a href="{{ url_for('vehiculos') }}" class="btn">Gestionar vehículos</a>
+              {#<a href="{{ url_for('vehiculos') }}" class="btn">Gestionar vehículos</a>
                 <a href="{{ url_for('rutas') }}" class="btn">Gestionar rutas</a>
                 <a href="{{ url_for('generar_alerta') }}" class="btn">Generar alertas</a>
                 <a href="{{ url_for('recibir_alertas') }}" class="btn">Recibir alertas</a>
-                <a href="{{ url_for('monitorear_ruta') }}" class="btn">Monitorear ruta</a>
+                <a href="{{ url_for('monitorear_ruta') }}" class="btn">Monitorear ruta</a> #}
             </div>
 
         </div>

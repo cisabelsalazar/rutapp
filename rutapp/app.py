@@ -4,7 +4,9 @@ import mysql.connector
 app = Flask(__name__)
 app.secret_key = "rutapp_secreto"
 
+#============================================
 #Esta es la conexión a la base de datos MySQL
+#============================================
 
 conexion = mysql.connector.connect(
     host="localhost",
@@ -13,12 +15,20 @@ conexion = mysql.connector.connect(
     database="rutapp_bd"
 )
 
-# Página de login
+#============================================
+#   ROUTES PROYECTO RUTAPP
+#============================================
+
+#============================================
+# AUTENTICACIÓN - RESPONSABLE: CRISTINA SALAZAR
+#============================================
+
+
 @app.route('/')
 def login():
     return render_template('login.html')
 
-#Usuario
+
 @app.route('/usuarios')
 def usuarios():
 
@@ -45,6 +55,9 @@ def usuarios():
 
     return render_template('usuarios.html', usuarios = lista_usuarios)
  
+# ==========================================
+# PANELES DEL SISTEMA
+# ==========================================
 
 # Panel administrador
 @app.route('/admin')
@@ -121,6 +134,46 @@ def valida_login():
 def logout():
     session.clear()
     return redirect(url_for('login'))
+
+# ==========================================
+# GESTIÓN DE VEHÍCULOS Y RUTAS
+# RESPONSABLE: CAMILO OCAMPO
+# ==========================================
+
+# Aquí se desarrollarán las rutas relacionadas con:
+# - Registro de vehículos
+# - Listado de vehículos
+# - Creación de rutas
+# - Edición de rutas
+# - Asignación de vehículo o conductor a la ruta
+
+#==========================================
+#GESTIÓN DE ESTUDIANTES Y ASIGNACIÓN A RUTA
+#RESPONSABLE: VICTOR VELANDIA
+#==========================================
+#Aquí se desarrollarán las rutas relacionadas con:
+#- Registro de estudiantes
+#- Edición de estudiantes
+#- Eliminación de estudiantes
+#- Asignación de estudiantes a rutas
+#- Consultar estudiantes por ruta
+#- Listar estudiantes por conductor o ruta
+
+# ==========================================
+# INTERFAZ DE USUARIO Y VISUALIZACIÓN DEL SISTEMA
+# RESPONSABLE: CAROLIA EPIAYU
+# ==========================================
+# Aquí se desarrollarán las rutas relacionadas con:
+# - Diseño de formularios (usuarios, estudiantes, vehículos, rutas)
+# - Dashboards por rol (Administrador, Conductor, Padres)
+# - Integración visual con Flask (render_template)
+# - Visualización de rutas, estudiantes y vehículos según rol
+# - Mejora de experiencia de usuario (UX)
+
+
+# ==========================================
+# EJECUCIÓN DE LA APLICACIÓN
+# ==========================================
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -32,7 +32,7 @@ RUTAPP
 
 1. Clonar el repositorio
 
-git clone https://github.com/cisabelsalazar/rutapp.git
+git clone https://github.com/cisabelsalazar/rutapp
 
 2. Crear entorno virtual
 
@@ -59,10 +59,23 @@ http://localhost:5000
 
 ## Integrantes del proyecto
 
-* Cristina Salazar
-* Camilo Ocampo
-* Víctor Velandia
-* Carolina Epiayu
+* Cristina Salazar – Autenticación, gestión de usuarios y administración del sistema.
+* Camilo Ocampo – Gestión de vehículos.
+* Víctor Velandia – Gestión de rutas.
+* Carolina Epiayu – Sistema de alertas y monitoreo.
+
+## Estado del proyecto
+
+✔ Autenticación de usuarios  
+✔ Panel de administrador  
+✔ Gestión de usuarios  
+
+En desarrollo:
+
+⬜ Gestión de vehículos  
+⬜ Gestión de rutas  
+⬜ Monitoreo de rutas  
+⬜ Sistema de alertas
 
 ## Proyecto académico
 

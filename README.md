@@ -62,7 +62,7 @@ http://localhost:5000
 * Cristina Salazar – Autenticación, gestión de usuarios y administración del sistema.
 * Camilo Ocampo – Gestión de vehículos.
 * Víctor Velandia – Gestión de rutas.
-* Carolina Epiayu – Sistema de alertas y monitoreo.
+* Carolina Epiayu –  SALE DEL EQUIPO DE TRABAJO 25/03/2026
 
 ## Estado del proyecto
 

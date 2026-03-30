@@ -1,15 +1,16 @@
-<!---PANEL ADMINISTRDOR-->
+<!---PANEL SUPER ADMINISTRADOR-->
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RUTAPP - Panel Administrador</title>
+    <title>RUTAPP - Panel Superadministrador</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 
-<body class="bg-secundario admin-page">
+<body class="bg-secundario supadmin-page">
 
     <header>
         {# Incluye el encabezado (header) de la página #}
@@ -26,7 +27,7 @@
             <div class="admin-menu">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-                <h2>Panel Administrador</h2>
+                <h2>Panel Superadministrador</h2>
 
                 <ul>
                     <li>Dashboard</li>
@@ -54,7 +55,7 @@
                     <a href="{{ url_for('gestion_vehiculos') }}" class="btn">Gestionar vehículos</a>
                     <a href="{{ url_for('gestion_rutas') }}" class="btn">Gestionar rutas</a>
                     <a href="{{ url_for('gestion_alerta') }}" class="btn">Gestionar alertas</a>
-                    
+                    <a href="{{ url_for('reporte_inasistencia') }}" class="btn">Reporte inasistencia</a><!---Informar que un estudiante no usará la ruta-->
                 </div>
 
             </div>

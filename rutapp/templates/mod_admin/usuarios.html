@@ -83,7 +83,17 @@
 
         <!--  Boton volver (vista lista de usuarios) -->
 
-        <a href="{{ url_for('administrador') }}" class="btn btn-volver">
+        {% set ruta_volver = 'superadministrador' %}
+
+        {% if session['rol'] == 2 %}
+        {% set ruta_volver = 'administrador' %}
+        {% elif session['rol'] == 3 %}
+        {% set ruta_volver = 'conductor' %}
+        {% elif session['rol'] == 4 %}
+        {% set ruta_volver = 'padres' %}
+        {% endif %}
+
+        <a href="{{ url_for(ruta_volver) }}" class="btn btn-volver">
             Volver
         </a>
 
@@ -93,12 +103,12 @@
             Crear nuevo usuario
         </a>
 
-        <footer class="footer">
-            {# ===== FOOTER ===== #}
-            {% include 'layout/footer.html' %}
-        </footer>
 
     </main>
+    <footer class="footer">
+        {# ===== FOOTER ===== #}
+        {% include 'layout/footer.html' %}
+    </footer>
 
 </body>
 

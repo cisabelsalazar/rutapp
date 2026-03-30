@@ -29,24 +29,24 @@ conexion = mysql.connector.connect(
 
 @app.route('/') #Esta es la ruta principal
 def inicio():
-    return render_template('mod_admin/home.html')
+    return render_template('mod_admin/login.html')
 
 @app.route('/login') #Esta es la ruta de login
 def login():
     return render_template('mod_admin/login.html')
 
-#=========Ruta Usuarios=========
+#=========   Ruta Usuarios   =========
 
 @app.route('/usuarios') #Esta es la ruta Usuarios
 def usuarios(): #Esta es la función de Usuarios
 
     if 'usuario' not in session: #Aqui se hace la verificación de sesión
-        return redirect(url_for('mod_admin/home'))#Regresa al home
+        return redirect(url_for('mod_admin/login'))#Regresa al home
     
-    if session['rol'] !=1:# Aqui se verifica el rol del usuario
+    if session['rol'] not in [1, 2, 3, 4]:# Aqui se verifica el rol del usuario
         return "Acceso no autorizado"
     
-    cursor = conexion.cursor(dictionary=True)#Cursor creado para interactualr con MySQL
+    cursor = conexion.cursor(dictionary=True)#Cursor creado para interactuar con MySQL
 
 
     consulta = """ #Aquí estás guardando una consulta SQL dentro de una variable
@@ -65,6 +65,19 @@ def usuarios(): #Esta es la función de Usuarios
     lista_usuarios = cursor.fetchall()#Aquí se traen todos los resultados de la consulta.
 
     cursor.close()
+#ruta para boton volver    
+    ruta_volver = {
+        1: 'superadministrador',
+        2: 'administrador',
+        3: 'conductor',
+        4: 'padres'
+    }.get(session['rol'])
+
+    return render_template(
+        'mod_admin/usuarios.html',
+        usuarios=lista_usuarios,
+        ruta_volver=ruta_volver
+    )
 
     return render_template('mod_admin/usuarios.html', usuarios = lista_usuarios)#Manda la lista a usuarios.html
 
@@ -111,7 +124,7 @@ def guardar_usuario():
         conexion.commit()
         cursor.close()
 
-        return redirect(url_for('mod_admin/usuarios'))
+        return redirect(url_for('usuarios'))
         
 
 #====== Ruta para eliminar usuario=====
@@ -128,7 +141,7 @@ def eliminar_usuario(id_usuario):
     conexion.commit() #Guarda cambios
     cursor.close()
 
-    return redirect(url_for('mod_admin/usuarios'))#Vuelve a la lista de usuarios
+    return redirect(url_for('usuarios'))#Vuelve a la lista de usuarios
 
 #====== Ruta para editar usuario ======
 
@@ -147,23 +160,23 @@ def editar_usuario(id_usuario):
         return "Usuario no encontrado", 404
 
     return render_template('mod_admin/editar_usuario.html', usuario=usuario)
-
-    
+  
 
 # ==========================================
-# PANELES DEL SISTEMA
+#          PANELES DEL SISTEMA
 # ==========================================
-#============= Panel Super Administrdor ===============
+#============= PANEL SUPER ADMINISTRADOR ===============
 
-@app.route('/superadministrador')
+@app.route('/supadmin')
 def superadministrador():
 
     if 'usuario' not in session:
-        return redirect(url_for('mod_admin/login'))#Si no hay sesión iniciada regresa al login
+        return redirect(url_for('login'))
+
     if session['rol'] != 1:
-        return 'Acceso no autorizado'
+        return 'Acceso no autorizado 1'
     
-    return render_template('mod_admin/admin.html')#FALTA CREAR EL HTML DE SUPERADMIN
+    return render_template('mod_admin/supadmin.html')
 
 
 #============= Panel administrador ====================
@@ -171,22 +184,17 @@ def superadministrador():
 def administrador():
 
     if 'usuario' not in session:
-        return redirect(url_for('mod_admin/login')) #Si no hay sesión iniciada regresa al login
+        return redirect(url_for('login')) #Si no hay sesión iniciada regresa al login
     
-    if session['rol'] != 1:
-        return "Acceso no autorizado"
+    if session['rol'] != 2:
+        return f"Acceso no autorizado 2 | {session['rol']} |"
     
     return render_template('mod_admin/admin.html')
 
 #===============ALERTAS DEL SISTEMA=====================#
-@app.route('/generar_alerta')
-def generar_alerta():
+@app.route('/gestion_alerta')
+def gestion_alerta():
     return "<h2>Módulo de alertas en construcción</h2>"
-
-@app.route('/recibir_alerta')
-def recibir_alertas():
-    return "<h2>Módulo de alertas en construcción</h2>"
-
 
 
 #=========== Panel conductor ==========================
@@ -194,9 +202,9 @@ def recibir_alertas():
 def conductor():
 
     if 'usuario' not in session:
-        return redirect(url_for('mod_admin/login'))
+        return redirect(url_for('login'))
 
-    if session['rol'] != 2:
+    if session['rol'] != 3:
         return "Acceso no autorizado"
         
     return render_template('conductor.html')
@@ -206,20 +214,31 @@ def conductor():
 def padres():
 
     if 'usuario' not in session:
-        return redirect(url_for('mod_admin/login'))
+        return redirect(url_for('login'))
     
-    if session['rol'] != 3:
+    if session['rol'] != 4:
         return "Acceso no autorizado"
     
     return render_template('padre.html')
+
+#==========Gestionar Estudiante==========
+@app.route('/gestion_estudiantes')
+def gestion_estudiantes():
+    return "<h2>Módulo de alertas en construcción</h2>"
+
+@app.route('/reporte_inasistencia')
+def reporte_inasistencia():
+    return "<h2>Módulo de alertas en construcción</h2>"
+
+
 
 #======= RUTA VALIDACION DE LOGIN====================== CRISTINA SALAZAR
 
 @app.route('/validar_login',methods=['POST'])
 def valida_login():
 
-    correo = request.form['correo']
-    password = request.form['password']
+    correo = request.form['correo'].strip()
+    password = request.form['password'].strip()
 
     cursor = conexion.cursor(dictionary=True)
 
@@ -261,8 +280,8 @@ def logout():
 # GESTIÓN DE VEHÍCULOS Y RUTAS
 # RESPONSABLE: CAMILO OCAMPO
 # ==========================================
-@app.route('/vehiculos')
-def vehiculos():
+@app.route('/gestion_vehiculos')
+def gestion_vehiculos():
     return "<h2>Módulo de vehículos en construcción</h2>"
 
 @app.route('/monitorear_ruta')
@@ -282,8 +301,8 @@ def monitorear_ruta():
 #RESPONSABLE: VICTOR VELANDIA
 #==========================================
 
-@app.route('/rutas')
-def rutas():
+@app.route('/gestion_rutas')
+def gestion_rutas():
     return "<h2>Módulo de rutas en construcción</h2>"
 
 
@@ -297,16 +316,7 @@ def rutas():
 
 
 
-# ==========================================
-# INTERFAZ DE USUARIO Y VISUALIZACIÓN DEL SISTEMA
-# RESPONSABLE: CAROLIA EPIAYU
-# ==========================================
-# Aquí se desarrollarán las rutas relacionadas con:
-# - Diseño de formularios (usuarios, estudiantes, vehículos, rutas)
-# - Dashboards por rol (Administrador, Conductor, Padres)
-# - Integración visual con Flask (render_template)
-# - Visualización de rutas, estudiantes y vehículos según rol
-# - Mejora de experiencia de usuario (UX)
+
 
 
 # ==========================================

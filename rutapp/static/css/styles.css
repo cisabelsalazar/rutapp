@@ -401,6 +401,15 @@ body, html {
 /*==================================================================================*/
 /* 8. PANEL CONDUCTOR Y PADRE                                                        */
 /*==================================================================================*/
+.conductor_body {
+    background-image: url('../img/fondocon.png');
+    background-size: cover;  
+    background-position: center; 
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+}
+
+
 .conductor-layout,
 .padre-layout {
     display: flex;
@@ -468,6 +477,853 @@ body, html {
     margin-top: 20px;
     border-radius: 8px;
 }
+/*==================================================================================*/
+/* 8.1 Panel "my ruta"                                                        */
+/*==================================================================================*/
+.container {
+    display: flex;
+    width: 95%;
+    height: 90vh;
+    background: #1d95c1; 
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    
+}
+
+
+.sidebar {
+    width: 260px;
+    background-color: #1d95c1;
+    color: white;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-section {
+    text-align: center;
+    padding: 20px;
+}
+
+.icon-bus {
+    font-size: 50px;
+    background: #5ba4cf;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    margin: 0 auto 10px;
+    border-radius: 15px;
+}
+
+.sidebar h2 {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li a {
+    color: #bdc3c7;
+    text-decoration: none;
+    padding: 15px 25px;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar li.active a, .sidebar li a:hover {
+    background-color: #2980b9;
+    color: white;
+}
+
+.logout {
+    margin-top: auto;
+}
+
+
+
+
+.cardr {
+    background: white;
+    width: 100%;
+    max-width: 900px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.card-header {
+    padding: 15px 25px;
+    border-bottom: 1px solid #eee;
+    background: #fcfcfc;
+    
+}
+
+.card-body {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 20px;
+    padding: 25px;
+    
+}
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+    
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn-edit {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    background: #f8f8f8;
+    cursor: pointer;
+}
+
+.stops-list {
+    list-style: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.stops-list li {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9rem;
+}
+
+.stops-list li.selected {
+    background-color: #f0f0f0;
+}
+
+
+.map-container {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    background: #e5e3df; 
+    aspect-ratio: 1 / 1; 
+    width: 100%;
+    max-width: 450px; 
+    margin: 0 auto;
+    
+}
+
+.map-placeholder {
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+}
+
+.map-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.map-controls span {
+    background: white;
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+
+.card-footer {
+    padding:20px;
+    text-align: center;
+    
+}
+.card-ubication {
+    padding: 20px;
+    text-align: center;
+
+    
+}
+
+.btn-env {
+    background-color: #1d95c1;
+    color: #fff;
+    border: 1px solid #ccc;
+    padding: 12px 40px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+    
+}
+
+.btn-start {
+    background-color: #27ae60;
+    color: #fff;
+    border: 1px solid #ccc;
+    padding: 12px 40px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+    
+
+}
+
+
+.btn-start:hover {
+    background-color: #d1d4d7;
+}
+
+/*==================================================================================*/
+/* 8.2 Panel "estudiantes_conductor"                                                        */
+/*==================================================================================*/
+.sidebar {
+    width: 250px;
+    background-color: #1e3a52;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo-icon {
+    background-color: #f1c40f;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin: 0 auto 10px;
+}
+
+.menu {
+    list-style: none;
+}
+
+.menu-item {
+    padding: 12px 0;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.menu-item:hover {
+    opacity: 1;
+    color: #f1c40f;
+}
+
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 50px;
+    overflow-y: auto;
+}
+
+.table-container {
+    background-color: white;
+    width: 95%;
+    max-width: 1100px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.table-header h1 {
+    font-size: 1.6rem;
+    color: #2c3e50;
+    margin-left: auto;
+    margin-right: auto;
+    transform: translateX(80px); 
+}
+
+.search-box {
+    position: relative;
+}
+
+.search-box input {
+    padding: 8px 12px 8px 35px;
+    border: 1px solid #dfe6e9;
+    border-radius: 6px;
+    outline: none;
+    background-color: #f8f9fa;
+}
+
+.search-box i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #b2bec3;
+}
+
+
+.students-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.students-table thead tr {
+    border-bottom: 2px solid #f1f2f6;
+}
+
+.students-table th {
+    text-align: left;
+    padding: 15px;
+    color: #7f8c8d;
+    font-size: 0.85rem;
+    text-transform: capitalize;
+}
+
+.students-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f1f2f6;
+    color: #2d3436;
+    font-size: 0.9rem;
+}
+
+.students-table tbody tr:nth-child(even) {
+    background-color: #fcfcfc;
+}
+
+
+.actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.btn {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-blue {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-gray {
+    background-color: #ffffff;
+    color: #636e72;
+    border: 1px solid #dfe6e9;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn-subir {
+    background-color: #28a745;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.btn-subir:hover {
+    background-color: #218838;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.85em;
+}
+
+.bg-success { background-color: #d4edda; color: #155724; } /* Abordo */
+.bg-warning { background-color: #fff3cd; color: #856404; } /* En parada */
+/*==================================================================================*/
+/* 8.2 Panel "alertas_conductor"                                                        */
+/*==================================================================================*/
+.container-aler {
+    max-width: 1100px;
+    margin: 40px auto;
+    background: var(--bg-card);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* Header */
+.main-header-aler {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.main-header-aler h1 { margin: 0; font-size: 24px; color: #444; }
+
+.btn-clear-aler {
+    color: white;
+    background-color:#e1796b;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* Tabs */
+.filter-tabs-aler {
+    display: flex;
+    gap: 10px;
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.tab-aler {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-light);
+}
+
+.tab-active {
+    background: #5d91c6;
+    border: 1px solid #ddd;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+}
+
+/* Table */
+.table-container-aler { overflow-x: auto; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th {
+    text-align: left;
+    padding: 15px;
+    border-bottom: 2px solid var(--border-color);
+    color: #555;
+    font-weight: 600;
+}
+
+td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+/* User Info */
+.user-info-aler {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #444;
+    font-weight: 500;
+}
+
+.user-info-aler img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #ddd;
+}
+
+/* Badges */
+.badge {
+    border: none;
+    padding: 7px 13px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    color: white;
+}
+
+.badge-retraso { background-color:#e0303b}
+.badge-incidente { background-color: #f06292; } /* Un tono más fuerte para incidente */
+.badge-ausente { background-color: #f3c26c; }
+
+/* Buttons */
+.actions-aler { display: flex; gap: 8px; }
+
+.btn-read{
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    color: white;
+    background-color: #5d91c6;
+}
+.btn-resolve {
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    color: white;
+    background-color: #84bb97;
+}
+
+
+
+
+.btn-read:hover, .btn-resolve:hover, .btn-clear:hover {
+    filter: brightness(0.9);
+}
+
+/*==================================================================================*/
+/* 8.3 Panel "informacion_conductor"                                                        */
+/*==================================================================================*/
+
+
+.body-infocon {
+    background-image: url('../img/fondocon.png');
+    background-color: #2c3e50; /* Color oscuro lateral */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    
+  
+  
+    
+}
+
+.background-infocon {
+    width: 100%;
+    height: 100vh;
+    
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.card-infocon {
+    background: white;
+    width: 400px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    padding: 10px;
+}
+
+.card-header-infocon  {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+    align-items: center;
+    
+}
+.driver-photo-infocon{
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+    align-items: center;
+}
+
+.card-body-infocon {
+    padding: 20px;
+}
+
+.card-body-infocon h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    border-bottom: 2px solid #f0f2f5;
+    padding-bottom: 10px;
+    text-align: center;
+
+}
+
+.info-grid-infocon p {
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.info-grid-infocon strong {
+    color: #888;
+    font-weight: 500;
+}
+
+/* Botones */
+.button-group-infocon {
+    margin-top: 25px;
+    display: flex;       
+    flex-direction: row; 
+    flex-wrap: nowrap;  
+    gap: 8px;           
+    align-items: center;
+    justify-content: space-between; 
+    width: 100%;
+}
+
+.btn-info {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.3s;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+.btn-social {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    flex-shrink: 0;    
+    width: 40px;
+    height: 40px;
+}
+
+
+.wa { background-color: #25d366; }
+.btn-call {
+    background-color: #4a69bd; 
+    flex-grow: 1; 
+    white-space: nowrap; 
+    font-size: 13px;    
+    padding: 10px 5px;
+}
+.btn-msg { 
+    background-color: #4a69bd; 
+    flex-grow: 1; 
+    white-space: nowrap; 
+    font-size: 13px;    
+    padding: 10px 5px;
+
+}
+
+/*==================================================================================*/
+/* 8.3 Panel "informacion_conductor"                                                        */
+/*==================================================================================*/
+
+
+.main-container-estp {
+    display: flex;
+    width: 100%;
+}
+
+/* Sidebar */
+.sidebar-estp {
+    width: 250px;
+    background-color: rgba(45, 59, 92, 0.95);
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-section-estp {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.bus-icon-estp {
+    background-color: #0088cc;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-size: 30px;
+}
+
+.sidebar-estp ul {
+    list-style: none;
+}
+
+.sidebar-estp li {
+    padding: 15px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+    font-size: 0.9rem;
+}
+
+.sidebar-estp li i {
+    margin-right: 10px;
+}
+
+.sidebar-estp li:hover, .sidebar li.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #a2d2ff;
+}
+
+/* Contenido Principal */
+.content-estp {
+    flex: 1;
+    padding: 40px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* Tabla Estilo Card */
+.table-card-estp {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.table-header-estp {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.search-container-estp {
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    background: white;
+}
+
+.search-container-estp input {
+    border: none;
+    padding: 8px 12px;
+    outline: none;
+}
+
+.search-container-estp button {
+    background: #e9ecef;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #666;
+}
+
+/* Tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead tr {
+    background-color: #f1f5f9;
+}
+
+th {
+    text-align: left;
+    padding: 15px;
+    color: #444;
+    font-weight: 500;
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    color: #555;
+    vertical-align: middle;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.bold-text-estp {
+    font-weight: bold;
+    color: #222;
+}
+
+.sub-text-estp {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+/* Badge de Estado */
+.status-badge-estp {
+    background-color: #7cc576;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.link-location-estp {
+    color: #4da3ff;
+    text-decoration: underline;
+    font-size: 0.9rem;
+}
+
+
+
+
 
 /*==================================================================================*/
 /* 9. FORMULARIOS USUARIOS                                                          */

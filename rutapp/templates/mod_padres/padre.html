@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 
-<body>
+<body class="conductor_body">
     
     <div class="padre-layout">
 
@@ -21,9 +21,9 @@
             <h2>Panel Padre de Familia</h2>
 
             <ul>
-                <li>Inicio</li>
-                <li>Información del conductor</li>
-                <li>Estudiantes</li>
+                <li><a href="{{ url_for('padres') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('informacion_conductor') }}">Información del conductor</a></li>
+                <li><a href="{{ url_for('estudiantes_padre') }}">Estudiantes</a></li>
                 <li>Estado de la ruta</li>
                 <li>Reportar inasistencia</li>
                 <li>Cerrar sesión</li>
@@ -37,12 +37,12 @@
             <img
              src="{{url_for('static', filename='img/mapa.png') }}"
              alt="Mapa de la ruta"
-             class="mapa-padre de familia"
+             class="mapa-admin"
             >
 
-            <div class="padre-buttons">
-                <a href="{{ url_for('ver_conductor') }}" class="btn">Ver conductor</a>
-                <a href="{{ url_for('ver_ruta') }}" class="btn">Ver ruta</a>
+            <div class="admin-buttons">
+                <a href="{{ url_for('informacion_conductor') }}" class="btn">Ver conductor</a>
+                <a href="{{ url_for('ver_rutar') }}" class="btn">Ver ruta</a>
                 <a hrer="{{ url_for('reportar_inansistencia') }}" class="btn">Reportar inasistencia</a>
             </div>
         </div>

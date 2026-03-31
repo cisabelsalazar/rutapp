@@ -11,7 +11,7 @@ app.secret_key = "rutapp_secreto"
 conexion = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Cristina+-2026",
+    password="12345",
     database="rutapp_bd"
 )
 
@@ -196,10 +196,79 @@ def conductor():
     if 'usuario' not in session:
         return redirect(url_for('mod_admin/login'))
 
-    if session['rol'] != 2:
+    if session['rol'] != 3:
         return "Acceso no autorizado"
         
-    return render_template('conductor.html')
+    return render_template('mod_conductor/conductor.html')
+
+
+# panel Mis Rutas 
+@app.route('/mi_ruta')
+def mi_ruta():
+    
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    
+    if session['rol'] != 3:
+        return "Acceso no autorizado"
+
+    
+    return render_template('mod_conductor/mi_ruta.html')
+
+
+
+# panel Estudiantes_conductor
+
+@app.route('/estudiantes_conductor')
+def estudiantes_conductor():
+ 
+    
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    
+    if session['rol'] != 3:
+        return "Acceso no autorizado"
+
+    cursor = conexion.cursor(dictionary=True)
+    consulta = """
+    SELECT id_estudiante,nombre,grado,direccion,telefono,id_ruta,estado
+    FROM estudiante;
+    """
+    cursor.execute(consulta)
+    lista_estudiantes = cursor.fetchall()
+    
+    return render_template('mod_conductor/estudiantes_conductor.html', estudiantes_bd=lista_estudiantes)
+
+@app.route('/abordar_estudiante/<int:id_estudiante>')
+def abordar_estudiante(id_estudiante):
+    if 'usuario' not in session or session['rol'] != 3:
+        return redirect(url_for('login'))
+
+    cursor = conexion.cursor()
+    # Cambia el estado a 'Abordo' para ese ID específico
+    consulta = "UPDATE estudiante SET estado = 'Abordo' WHERE id_estudiante = %s"
+    cursor.execute(consulta, (id_estudiante,))
+    conexion.commit() # ¡Importante! Guarda el cambio en la BD
+    
+    return redirect(url_for('estudiantes_conductor'))
+#Panel alertas conductor
+@app.route('/aler_conduc')
+def aler_conduc():
+    
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    
+    if session['rol'] != 3:
+        return "Acceso no autorizado"
+
+    
+    return render_template('mod_conductor/alertas_conductor.html')
+
+
+
 
 #============ Panel padres de familia==================
 @app.route('/padres')
@@ -208,10 +277,45 @@ def padres():
     if 'usuario' not in session:
         return redirect(url_for('mod_admin/login'))
     
-    if session['rol'] != 3:
+    if session['rol'] != 4:
         return "Acceso no autorizado"
     
-    return render_template('padre.html')
+    return render_template('mod_padres/padre.html')
+
+
+
+@app.route('/ver_rutar')
+def ver_rutar():
+    return "<h2>Módulo de vehículos en construcción</h2>"
+
+@app.route('/reportar_inansistencia')
+def reportar_inansistencia():
+    return "<h2>Módulo de vehículos en construcción</h2>"
+#============ Panel informacion del conductor==================
+@app.route('/informacion_conductor')
+def informacion_conductor():
+
+    if 'usuario' not in session:
+        return redirect(url_for('mod_admin/login'))
+    
+    if session['rol'] != 4:
+        return "Acceso no autorizado"
+    
+    return render_template('mod_padres/informacion_conductor.html')
+#============ Panel estudiantes_padre==================
+
+@app.route('/estudiantes_padre')
+def estudiantes_padre():
+
+    if 'usuario' not in session:
+        return redirect(url_for('mod_admin/login'))
+    
+    if session['rol'] != 4:
+        return "Acceso no autorizado"
+    
+    return render_template('mod_padres/estudiantes_padre.html')
+
+
 
 #======= RUTA VALIDACION DE LOGIN====================== CRISTINA SALAZAR
 

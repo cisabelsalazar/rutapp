@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RUTAPP - Panel Conductor</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href='styles.css'>
 </head>
 
 <body>
@@ -13,7 +13,7 @@
 
         <div class="conductor-menu">
             <img
-             src="{{ url_for('static', filename='img/logo.png') }}"
+             src="img/logo.png"
              alt="Logo RUTAPP"
              class="logo"
             >
@@ -21,12 +21,13 @@
             <h2>Panel Conductor</h2>
 
             <ul>
-                <li>Dashboard</li>
-                <li>Mi Ruta</li>
-                <li>Ubicación en tiempo real</li>
-                <li>Estudiantes</li>
-                <li>Alertas</li>
+                <li><a href="conductor.html">Dashboard</a></li>
+                <li><a href="mi_ruta.html">Mis Rutas</a></li>
+                <li><a href="estudiantes_conductor.html">Estudiantes</a></li>
+                <li><a href="alertas_conductor.html">Alertas</a></li>
                 <li>Cerrar Sesión</li>
+                
+                
             </ul>
         </div>
 
@@ -35,16 +36,11 @@
             <p>Visualice el recorrido y gestione las alertas para los padres de familia.</p>
 
                 <img
-                 src="{{ url_for('static', filename='img/mapa.png') }}" 
+                 src="img/mapa.png" 
                  alt="Mapa de rutas en tiempo real"
                  class="mapa-conductor"
                 >
 
-            <div class="conductor-buttons">
-                <a href="{{url_for('compartir_ruta') }}" class ="btn">Compartir ruta</a>
-                <a href="{{ url_for('generar_alerta') }}" class="btn">Generar alertas</a>
-                <a href="{{ url_for('recibir_alertas') }}" class="btn">Recibir alertas</a>
-            </div>
 
         </div>
     </div>

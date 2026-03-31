@@ -20,63 +20,83 @@
             class="Imagen" />
 
 
-        <form class="form-editar_usuario" action="/guardar_usuario" method="POST">
+        <form id="formEditarUsuario" class="form-editar_usuario"
+            action="{{ url_for('editar_usuario', id_usuario=usuario.id_usuario) }}" method="POST">
 
             <h1>Editar usuario</h1>
 
             <div class="form-group">
                 <label>Cédula:</label>
-                <input type="text" name="id_usuario" required>
+                <input type="text" name="id_usuario" value="{{ usuario.id_usuario }}" readonly>
             </div>
 
             <div class="form-group">
-                <label>Nombre de usuario:</label> <!-- Campo para nombre de usuario -->
-                <input type="text" name="nombre_usuario" required>
+                <label>Nombre de usuario:</label>
+                <input type="text" name="nombre_usuario" value="{{ usuario.nombre_usuario }}" required>
             </div>
 
             <div class="form-group">
                 <label>Nombre completo:</label>
-                <input type="text" name="nombres_y_apellidos" required>
+                <input type="text" name="nombres_y_apellidos" value="{{ usuario.nombres_y_apellidos }}" required>
             </div>
 
             <div class="form-group">
                 <label>Correo:</label>
-                <input type="email" name="correo" required>
+                <input type="email" name="correo" value="{{ usuario.correo }}" required>
             </div>
 
             <div class="form-group">
                 <label>Teléfono:</label>
-                <input type="text" name="telefono" required>
-            </div>
-
-            <div class="form-group">
-                <label>Contraseña:</label>
-                <input type="password" name="password" required>
+                <input type="text" name="telefono" value="{{ usuario.telefono }}" required>
             </div>
 
             <div class="form-group">
                 <label>Rol:</label>
-                <select name="rol">
-                    <option value="1">Superadministrador</option>
-                    <option value="2">Administrador</option>
-                    <option value="3">Conductor</option>
-                    <option value="4">Padre de familia</option>
+                <select name="rol" required>
+                    <option value="1" {% if usuario.rol==1 %}selected{% endif %}>Superadministrador</option>
+                    <option value="2" {% if usuario.rol==2 %}selected{% endif %}>Administrador</option>
+                    <option value="3" {% if usuario.rol==3 %}selected{% endif %}>Conductor</option>
+                    <option value="4" {% if usuario.rol==4 %}selected{% endif %}>Padre de familia</option>
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-guardar">Guardar</button>
+            <button type="button" class="btn btn-guardar" onclick="confirmarGuardado()">
+                Guardar cambios
+            </button>
 
-            <a href="{{ url_for('usuarios') }}" class="btn btn-volver">Volver</a>
+            <a href="{{ url_for('usuarios') }}" class="btn btn-cabcelar">
+                Cancelar
+            </a>
 
         </form>
     </main>
 
     <footer class="footer">
-        <p>© 2026 RUTAPP - Proyecto ADSO SENA</p>
+        {% include 'layout/footer.html' %}
     </footer>
-</body>
 
-</html>
+    <script>
+        function confirmarGuardado() {
+            Swal.fire({
+                title: '¿Guardar cambios?',
+                text: 'Se actualizará la información del usuario',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, guardar',
+                cancelButtonText: 'Cancelar',
+                customClass: {
+                    popup: 'swal-popup',
+                    confirmButton: 'swal-confirm-btn',
+                    cancelButton: 'swal-cancel-btn'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('formEditarUsuario').submit();
+                }
+            });
+        }
+    </script>
+
 </body>
 
 </html>

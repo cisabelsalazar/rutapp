@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for,session
+from flask import Flask, render_template, request, redirect, url_for,session, flash
 import mysql.connector
 
 app = Flask(__name__)
@@ -86,7 +86,7 @@ def usuarios(): #Esta es la función de Usuarios
 def crear_usuario():
     return render_template('mod_admin/crear_usuarios.html')
 
-#====== Ruta para guardar Usuario===
+#====== RUTA GUARDAR USUARIO===
 from werkzeug.security import generate_password_hash
 
 @app.route('/guardar_usuario', methods=['POST'])
@@ -123,43 +123,75 @@ def guardar_usuario():
         cursor.execute(sql, valores)
         conexion.commit()
         cursor.close()
+        flash('Usuario guardado correctamente', 'success')
 
         return redirect(url_for('usuarios'))
         
 
-#====== Ruta para eliminar usuario=====
+#====== RUTA ELIMINAR USUARIO =====
 
-@app.route('/eliminar_usuario/<id_usuario>')
+# - Elimina un usuario de la base de datos
+# - Se ejecuta únicamente mediante método POST por seguridad
+@app.route('/eliminar_usuario/<id_usuario>', methods=['POST'])
 def eliminar_usuario(id_usuario):
 
-    cursor = conexion.cursor()
+    cursor = conexion.cursor() # Crear cursor
+    sql = "DELETE FROM usuario WHERE id_usuario = %s"# Consulta SQL para eliminar el usuario
+    cursor.execute(sql, (id_usuario,))# Ejecutar la consulta
+    conexion.commit() # Guardar cambios en la base de datos
+    cursor.close() # Cerrar cursor
+    flash('Usuario eliminado correctamente', 'success')
 
-    sql = "DELETE FROM usuario WHERE id_usuario = %s" 
-    cursor.execute(sql, (id_usuario,))
+    return redirect(url_for('usuarios')) # Redirigir a la lista de usuarios
 
+#====== RUTA EDITAR USUARIO ======
 
-    conexion.commit() #Guarda cambios
-    cursor.close()
-
-    return redirect(url_for('usuarios'))#Vuelve a la lista de usuarios
-
-#====== Ruta para editar usuario ======
-
-@app.route('/editar_usuario/<id_usuario>')
+# - GET  -> muestra el formulario con los datos actuales
+# - POST -> guarda los cambios realizados en la BD
+@app.route('/editar_usuario/<id_usuario>', methods=['GET', 'POST'])
 def editar_usuario(id_usuario):
 
-    cursor = conexion.cursor(dictionary=True)
+    cursor = conexion.cursor(dictionary=True) # Crear cursor en formato diccionario para acceder por nombre de campo
 
-    sql = "SELECT * FROM usuario WHERE id_usuario = %s"
+    # POST guardar cambios
+    if request.method == 'POST': # POST: cuando el usuario da clic en "Guardar cambios"
+
+        # Captura los datos enviados desde el formulario HTML
+        nombres = request.form['nombres_y_apellidos']
+        correo = request.form['correo']
+        telefono = request.form['telefono']
+        rol = request.form['rol'] #para actualizar el rol cuando se edita usuario
+
+        # Consulta SQL para actualizar la información del usuario
+        sql = """
+        UPDATE usuario
+        SET nombres_y_apellidos = %s,
+            correo = %s,
+            telefono = %s,
+            id_rol = %s
+        WHERE id_usuario = %s
+        """
+
+        valores = (nombres, correo, telefono, rol, id_usuario)
+
+        cursor.execute(sql, valores)
+        conexion.commit()
+        cursor.close()
+
+        flash('Informacion actualizada correctamente', 'success')
+        return redirect(url_for('usuarios'))
+
+    #GET: Cargar formulario
+    sql = "SELECT * FROM usuario WHERE id_usuario = %s" # Consulta para obtener los datos actuales del usuario
     cursor.execute(sql, (id_usuario,))
     usuario = cursor.fetchone()
 
-    cursor.close()
+    cursor.close() #Cierra el cursor
 
-    if not usuario:
+    if not usuario: #validacion por si no existe el usuario
         return "Usuario no encontrado", 404
 
-    return render_template('mod_admin/editar_usuario.html', usuario=usuario)
+    return render_template('mod_admin/editar_usuario.html', usuario=usuario) # Envía los datos al formulario editar_usuario.html
   
 
 # ==========================================
@@ -179,7 +211,7 @@ def superadministrador():
     return render_template('mod_admin/supadmin.html')
 
 
-#============= Panel administrador ====================
+#============= PANEL ADMINISTRADOR====================
 @app.route('/admin')
 def administrador():
 
@@ -197,7 +229,7 @@ def gestion_alerta():
     return "<h2>Módulo de alertas en construcción</h2>"
 
 
-#=========== Panel conductor ==========================
+#=========== PANEL CONDUCTOR==========================
 @app.route('/conductor')
 def conductor():
 
@@ -209,7 +241,7 @@ def conductor():
         
     return render_template('conductor.html')
 
-#============ Panel padres de familia==================
+#============ PANEL PADRES DE FAMILIA==================
 @app.route('/padres')
 def padres():
 
@@ -221,7 +253,7 @@ def padres():
     
     return render_template('padre.html')
 
-#==========Gestionar Estudiante==========
+#==========GESTIONAR ESTUDIANTES ==========
 @app.route('/gestion_estudiantes')
 def gestion_estudiantes():
     return "<h2>Módulo de alertas en construcción</h2>"

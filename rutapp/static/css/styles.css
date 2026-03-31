@@ -281,6 +281,7 @@ main {
 
 
 
+
 /*==================================================================================*/
 /* 7. PANEL ADMINISTRADOR   y SUPERADMINISTRADOR                                                         */
 /*==================================================================================*/
@@ -576,7 +577,6 @@ body, html {
     border-radius: 5px;
     font-size: 12px;
     text-decoration: none;
-    font-weight: bold;
     cursor: pointer;
     box-shadow: 0px 4px 0px rgba(0,0,0,0.2), 0px 8px 10px rgba(0,0,0,0.1);
 }
@@ -628,6 +628,16 @@ body, html {
     box-shadow: 0px 4px 0px #9da2a5, 0px 8px 10px rgba(0,0,0,0.3);
     background-color: rgba(245, 245, 245, 0.75);
     border: 2px solid #216c8f;
+    font-weight: bold; /*Negrita en texto de botones*/
+}
+
+.btn,
+.btn:visited,
+.btn:active,
+.btn:hover,
+.btn:focus {
+    text-decoration: none;
+    color: black;   /* cambia por white si los botones llevan fondo oscuro */
 }
 
 
@@ -640,7 +650,8 @@ body, html {
 .btn-guardar,
 .btn-crear,
 .btn-editar,
-.btn-actualizar {
+.btn-actualizar,
+.btn-cancelar {
     color: black;
     border: 2px solid #28a745;
     margin-left: 15px;

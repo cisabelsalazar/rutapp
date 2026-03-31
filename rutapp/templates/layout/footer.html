@@ -3,3 +3,28 @@
 <footer class="footer">
     <p>© 2026 RUTAPP - Proyecto ADSO SENA</p>
 </footer>
+
+<!-- Librería SweetAlert para alertas personalizadas -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!---ALERTAS FLASH DE FLASK
+Captura mensajes enviados desde Python con flash()--->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <script>
+            {% for category, message in messages %}
+            Swal.fire({
+
+                icon: "{{ 'error' if category == 'error' else 'success' }}", <!---Define icono según categoría del mensaje-->
+                title: "{{ message }}", <!--- Texto principal de la alerta -->
+                confirmButtonText: "Aceptar", <!--- Texto del botón -->
+                customClass: { <!--- Clases CSS personalizadas para diseño-->
+                    popup: 'swal-popup',
+                    confirmButton: 'swal-confirm-btn'
+                }
+            });
+            {% endfor %}
+        </script>
+    {% endif %}
+{% endwith %}

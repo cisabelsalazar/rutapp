@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +8,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 
-<body class="conductor_body">
+<body class="conductor_body vista-alertas">
 
     <div class="conductor-layout">
 
         <div class="conductor-menu">
-            <img
-             src="{{ url_for('static', filename='img/logo.png') }}"
-             alt="Logo RUTAPP"
-             class="logo"
-            >
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
             <h2>Panel Conductor</h2>
 
@@ -24,95 +21,112 @@
                 <li><a href="{{ url_for('conductor') }}">Dashboard</a></li>
                 <li><a href="{{ url_for('mi_ruta') }}">Mis Rutas</a></li>
                 <li><a href="{{ url_for('estudiantes_conductor') }}">Estudiantes</a></li>
-                <li><a href="{{ url_for('aler_conduc') }}">Alertas</a></li>
+                <li><a href="{{ url_for('alertas_conductor') }}">Alertas</a></li>
                 <li>
                     <a href="{{ url_for('logout') }}" class="btn-logout">
-                            Cerrar sesión
+                        Cerrar sesión
                     </a>
                 </li>
             </ul>
         </div>
-<div class="container-aler">
-        <header class="main-header-aler">
-            <h1>Alertas</h1>
-            <button class="btn-clear-aler">Limpiar seleccionadas</button>
-        </header>
+        <div class="container-aler">
+            <header class="main-header-aler">
+                <h1>Alertas</h1>
+                <button class="btn-clear-aler">Limpiar seleccionadas</button>
 
-        <nav class="filter-tabs-aler">
-            <button class="tab-aler">Todas</button>
-            <button class="tab-active">Sin Leer</button>
-            <button class="tab-aler">Leídas</button>
-            <button class="tab-aler">Resueltas</button>
-        </nav>
+            </header>
 
-        <div class="table-container-aler">
-            <table>
-                <thead>
-                    <tr>
-                        <th width="40"><input type="checkbox"></th>
-                        <th>Estudiante</th>
-                        <th>Tipo</th>
-                        <th>Hora</th>
-                        <th>Mensaje</th>
-                        <th class="actions-header">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><div class="user-info-aler"><img src="{{ url_for('static', filename='img/avatar f.png') }}"> Lucia Pérez</div></td>
-                        <td><span class="badge badge-retraso">⚠️ Retraso</span></td>
-                        <td>08:16 AM</td>
-                        <td>Retraso inesperado. Tiempo estimado: 10 minutos.</td>
-                        <td>
-                            <div class="actions-aler">
-                                <button class="btn-read">Marcar leída</button>
-                                <button class="btn-resolve">Resolver</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><div class="user-info-aler"><img src="{{ url_for('static', filename='img/avatar h.png') }}"> Pablo Gómez</div></td>
-                        <td><span class="badge badge-retraso">⚠️ Retraso</span></td>
-                        <td>08:05 AM</td>
-                        <td>Retraso inesperado. Tiempo estimado: 10 minutos.</td>
-                        <td>
-                            <div class="actions-aler">
-                                <button class="btn-read">Marcar leída</button>
-                                <button class="btn-resolve">Resolver</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><div class="user-info-aler"><img src="{{ url_for('static', filename='img/avatar f.png') }}"> Carmen Ruiz</div></td>
-                        <td><span class="badge badge-incidente">⚠️ Incidente</span></td>
-                        <td>07:54 AM</td>
-                        <td>El autobús se retrasó debido a un incidente menor.</td>
-                        <td>
-                            <div class="actions-aler">
-                                <button class="btn-read">Marcar leída</button>
-                                <button class="btn-resolve">Resolver</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><div class="user-info-aler"><img src="{{ url_for('static', filename='img/avatar h.png') }}"> Samuel Ortega</div></td>
-                        <td><span class="badge badge-ausente">⚠️ Ausente</span></td>
-                        <td>07:35 AM</td>
-                        <td>Samuel no se presentó en su parada esta mañana.</td>
-                        <td>
-                            <div class="actions-aler">
-                                <button class="btn-read">Marcar leída</button>
-                                <button class="btn-resolve">Resolver</button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <nav class="filter-tabs-aler">
+                <button class="tab-aler">Todas</button>
+                <button class="tab-active">Sin Leer</button>
+                <button class="tab-aler">Leídas</button>
+                <button class="tab-aler">Resueltas</button>
+            </nav>
+
+            <div class="table-container-aler">
+                <a href="{{ url_for('conductor') }}" class="btn btn-volver">
+                    Volver
+                </a>
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="40"><input type="checkbox"></th>
+                            <th>Estudiante</th>
+                            <th>Tipo</th>
+                            <th>Hora</th>
+                            <th>Mensaje</th>
+                            <th class="actions-header">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>
+                                <div class="user-info-aler"><img
+                                        src="{{ url_for('static', filename='img/avatar f.png') }}"> Lucia Pérez</div>
+                            </td>
+                            <td><span class="badge badge-retraso">⚠️ Retraso</span></td>
+                            <td>08:16 AM</td>
+                            <td>Retraso inesperado. Tiempo estimado: 10 minutos.</td>
+                            <td>
+                                <div class="actions-aler">
+                                    <button class="btn-read">Marcar leída</button>
+                                    <button class="btn-resolve">Resolver</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>
+                                <div class="user-info-aler"><img
+                                        src="{{ url_for('static', filename='img/avatar h.png') }}"> Pablo Gómez</div>
+                            </td>
+                            <td><span class="badge badge-retraso">⚠️ Retraso</span></td>
+                            <td>08:05 AM</td>
+                            <td>Retraso inesperado. Tiempo estimado: 10 minutos.</td>
+                            <td>
+                                <div class="actions-aler">
+                                    <button class="btn-read">Marcar leída</button>
+                                    <button class="btn-resolve">Resolver</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>
+                                <div class="user-info-aler"><img
+                                        src="{{ url_for('static', filename='img/avatar f.png') }}"> Carmen Ruiz</div>
+                            </td>
+                            <td><span class="badge badge-incidente">⚠️ Incidente</span></td>
+                            <td>07:54 AM</td>
+                            <td>El autobús se retrasó debido a un incidente menor.</td>
+                            <td>
+                                <div class="actions-aler">
+                                    <button class="btn-read">Marcar leída</button>
+                                    <button class="btn-resolve">Resolver</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>
+                                <div class="user-info-aler"><img
+                                        src="{{ url_for('static', filename='img/avatar h.png') }}"> Samuel Ortega</div>
+                            </td>
+                            <td><span class="badge badge-ausente">⚠️ Ausente</span></td>
+                            <td>07:35 AM</td>
+                            <td>Samuel no se presentó en su parada esta mañana.</td>
+                            <td>
+                                <div class="actions-aler">
+                                    <button class="btn-read">Marcar leída</button>
+                                    <button class="btn-resolve">Resolver</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 </body>
+
 </html>

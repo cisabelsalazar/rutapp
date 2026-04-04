@@ -1,0 +1,13 @@
+
+# Backups y comprimidos
+*.7z
+*.zip
+
+# Archivos de prueba o notas personales
+*_RESUMEN.md
+how*mra*
+*archivo.py
+
+# Copias de imágenes
+* - copia.png
+*.ico

@@ -1,0 +1,72 @@
+<!-- ===== FORMULARIO CREAR ESTUDIANTE ===== -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Crear Estudiante</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+</head>
+
+<body class="bg-secundario">
+
+    <header>
+        {# Incluye el encabezado (header) de la página #}
+        {% include 'layout/header.html' %}
+
+    </header>
+
+    <main>
+
+        <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
+            class="Imagen" />
+
+
+        <form class="form-crear_usuarios" action="/guardar_usuario" method="POST">
+
+            <h1>Crear nuevo estudiante</h1>
+
+            <div class="form-group">
+                <label>id_estudiante:</label>
+                <input type="text" name="id_estudiante" required>
+            </div>
+
+            <div class="form-group">
+                <label>Nombre:</label> <!-- Campo para nombre de estudiante -->
+                <input type="text" name="nombre_estudiante" required>
+            </div>
+
+            <div class="form-group">
+                <label>Grado:</label>
+                <input type="text" name="grado_salon" required>
+            </div>
+            <div class="form-group">
+                <label>Dirección:</label>
+                <input type="text" name="direccion" required>
+            </div>
+
+            <div class="form-group">
+                <label>Teléfono:</label>
+                <input type="text" name="telefono" required>
+
+            </div>
+            <div class="form-group">
+                <label>Id_ruta:</label>
+                <input type="text" name="telefono" required>
+            </div>
+
+
+            <button type="submit" class="btn btn-guardar">Guardar</button>
+            <a href="{{ url_for('superadministrador') }}" class="btn btn-volver">Volver</a>
+            </a>
+
+        </form>
+        <footer class="footer">
+            {# ===== FOOTER ===== #}
+            {% include 'layout/footer.html' %}
+        </footer>
+    </main>
+</body>
+
+</html>

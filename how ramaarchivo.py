@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for,session, flash
+from flask import Flask, render_template, request, redirect, url_for,session
 import mysql.connector
 
 app = Flask(__name__)
@@ -11,7 +11,7 @@ app.secret_key = "rutapp_secreto"
 conexion = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Cristina+-2026",
+    password="12345",
     database="rutapp_bd"
 )
 
@@ -29,24 +29,24 @@ conexion = mysql.connector.connect(
 
 @app.route('/') #Esta es la ruta principal
 def inicio():
-    return render_template('mod_admin/login.html')
+    return render_template('mod_admin/home.html')
 
 @app.route('/login') #Esta es la ruta de login
 def login():
     return render_template('mod_admin/login.html')
 
-#=========   Ruta Usuarios   =========
+#=========Ruta Usuarios=========
 
 @app.route('/usuarios') #Esta es la ruta Usuarios
 def usuarios(): #Esta es la función de Usuarios
 
     if 'usuario' not in session: #Aqui se hace la verificación de sesión
-        return redirect(url_for('mod_admin/login'))#Regresa al home
+        return redirect(url_for('mod_admin/home'))#Regresa al home
     
-    if session['rol'] not in [1, 2, 3, 4]:# Aqui se verifica el rol del usuario
+    if session['rol'] !=1:# Aqui se verifica el rol del usuario
         return "Acceso no autorizado"
     
-    cursor = conexion.cursor(dictionary=True)#Cursor creado para interactuar con MySQL
+    cursor = conexion.cursor(dictionary=True)#Cursor creado para interactualr con MySQL
 
 
     consulta = """ #Aquí estás guardando una consulta SQL dentro de una variable
@@ -65,19 +65,6 @@ def usuarios(): #Esta es la función de Usuarios
     lista_usuarios = cursor.fetchall()#Aquí se traen todos los resultados de la consulta.
 
     cursor.close()
-#ruta para boton volver    
-    ruta_volver = {
-        1: 'superadministrador',
-        2: 'administrador',
-        3: 'conductor',
-        4: 'padres'
-    }.get(session['rol'])
-
-    return render_template(
-        'mod_admin/usuarios.html',
-        usuarios=lista_usuarios,
-        ruta_volver=ruta_volver
-    )
 
     return render_template('mod_admin/usuarios.html', usuarios = lista_usuarios)#Manda la lista a usuarios.html
 
@@ -86,7 +73,7 @@ def usuarios(): #Esta es la función de Usuarios
 def crear_usuario():
     return render_template('mod_admin/crear_usuarios.html')
 
-#====== RUTA GUARDAR USUARIO===
+#====== Ruta para guardar Usuario===
 from werkzeug.security import generate_password_hash
 
 @app.route('/guardar_usuario', methods=['POST'])
@@ -123,190 +110,220 @@ def guardar_usuario():
         cursor.execute(sql, valores)
         conexion.commit()
         cursor.close()
-        flash('Usuario guardado correctamente', 'success')
 
-        return redirect(url_for('usuarios'))
+        return redirect(url_for('mod_admin/usuarios'))
         
 
-#====== RUTA ELIMINAR USUARIO =====
+#====== Ruta para eliminar usuario=====
 
-# - Elimina un usuario de la base de datos
-# - Se ejecuta únicamente mediante método POST por seguridad
-@app.route('/eliminar_usuario/<id_usuario>', methods=['POST'])
+@app.route('/eliminar_usuario/<id_usuario>')
 def eliminar_usuario(id_usuario):
 
-    cursor = conexion.cursor() # Crear cursor
-    sql = "DELETE FROM usuario WHERE id_usuario = %s"# Consulta SQL para eliminar el usuario
-    cursor.execute(sql, (id_usuario,))# Ejecutar la consulta
-    conexion.commit() # Guardar cambios en la base de datos
-    cursor.close() # Cerrar cursor
-    flash('Usuario eliminado correctamente', 'success')
+    cursor = conexion.cursor()
 
-    return redirect(url_for('usuarios')) # Redirigir a la lista de usuarios
+    sql = "DELETE FROM usuario WHERE id_usuario = %s" 
+    cursor.execute(sql, (id_usuario,))
 
-#====== RUTA EDITAR USUARIO ======
 
-# - GET  -> muestra el formulario con los datos actuales
-# - POST -> guarda los cambios realizados en la BD
-@app.route('/editar_usuario/<id_usuario>', methods=['GET', 'POST'])
+    conexion.commit() #Guarda cambios
+    cursor.close()
+
+    return redirect(url_for('mod_admin/usuarios'))#Vuelve a la lista de usuarios
+
+#====== Ruta para editar usuario ======
+
+@app.route('/editar_usuario/<id_usuario>')
 def editar_usuario(id_usuario):
 
-    cursor = conexion.cursor(dictionary=True) # Crear cursor en formato diccionario para acceder por nombre de campo
+    cursor = conexion.cursor(dictionary=True)
 
-    # POST guardar cambios
-    if request.method == 'POST': # POST: cuando el usuario da clic en "Guardar cambios"
-
-        # Captura los datos enviados desde el formulario HTML
-        nombres = request.form['nombres_y_apellidos']
-        correo = request.form['correo']
-        telefono = request.form['telefono']
-        rol = request.form['rol'] #para actualizar el rol cuando se edita usuario
-
-        # Consulta SQL para actualizar la información del usuario
-        sql = """
-        UPDATE usuario
-        SET nombres_y_apellidos = %s,
-            correo = %s,
-            telefono = %s,
-            id_rol = %s
-        WHERE id_usuario = %s
-        """
-
-        valores = (nombres, correo, telefono, rol, id_usuario)
-
-        cursor.execute(sql, valores)
-        conexion.commit()
-        cursor.close()
-
-        flash('Informacion actualizada correctamente', 'success')
-        return redirect(url_for('usuarios'))
-
-    #GET: Cargar formulario
-    sql = "SELECT * FROM usuario WHERE id_usuario = %s" # Consulta para obtener los datos actuales del usuario
+    sql = "SELECT * FROM usuario WHERE id_usuario = %s"
     cursor.execute(sql, (id_usuario,))
     usuario = cursor.fetchone()
 
-    cursor.close() #Cierra el cursor
+    cursor.close()
 
-    if not usuario: #validacion por si no existe el usuario
+    if not usuario:
         return "Usuario no encontrado", 404
 
-    return render_template('mod_admin/editar_usuario.html', usuario=usuario) # Envía los datos al formulario editar_usuario.html
-  
+    return render_template('mod_admin/editar_usuario.html', usuario=usuario)
+
+    
 
 # ==========================================
-#          PANELES DEL SISTEMA
+# PANELES DEL SISTEMA
 # ==========================================
-#============= PANEL SUPER ADMINISTRADOR ===============
+#============= Panel Super Administrdor ===============
 
-@app.route('/supadmin')
+@app.route('/superadministrador')
 def superadministrador():
 
     if 'usuario' not in session:
-        return redirect(url_for('login'))
-
+        return redirect(url_for('mod_admin/login'))#Si no hay sesión iniciada regresa al login
     if session['rol'] != 1:
-        return 'Acceso no autorizado 1'
+        return 'Acceso no autorizado'
     
-    return render_template('mod_admin/supadmin.html')
+    return render_template('mod_admin/admin.html')#FALTA CREAR EL HTML DE SUPERADMIN
 
 
-#============= PANEL ADMINISTRADOR====================
+#============= Panel administrador ====================
 @app.route('/admin')
 def administrador():
 
     if 'usuario' not in session:
-        return redirect(url_for('login')) #Si no hay sesión iniciada regresa al login
+        return redirect(url_for('mod_admin/login')) #Si no hay sesión iniciada regresa al login
     
-    if session['rol'] != 2:
-        return f"Acceso no autorizado 2 | {session['rol']} |"
+    if session['rol'] != 1:
+        return "Acceso no autorizado"
     
     return render_template('mod_admin/admin.html')
 
 #===============ALERTAS DEL SISTEMA=====================#
-@app.route('/gestion_alerta')
-def gestion_alerta():
+@app.route('/generar_alerta')
+def generar_alerta():
+    return "<h2>Módulo de alertas en construcción</h2>"
+
+@app.route('/recibir_alerta')
+def recibir_alertas():
     return "<h2>Módulo de alertas en construcción</h2>"
 
 
-#=========== PANEL CONDUCTOR========================== 
+
+#=========== Panel conductor ==========================
 @app.route('/conductor')
 def conductor():
 
-    # if 'usuario' not in session:
-    #     return redirect(url_for('login'))
+    if 'usuario' not in session:
+        return redirect(url_for('mod_admin/login'))
 
-    # if session['rol'] != 3:
-    #     return "Acceso no autorizado"
+    if session['rol'] != 3:
+        return "Acceso no autorizado"
         
     return render_template('mod_conductor/conductor.html')
 
-@app.route('/conductor/mi_ruta')#Revisado por Cristina OK#
+
+# panel Mis Rutas 
+@app.route('/mi_ruta')
 def mi_ruta():
-    # if 'usuario' not in session:
-    #     return redirect(url_for('login'))
-    # if session['rol'] != 3:
-    #     return "Acceso no autorizado"
+    
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    
+    if session['rol'] != 3:
+        return "Acceso no autorizado"
+
+    
     return render_template('mod_conductor/mi_ruta.html')
 
-@app.route('/conductor/estudiantes')
-def estudiantes_conductor():
-    return render_template('mod_conductor/estudiantes_conductor.html')
 
-@app.route('/conductor/alertas')#Revisado por Cristina OK#
-def alertas_conductor():
+
+# panel Estudiantes_conductor
+
+@app.route('/estudiantes_conductor')
+def estudiantes_conductor():
+ 
+    
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    
+    if session['rol'] != 3:
+        return "Acceso no autorizado"
+
+    cursor = conexion.cursor(dictionary=True)
+    consulta = """
+    SELECT id_estudiante,nombre,grado,direccion,telefono,id_ruta,estado
+    FROM estudiante;
+    """
+    cursor.execute(consulta)
+    lista_estudiantes = cursor.fetchall()
+    
+    return render_template('mod_conductor/estudiantes_conductor.html', estudiantes_bd=lista_estudiantes)
+
+@app.route('/abordar_estudiante/<int:id_estudiante>')
+def abordar_estudiante(id_estudiante):
+    if 'usuario' not in session or session['rol'] != 3:
+        return redirect(url_for('login'))
+
+    cursor = conexion.cursor()
+    # Cambia el estado a 'Abordo' para ese ID específico
+    consulta = "UPDATE estudiante SET estado = 'Abordo' WHERE id_estudiante = %s"
+    cursor.execute(consulta, (id_estudiante,))
+    conexion.commit() # ¡Importante! Guarda el cambio en la BD
+    
+    return redirect(url_for('estudiantes_conductor'))
+#Panel alertas conductor
+@app.route('/aler_conduc')
+def aler_conduc():
+    
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    
+    if session['rol'] != 3:
+        return "Acceso no autorizado"
+
+    
     return render_template('mod_conductor/alertas_conductor.html')
 
-@app.route('/conductor/compartir_ubicacion')
-def compartir_ubicacion():  
-    return "<h2>Módulo en construcción</h2>"
 
-#============ PANEL PADRES DE FAMILIA==================
+
+
+#============ Panel padres de familia==================
 @app.route('/padres')
 def padres():
 
-    # if 'usuario' not in session:
-    #     return redirect(url_for('login'))
+    if 'usuario' not in session:
+        return redirect(url_for('mod_admin/login'))
     
-    # if session['rol'] != 4:
-    #     return "Acceso no autorizado"
+    if session['rol'] != 4:
+        return "Acceso no autorizado"
     
     return render_template('mod_padres/padre.html')
 
-#==========GESTIONAR ESTUDIANTES ==========
-@app.route('/gestion_estudiantes')
-def gestion_estudiantes():
-    return "<h2>Módulo de alertas en construcción</h2>"
 
-@app.route('/reporte_inasistencia')
-def reporte_inasistencia():
-    return "<h2>Módulo de alertas en construcción</h2>"
 
+@app.route('/ver_rutar')
+def ver_rutar():
+    return "<h2>Módulo de vehículos en construcción</h2>"
+
+@app.route('/reportar_inansistencia')
+def reportar_inansistencia():
+    return "<h2>Módulo de vehículos en construcción</h2>"
+#============ Panel informacion del conductor==================
 @app.route('/informacion_conductor')
 def informacion_conductor():
-    return "<h2>Módulo de rutas en construcción</h2>"
+
+    if 'usuario' not in session:
+        return redirect(url_for('mod_admin/login'))
+    
+    if session['rol'] != 4:
+        return "Acceso no autorizado"
+    
+    return render_template('mod_padres/informacion_conductor.html')
+#============ Panel estudiantes_padre==================
 
 @app.route('/estudiantes_padre')
 def estudiantes_padre():
-    return "<h2>Módulo de rutas en construcción</h2>"
+
+    if 'usuario' not in session:
+        return redirect(url_for('mod_admin/login'))
+    
+    if session['rol'] != 4:
+        return "Acceso no autorizado"
+    
+    return render_template('mod_padres/estudiantes_padre.html')
 
 
-@app.route('/ver_ruta')
-def ver_ruta():
-    return "<h2>Módulo de rutas en construcción</h2>"
 
-@app.route('/reportar_inasistencia')
-def reportar_inasistencia():
-    return "<h2>Módulo de rutas en construcción</h2>"
-
-
-#============== RUTA VALIDACION DE LOGIN====================== CRISTINA SALAZAR
+#======= RUTA VALIDACION DE LOGIN====================== CRISTINA SALAZAR
 
 @app.route('/validar_login',methods=['POST'])
 def valida_login():
 
-    correo = request.form['correo'].strip()
-    password = request.form['password'].strip()
+    correo = request.form['correo']
+    password = request.form['password']
 
     cursor = conexion.cursor(dictionary=True)
 
@@ -348,8 +365,8 @@ def logout():
 # GESTIÓN DE VEHÍCULOS Y RUTAS
 # RESPONSABLE: CAMILO OCAMPO
 # ==========================================
-@app.route('/gestion_vehiculos')
-def gestion_vehiculos():
+@app.route('/vehiculos')
+def vehiculos():
     return "<h2>Módulo de vehículos en construcción</h2>"
 
 @app.route('/monitorear_ruta')
@@ -369,8 +386,8 @@ def monitorear_ruta():
 #RESPONSABLE: VICTOR VELANDIA
 #==========================================
 
-@app.route('/gestion_rutas')
-def gestion_rutas():
+@app.route('/rutas')
+def rutas():
     return "<h2>Módulo de rutas en construcción</h2>"
 
 
@@ -384,7 +401,16 @@ def gestion_rutas():
 
 
 
-
+# ==========================================
+# INTERFAZ DE USUARIO Y VISUALIZACIÓN DEL SISTEMA
+# RESPONSABLE: CAROLIA EPIAYU
+# ==========================================
+# Aquí se desarrollarán las rutas relacionadas con:
+# - Diseño de formularios (usuarios, estudiantes, vehículos, rutas)
+# - Dashboards por rol (Administrador, Conductor, Padres)
+# - Integración visual con Flask (render_template)
+# - Visualización de rutas, estudiantes y vehículos según rol
+# - Mejora de experiencia de usuario (UX)
 
 
 # ==========================================

@@ -273,6 +273,10 @@ def padres():
     
     return render_template('mod_padres/padre.html')
 
+@app.route('/padres/informacion_conductor')
+def informacion_conductor():
+    return render_template('mod_padres/informacion_conductor.html')
+
 #==========GESTIONAR ESTUDIANTES ==========
 @app.route('/gestion_estudiantes')
 def gestion_estudiantes():
@@ -282,22 +286,19 @@ def gestion_estudiantes():
 def reporte_inasistencia():
     return "<h2>Módulo de alertas en construcción</h2>"
 
-@app.route('/informacion_conductor')
-def informacion_conductor():
-    return "<h2>Módulo de rutas en construcción</h2>"
 
 @app.route('/estudiantes_padre')
 def estudiantes_padre():
     return "<h2>Módulo de rutas en construcción</h2>"
 
 
-@app.route('/ver_ruta')
+@app.route('/padres/ver_ruta')
 def ver_ruta():
-    return "<h2>Módulo de rutas en construcción</h2>"
+    return render_template('mod_padres/ver_ruta.html')
 
 @app.route('/reportar_inasistencia')
 def reportar_inasistencia():
-    return "<h2>Módulo de rutas en construcción</h2>"
+    return render_template('mod_padres/reportar_inasistencia.html')
 
 
 #============== RUTA VALIDACION DE LOGIN====================== CRISTINA SALAZAR

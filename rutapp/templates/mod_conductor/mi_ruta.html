@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RUTAPP - Panel Conductor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
 </head>
 
 <body class="conductor_body vista-mi-ruta">
@@ -15,7 +16,6 @@
         {% include 'layout/header.html' %}
 
         <div class="conductor-layout">
-
             <div class="conductor-menu">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
@@ -82,9 +82,12 @@
                     </footer>
 
                 </section>
-
-            </main>
         </div>
+        </main>
+        <footer class="footer">
+            {# ===== FOOTER ===== #}
+            {% include 'layout/footer.html' %}
+        </footer>
 </body>
 
 </html>

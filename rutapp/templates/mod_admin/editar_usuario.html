@@ -19,56 +19,77 @@
         <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
             class="Imagen" />
 
+        <div class="admin-layout">
 
-        <form id="formEditarUsuario" class="form-editar_usuario"
-            action="{{ url_for('editar_usuario', id_usuario=usuario.id_usuario) }}" method="POST">
+            <div class="admin-menu">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-            <h1>Editar usuario</h1>
+                <h2>Panel Administrador</h2>
 
-            <div class="form-group">
-                <label>Cédula:</label>
-                <input type="text" name="id_usuario" value="{{ usuario.id_usuario }}" readonly>
+                <ul>
+                    <li>Dashboard</li>
+                    <li>Usuarios</li>
+                    <li>Rutas</li>
+                    <li>Ubicación en tiempo real</li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="btn-logout">
+                            Cerrar sesión
+                        </a>
+                    </li>
+                </ul>
             </div>
+        
 
-            <div class="form-group">
-                <label>Nombre de usuario:</label>
-                <input type="text" name="nombre_usuario" value="{{ usuario.nombre_usuario }}" required>
-            </div>
+            <form id="formEditarUsuario" class="form-editar_usuario"
+                action="{{ url_for('editar_usuario', id_usuario=usuario.id_usuario) }}" method="POST">
 
-            <div class="form-group">
-                <label>Nombre completo:</label>
-                <input type="text" name="nombres_y_apellidos" value="{{ usuario.nombres_y_apellidos }}" required>
-            </div>
+                <h1>Editar usuario</h1>
 
-            <div class="form-group">
-                <label>Correo:</label>
-                <input type="email" name="correo" value="{{ usuario.correo }}" required>
-            </div>
+                <div class="form-group">
+                    <label>Cédula:</label>
+                    <input type="text" name="id_usuario" value="{{ usuario.id_usuario }}" readonly>
+                </div>
 
-            <div class="form-group">
-                <label>Teléfono:</label>
-                <input type="text" name="telefono" value="{{ usuario.telefono }}" required>
-            </div>
+                <div class="form-group">
+                    <label>Nombre de usuario:</label>
+                    <input type="text" name="nombre_usuario" value="{{ usuario.nombre_usuario }}" required>
+                </div>
 
-            <div class="form-group">
-                <label>Rol:</label>
-                <select name="rol" required>
-                    <option value="1" {% if usuario.rol==1 %}selected{% endif %}>Superadministrador</option>
-                    <option value="2" {% if usuario.rol==2 %}selected{% endif %}>Administrador</option>
-                    <option value="3" {% if usuario.rol==3 %}selected{% endif %}>Conductor</option>
-                    <option value="4" {% if usuario.rol==4 %}selected{% endif %}>Padre de familia</option>
-                </select>
-            </div>
+                <div class="form-group">
+                    <label>Nombre completo:</label>
+                    <input type="text" name="nombres_y_apellidos" value="{{ usuario.nombres_y_apellidos }}" required>
+                </div>
 
-            <button type="button" class="btn btn-guardar" onclick="confirmarGuardado()">
-                Guardar cambios
-            </button>
+                <div class="form-group">
+                    <label>Correo:</label>
+                    <input type="email" name="correo" value="{{ usuario.correo }}" required>
+                </div>
 
-            <a href="{{ url_for('usuarios') }}" class="btn btn-cabcelar">
-                Cancelar
-            </a>
+                <div class="form-group">
+                    <label>Teléfono:</label>
+                    <input type="text" name="telefono" value="{{ usuario.telefono }}" required>
+                </div>
 
-        </form>
+                <div class="form-group">
+                    <label>Rol:</label>
+                    <select name="rol" required>
+                        <option value="1" {% if usuario.rol==1 %}selected{% endif %}>Superadministrador</option>
+                        <option value="2" {% if usuario.rol==2 %}selected{% endif %}>Administrador</option>
+                        <option value="3" {% if usuario.rol==3 %}selected{% endif %}>Conductor</option>
+                        <option value="4" {% if usuario.rol==4 %}selected{% endif %}>Padre de familia</option>
+                    </select>
+                </div>
+
+                <button type="button" class="btn btn-guardar" onclick="confirmarGuardado()">
+                    Guardar cambios
+                </button>
+
+                <a href="{{ url_for('usuarios') }}" class="btn btn-cabcelar">
+                    Cancelar
+                </a>
+
+            </form>
+        </div>
     </main>
 
     <footer class="footer">

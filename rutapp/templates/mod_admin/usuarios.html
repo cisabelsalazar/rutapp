@@ -7,7 +7,7 @@
 
 </head>
 
-<body class="bg-secundario">
+<body class="bg-secundario vista-usuario">
 
     <header>
         {# Incluye el encabezado (header) de la página #}
@@ -19,101 +19,118 @@
         <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
             class="Imagen" />
 
-        <div class="tabla-usuarios-container">
+        <div class="admin-layout">
 
-            <h1>Gestion de Usuarios</h1>
+            <div class="admin-menu">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-            <table>
+                <h2>Panel Administrador</h2>
 
-                <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>Usuario</th>
-                        <th>Nombre completo</th>
-                        <th>Correo</th>
-                        <th>Teléfono</th>
-                        <th>Rol</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
+                <ul>
+                    <li>Dashboard</li>
+                    <li>Usuarios</li>
+                    <li>Rutas</li>
+                    <li>Ubicación en tiempo real</li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="btn-logout">
+                            Cerrar sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-                <tbody>
+            <div class="tabla-usuarios-container">
 
-                    {% if usuarios %}
-                    {% for usuario in usuarios %}
+                <h1>Gestion de Usuarios</h1>
 
-                    <tr>
+                <table>
 
-                        <td>{{ usuario.id_usuario }}</td>
-                        <td>{{ usuario.nombre_rol }}</td>
-                        <td>{{ usuario.nombres_y_apellidos }}</td>
-                        <td>{{ usuario.correo }}</td>
-                        <td>{{ usuario.telefono }}</td>
-                        <td>{{ usuario.nombre_rol }}</td>
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>Usuario</th>
+                            <th>Nombre completo</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
 
-                        <!--  Boton de editar usuario -->
+                    <tbody>
 
-                        <td style="width: 20%;">
-                            <div class="acciones">
+                        {% if usuarios %}
+                        {% for usuario in usuarios %}
 
-                                <a href="{{url_for('editar_usuario', id_usuario = usuario.id_usuario) }}"
-                                    class="btn btn-editar">
-                                    Editar
-                                </a>
+                        <tr>
 
-                                <!--  Boton de eliminar usuario -->
+                            <td>{{ usuario.id_usuario }}</td>
+                            <td>{{ usuario.nombre_rol }}</td>
+                            <td>{{ usuario.nombres_y_apellidos }}</td>
+                            <td>{{ usuario.correo }}</td>
+                            <td>{{ usuario.telefono }}</td>
+                            <td>{{ usuario.nombre_rol }}</td>
 
-                                <form id="formEliminar{{usuario.id_usuario}}"
-                                      action="{{ url_for('eliminar_usuario', id_usuario=usuario.id_usuario) }}"
-                                      method="POST">
+                            <!--  Boton de editar usuario -->
 
-                                    <button type="button"
-                                            class="btn btn-eliminar"
+                            <td style="width: 20%;"> <!---Ancho fijo para la columna de acciones--->
+                                <div class="acciones">
+
+                                    <a href="{{url_for('editar_usuario', id_usuario = usuario.id_usuario) }}"
+                                        class="btn btn-editar">
+                                        Editar
+                                    </a>
+
+                                    <!--  Boton de eliminar usuario -->
+
+                                    <form id="formEliminar{{usuario.id_usuario}}"
+                                        action="{{ url_for('eliminar_usuario', id_usuario=usuario.id_usuario) }}"
+                                        method="POST">
+
+                                        <button type="button" class="btn btn-eliminar"
                                             onclick="confirmarEliminacion('{{usuario.id_usuario}}')">
-                                        Eliminar
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                    {% else %}
-                    <tr>
-                        <td colspan="6">No hay usuarios registrados</td>
-                    </tr>
-                    {% endif %}
-                </tbody>
+                                            Eliminar
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="6">No hay usuarios registrados</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
 
-            </table>
+                </table>
+
+            </div>
+
+            <br>
+            <div>
+                <!--  Boton volver (vista lista de usuarios) -->
+
+                {% set ruta_volver = 'superadministrador' %}
+
+                {% if session['rol'] == 2 %}
+                {% set ruta_volver = 'administrador' %}
+                {% elif session['rol'] == 3 %}
+                {% set ruta_volver = 'conductor' %}
+                {% elif session['rol'] == 4 %}
+                {% set ruta_volver = 'padres' %}
+                {% endif %}
+
+                <a href="{{ url_for(ruta_volver) }}" class="btn btn-volver"> Volver </a>
+                <!--  Boton crear nuevo usuario (vista lista de usuarios) -->
+                <a href="{{url_for('crear_usuario') }}" class="btn btn-crear">Crear nuevo usuario</a>
+
+            </div>
+
 
         </div>
-
-        <br>
-
-        <!--  Boton volver (vista lista de usuarios) -->
-
-        {% set ruta_volver = 'superadministrador' %}
-
-        {% if session['rol'] == 2 %}
-        {% set ruta_volver = 'administrador' %}
-        {% elif session['rol'] == 3 %}
-        {% set ruta_volver = 'conductor' %}
-        {% elif session['rol'] == 4 %}
-        {% set ruta_volver = 'padres' %}
-        {% endif %}
-
-        <a href="{{ url_for(ruta_volver) }}" class="btn btn-volver">
-            Volver
-        </a>
-
-        <!--  Boton crear nuevo usuario (vista lista de usuarios) -->
-
-        <a href="{{url_for('crear_usuario') }}" class="btn btn-crear">
-            Crear nuevo usuario
-        </a>
-
-
     </main>
+
     <footer class="footer">
         {# ===== FOOTER ===== #}
         {% include 'layout/footer.html' %}

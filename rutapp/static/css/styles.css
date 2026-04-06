@@ -149,7 +149,7 @@ main {
 }
 
 .bg-secundario .Imagen { /* Opacidad para páginas secundarias */
-    opacity: 0.25;/* Imagen más tenue en páginas secundarias */
+    opacity: 0.2;/* Imagen más tenue en páginas secundarias */
 }
 
 
@@ -455,44 +455,7 @@ body, html {
     font-size: 18px;
     margin-bottom: 30px;
 }
-/*====================================================================*/
-/*===Estilos modulo padre de familia===*/
-/*===================================================================*/
 
-.form-inasistencia {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-    margin: auto;
-    background: rgba(240, 237, 237, 0.8);
-    padding: 30px;
-    border-radius: 10px;
-    margin-top: -90px;
-}
-
-.vista-inasistencia h1 {/* Título del formulario */   
-    text-align: center;/* Centra el título */
-    color: #2c3e50; /* Color del título */
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-textarea {
-    resize: none;
-    border-radius: 10px;
-    padding: 10px;
-}
-
-.acciones-formulario {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-}
 /*===== Imagen fondo modulo padres======*/
 
 .vista-padres {
@@ -1526,11 +1489,13 @@ h1 {
 
 
 /*==================================================================================*/
-/* 9. FORMULARIOS DE USUARIOS: Estilos para crear y editar usuarios                */
+/* 9. SECCION ESTILOS PARA FORMULARIOS              */
 /*==================================================================================*/
 /* ===== CONTENEDOR FORMULARIOS: Estilos base para formularios ===== */
 .form-crear_usuarios,
-.form-editar_usuario {
+.form-editar_usuario,
+.form-crear_estudiante, 
+.form-editar_estudiante{
     width: 30%;/* Ancho fijo para consistencia */
     margin: 20px auto; /* Centrado horizontal */
     padding: 10px;/* Espaciado interno */
@@ -1540,22 +1505,41 @@ h1 {
     height: 550px;/* Altura fija para mantener consistencia */
 }
 
+.form-inasistencia {/* Estilos específicos para formulario de inasistencia, con altura ajustada para contenido más compacto */
+    width: 100%;/* Ancho fijo para consistencia */
+    margin: 20px auto; /* Centrado horizontal */
+    padding: 60px;/* Espaciado interno */
+    border-radius: 12px;/* Bordes redondeados */
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.2);/* Sombra para profundidad */
+    background-color: rgba(255, 255, 255, 0.779);/* Fondo semitransparente */
+    height: 350px;/* Altura fija para mantener consistencia */
+}
+
 .form-crear_usuarios .form-group,
-.form-editar_usuario .form-group {
+.form-editar_usuario .form-group,
+.form-inasistencia .form-group,
+.form-crear_estudiante .form-group,
+.form-editar_estudiante .form-group {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
 }
 
 .form-crear_usuarios label,
-.form-editar_usuario label {
+.form-editar_usuario label,
+.form-inasistencia label,
+.form-crear_estudiante label,
+.form-editar_estudiante label {
     width: 150px;
     font-weight: bold;
     color: rgb(85, 82, 82);
 }
 
 .form-crear_usuarios input,
-.form-editar_usuario input {
+.form-editar_usuario input,
+.form-inasistencia input,
+.form-crear_estudiante input,
+.form-editar_estudiante input {
     flex: 1;
     padding: 8px;
     border: 1px solid #ccc;
@@ -1564,18 +1548,30 @@ h1 {
 }
 
 .form-crear_usuarios input:focus,
-.form-editar_usuario input:focus {
+.form-editar_usuario input:focus,
+.form-inasistencia input:focus,
+.form-crear_estudiante input:focus,
+.form-editar_estudiante input:focus {
     border-color: #2d84c7;
     outline: none;
 }
 
-.form-crear_usuarios h1,
-.form-editar_usuario h1 {
+.form-crear_usuarios h1,/* Estilo específico para título de formulario de creación de usuarios */
+.form-editar_usuario h1,/* Estilo específico para título de formulario de edición de usuarios */
+.form-crear_estudiante h1,
+.form-editar_estudiante h1 {/* Estilo específico para título de formulario de creación de estudiantes */
     text-align: center;
     margin-bottom: 20px;
     color: rgb(85, 82, 82);
+    margin-top:0;
 }
 
+.form-inasistencia h1 {/* Estilo específico para título de formulario de inasistencia */
+    text-align: center;
+    margin-bottom: 20px;
+    color: rgb(85, 82, 82);
+    margin-top:-15px;
+}
 
 
 /*==================================================================================*/
@@ -1733,14 +1729,16 @@ h1 {
 }
 
 
-.vista-usuario .btn-crear{
+.vista-usuario .btn-crear,
+.vista-gestudiantes .btn-crear {/* Estilos específicos para botón crear en vistas de usuario y estudiantes */
     margin-left: 0; /* anula el margin del botón general */
     position: absolute; /* posiciona el botón de forma absoluta dentro del contenedor de la tabla */
     top: 130px; /* ajusta la posición vertical del botón */
     right: 170px; /* ajusta la posición horizontal del botón */
 }
 
-.vista-usuario .btn-volver{
+.vista-usuario .btn-volver,
+.vista-gestudiantes .btn-volver {/* Estilos específicos para botón volver en vistas de usuario y estudiantes */
     margin-left: 0; /* anula el margin del botón general */
     position: absolute; /* posiciona el botón de forma absoluta dentro del contenedor de la tabla */
     top:130px; /* ajusta la posición vertical del botón */

@@ -27,7 +27,7 @@ conexion = mysql.connector.connect(
 #   RUTA HOME
 #============================================
 
-@app.route('/') #Esta es la ruta principal
+@app.route('/') #Esta es la ruta principal o index del proyecto
 def inicio():
     return render_template('mod_admin/login.html')
 
@@ -35,7 +35,7 @@ def inicio():
 def login():
     return render_template('mod_admin/login.html')
 
-#=========   Ruta Usuarios   =========
+#=========   RUTA USUARIOS   =========
 
 @app.route('/usuarios') #Esta es la ruta Usuarios
 def usuarios(): #Esta es la función de Usuarios
@@ -68,16 +68,8 @@ def usuarios(): #Esta es la función de Usuarios
 #ruta para boton volver    
     ruta_volver = {
         1: 'superadministrador',
-        2: 'administrador',
-        3: 'conductor',
-        4: 'padres'
+        2: 'administrador'
     }.get(session['rol'])
-
-    return render_template(
-        'mod_admin/usuarios.html',
-        usuarios=lista_usuarios,
-        ruta_volver=ruta_volver
-    )
 
     return render_template('mod_admin/usuarios.html', usuarios = lista_usuarios)#Manda la lista a usuarios.html
 
@@ -87,7 +79,7 @@ def crear_usuario():
     return render_template('mod_admin/crear_usuarios.html')
 
 #====== RUTA GUARDAR USUARIO===
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash #Importa la función para encriptar contraseñas
 
 @app.route('/guardar_usuario', methods=['POST'])
 def guardar_usuario():
@@ -276,11 +268,161 @@ def padres():
 @app.route('/padres/informacion_conductor')
 def informacion_conductor():
     return render_template('mod_padres/informacion_conductor.html')
-
+#==========================================
 #==========GESTIONAR ESTUDIANTES ==========
+#==========================================
+
 @app.route('/gestion_estudiantes')
 def gestion_estudiantes():
-    return "<h2>Módulo de alertas en construcción</h2>"
+
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    
+    if session['rol'] not in [1, 2]:
+        return "Acceso no autorizado"
+    
+    cursor = conexion.cursor(dictionary=True)
+
+    consulta = """
+    SELECT e.id_estudiante,
+           e.nombre,
+           e.grado,
+           e.direccion,
+           e.telefono,
+           r.nombre_ruta
+    FROM estudiante e
+    LEFT JOIN ruta r ON e.id_ruta = r.id_ruta
+    """
+
+    cursor.execute(consulta)
+    lista_estudiantes = cursor.fetchall()
+    cursor.close()
+    
+    ruta_volver = {
+        1: 'superadministrador',
+        2: 'administrador'
+    }.get(session['rol'])
+
+    return render_template(
+        'mod_admin/estudiantes.html',
+        ruta_volver=ruta_volver,
+        estudiantes=lista_estudiantes
+    )
+#==== Ruta Crear Estudiante ====
+
+@app.route('/crear_estudiante')
+def crear_estudiante():
+    return render_template('mod_admin/crear_estudiante.html')
+
+#================================================================
+#=============RUTA GUARDA ESTUDIANTE=======
+
+@app.route('/guardar_estudiante', methods=['POST'])
+def guardar_estudiante():
+
+        id_estudiante = request.form['id_estudiante']
+        nombre= request.form['nombre']
+        grado= request.form['grado']
+        direccion= request.form['direccion']
+        telefono= request.form['telefono']
+        id_ruta= request.form['id_ruta']
+
+        cursor =conexion.cursor()
+        # Valida Id dubplicado
+        cursor.execute ("SELECT * FROM estudiante WHERE id_estudiante = %s", (id_estudiante,))
+        if cursor.fetchone():
+            return "Ya existe un estudiante con este número de identificación"
+        
+        sql = """
+        INSERT INTO estudiante
+        (id_estudiante, nombre, grado, direccion, telefono, id_ruta)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        valores = (id_estudiante, nombre, grado, direccion, telefono, id_ruta)
+
+        cursor.execute(sql, valores)
+        conexion.commit()
+        cursor.close()
+        flash('Estudiante guardado correctamente', 'success')
+
+        return redirect(url_for('gestion_estudiantes')) 
+
+#====== RUTA ELIMINAR ESTUDIANTE =====
+
+# - Elimina un estudiante de la base de datos
+# - Se ejecuta únicamente mediante método POST por seguridad
+@app.route('/eliminar_estudiante/<id_estudiante>', methods=['POST'])
+def eliminar_estudiante(id_estudiante):
+
+    cursor = conexion.cursor() # Crear cursor
+    sql = "DELETE FROM estudiante WHERE id_estudiante = %s"# Consulta SQL para eliminar el estudiante
+    cursor.execute(sql, (id_estudiante,))# Ejecutar la consulta
+    conexion.commit() # Guardar cambios en la base de datos
+    cursor.close() # Cerrar cursor
+    flash('Estudiante eliminado correctamente', 'success')
+
+    return redirect(url_for('gestion_estudiantes')) # Redirigir a la lista de estudiantes
+
+#====== RUTA EDITAR ESTUDIANTE ======
+
+# - GET  -> muestra el formulario con los datos actuales
+# - POST -> guarda los cambios realizados en la BD
+@app.route('/editar_estudiante/<id_estudiante>', methods=['GET', 'POST'])
+def editar_estudiante(id_estudiante):
+
+    cursor = conexion.cursor(dictionary=True) # Crear cursor en formato diccionario para acceder por nombre de campo
+
+    # POST guardar cambios
+    if request.method == 'POST': # POST: cuando el usuario da clic en "Guardar cambios"
+
+        # Captura los datos enviados desde el formulario HTML
+        nombre = request.form['nombre']
+        grado = request.form['grado']
+        direccion = request.form['direccion']
+        telefono = request.form['telefono']
+        id_ruta = request.form['id_ruta']
+
+        # Consulta SQL para actualizar la información del estudiante        
+        sql = """
+        UPDATE estudiante
+        SET nombre = %s,
+            grado = %s,
+            direccion = %s,
+            telefono = %s,
+            id_ruta = %s
+        WHERE id_estudiante = %s
+        """
+
+        valores = (nombre, grado, direccion, telefono, id_ruta, id_estudiante)
+
+        cursor.execute(sql, valores)
+        conexion.commit()
+        cursor.close()
+
+        flash('Informacion actualizada correctamente', 'success')
+        return redirect(url_for('gestion_estudiantes'))
+
+    #GET: Cargar formulario
+    sql = "SELECT * FROM estudiante WHERE id_estudiante = %s" # Consulta para obtener los datos actuales del estudiante
+    cursor.execute(sql, (id_estudiante,))
+    estudiante = cursor.fetchone()
+
+    cursor.close() #Cierra el cursor
+
+    if not estudiante: #validacion por si no existe el estudiante
+        return "Estudiante no encontrado", 404
+    
+    ruta_volver = {
+        1: 'superadministrador',
+        2: 'administrador'
+    }.get(session['rol'])
+
+    return render_template('mod_admin/editar_estudiante.html', # Renderiza el formulario de edición con los datos actuales del estudiante
+                           ruta_volver=ruta_volver, 
+                           estudiante=estudiante  ) # Envía los datos al formulario editar_estudiante.html
+
+#=================================================================
+#=================================================================
 
 @app.route('/reporte_inasistencia')
 def reporte_inasistencia():

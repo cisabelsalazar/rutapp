@@ -245,9 +245,62 @@ def mi_ruta():
 def estudiantes_conductor():
     return render_template('mod_conductor/estudiantes_conductor.html')
 
-@app.route('/conductor/alertas')#Revisado por Cristina OK#
+#===================================================================================================
+# RUTA PARA GESTIONAR ALERTAS DESDE EL PANEL DEL CONDUCTOR
+
+@app.route('/conductor/alertas', methods=['GET', 'POST'])#Revisado por Cristina OK#
 def alertas_conductor():
-    return render_template('mod_conductor/alertas_conductor.html')
+    cursor = conexion.cursor(dictionary=True)# Crear cursor para interactuar con la base de datos
+
+    id_conductor = session.get('usuario') # Obtener el ID del conductor desde la sesión
+
+    #Crear alerta
+    if request.method == 'POST':
+        id_estudiante = request.form.get('id_estudiante')
+        id_ruta = request.form.get('id_ruta')
+        tipo_alerta = request.form.get('tipo_alerta')
+        mensaje = request.form.get('mensaje')
+
+        consulta_insert = """
+        INSERT INTO ALERTAS(
+        id_usuario_emisor,
+        id_estudiante,
+        id_ruta,
+        tipo_alerta,
+        mensaje
+        )
+        VALUES (%s, %s, %s, %s, %s)
+        """
+
+        cursor.execute(consulta_insert,(
+            id_conductor,
+            id_estudiante,
+            id_ruta,
+            tipo_alerta,
+            mensaje
+        ))
+
+        conexion.commit()
+        cursor.close()
+        flash('Alerta creada correctamente', 'success')
+        return redirect(url_for('alertas_conductor'))
+    
+    #Mostrar alertas enviadas por el conductor
+    consulta="""
+    SELECT *
+    FROM ALERTAS
+    WHERE id_usuario_emisor = %s
+    ORDER BY fecha_hora DESC
+    """
+
+    cursor.execute(consulta, (id_conductor,))
+    alertas = cursor.fetchall()
+
+    cursor.close()
+
+    return render_template('mod_conductor/alertas_conductor.html', alertas=alertas)
+
+
 
 @app.route('/conductor/compartir_ubicacion')
 def compartir_ubicacion():  
@@ -445,42 +498,51 @@ def reportar_inasistencia():
 
 #============== RUTA VALIDACION DE LOGIN====================== CRISTINA SALAZAR
 
-@app.route('/validar_login',methods=['POST'])
-def valida_login():
+from werkzeug.security import check_password_hash # Importa la función para verificar contraseñas encriptadas
+import hashlib # Importa la librería para manejar hash MD5 (usuarios antiguos)
 
+@app.route('/validar_login', methods=['POST'])
+def valida_login():
     correo = request.form['correo'].strip()
     password = request.form['password'].strip()
 
     cursor = conexion.cursor(dictionary=True)
 
-    consulta = """
-    SELECT *
-    FROM usuario
-    WHERE correo=%s AND hash_password = md5(%s)
-    """
+    cursor.execute("""
+        SELECT * 
+        FROM usuario
+        WHERE correo = %s
+    """, (correo,))
 
-    cursor.execute(consulta,(correo,password))
     usuario = cursor.fetchone()
 
     if usuario:
-        id_rol = usuario['id_rol'] # Esta es la posición en donde esta el usuario en la tabla BD
+        hash_guardado = usuario['hash_password']
 
-        session['usuario'] = usuario['id_rol']
-        session['rol'] = usuario['id_rol']
+        acceso = False
 
-        if id_rol == 1:
-            return redirect(url_for('superadministrador'))
-        elif id_rol == 2:
-            return redirect(url_for('administrador'))
-        elif id_rol == 3:
-            return redirect(url_for('conductor'))
-        elif id_rol == 4:
-            return redirect(url_for('padres'))
+        # Usuarios nuevos (scrypt)
+        if hash_guardado.startswith("scrypt:"):
+            acceso = check_password_hash(hash_guardado, password)
+
+        # Usuarios viejos (MD5)
         else:
-            return "Rol no reconocido"
+            acceso = hashlib.md5(password.encode()).hexdigest() == hash_guardado
 
-    else:
-        return "Usuario o contraseña incorrectos"
+        if acceso:
+            session['usuario'] = usuario['id_usuario']
+            session['rol'] = usuario['id_rol']
+
+            if usuario['id_rol'] == 1:
+                return redirect(url_for('superadministrador'))
+            elif usuario['id_rol'] == 2:
+                return redirect(url_for('administrador'))
+            elif usuario['id_rol'] == 3:
+                return redirect(url_for('conductor'))
+            elif usuario['id_rol'] == 4:
+                return redirect(url_for('padres'))
+
+    return "Usuario o contraseña incorrectos"
     
 @app.route('/logout')
 def logout():

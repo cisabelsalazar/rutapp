@@ -1072,10 +1072,36 @@ input[type="text"]:focus {
     display:inline-flex; /*mantiene el botón en línea con el título*/
     align-items: center; /*centra verticalmente el texto del botón*/
     position: fixed; /*posiciona el botón de forma absoluta dentro del contenedor de la tabla*/
-    top: 145px; /*ajusta la posición vertical del botón*/
-    right: 300px; /*ajusta la posición horizontal del botón*/
+    top: 147px; /*ajusta la posición vertical del botón*/
+    right: 440px; /*ajusta la posición horizontal del botón*/
     padding-bottom: 9px; /*ajusta el padding para alinear mejor con el título*/
 
+}
+.vista-alertas h1 {/*ajusta el título para que se alinee mejor con el botón volver*/
+    font-size: 4 rem;
+    color: #2c3e50;
+    flex-grow: 1;
+    text-align: center;
+}
+
+
+.form-alerta-conductor textarea {/* Estilos para el textarea de alerta */
+    width: 100%;
+    min-height: 90px;
+    padding: 12px;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    resize: vertical;
+    outline: none;
+    box-sizing: border-box;
+    transition: border 0.3s ease;
+}
+
+.form-alerta-conductor textarea:focus {/* Estilos para el textarea al enfocarse */
+    border-color: #2d84c7;
+    box-shadow: 0 0 5px rgba(45, 132, 199, 0.3);
 }
 
 /* ===== PESTAÑAS FILTRO: Tabs para filtrar alertas ===== */

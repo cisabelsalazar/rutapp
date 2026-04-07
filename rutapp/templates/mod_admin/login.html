@@ -8,14 +8,14 @@
 
 </head>
 
-<body class="bg-home">
+<body class="bg-home"><!--- Agrega la clase "bg-home" para aplicar el fondo específico de la página de inicio -->
 
     <header>
     {# Incluye el encabezado (header) de la página #}
     {% include 'layout/header.html' %}
     </header>
 
-    <main>
+    <main><!--- Contenedor principal de la página de inicio -->
 
         <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
             class="Imagen" />
@@ -90,7 +90,6 @@
     <footer class="footer">
         <p>© 2026 RUTAPP - Proyecto ADSO SENA</p>
     </footer>
-
 
 </body>
 

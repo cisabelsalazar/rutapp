@@ -1512,9 +1512,6 @@ h1 {
     cursor: pointer;
 }
 
-
-
-
 /*==================================================================================*/
 /* 9. SECCION ESTILOS PARA FORMULARIOS              */
 /*==================================================================================*/
@@ -1686,29 +1683,6 @@ h1 {
     transform: translateY(-2px);
 }
 
-/* ===== BOTÓN EDITAR: Estilo para botón editar usuario ===== */
-.btn-editar {
-    border: 3px solid #409956;
-    color: black;
-    background-color: transparent;
-}
-
-.btn-editar:hover {
-    background-color: #409956;
-    color: white;
-}
-
-/* ===== BOTÓN ELIMINAR: Estilo para botón eliminar usuario ===== */
-.btn-eliminar {
-    border: 3px solid #d52923;
-    color: black;
-    background-color: transparent;
-}
-
-.btn-eliminar:hover {
-    background-color: #d52923;
-    color: white;
-}
 
 /* ===== BOTÓN CREAR: Estilo para botón crear usuario ===== */
 .tabla-usuarios-container .btn-crear {
@@ -1811,16 +1785,14 @@ h1 {
 
 }
 
-
-/* ===== BOTONES DE ACCIÓN: Botones para guardar, crear, editar ===== */
+/* ===== BOTONES DE ACCIÓN: Botones para guardar, crear, editar, actualizar, rep inasistencia ===== */
 .btn-guardar,
 .btn-crear,
 .btn-editar,
 .btn-actualizar,
-.btn-cancelar,
 .btn-rep-inasistencia {
     color: black;
-    border: 2px solid #28a745;
+    border: 2px solid #409956;
     margin-left: 15px;
     transition: background-color 0.2s;
 }
@@ -1829,28 +1801,24 @@ h1 {
 .btn-crear:hover,
 .btn-editar:hover,
 .btn-actualizar:hover,
-.btn-cancelar:hover,
 .btn-rep-inasistencia {
-    background-color: #28a745;
+    background-color: #409956;
     color: white;
 }
 
-/* ===== BOTÓN ELIMINAR: Botón para eliminar elemento ===== */
-.btn-eliminar {
+/* ===== BOTÓN ELIMINAR y CANCELAR: Botón global para eliminar elemento ===== */
+.btn-eliminar,
+.btn-cancelar {
     color: black;
     border: 2px solid #a72828;
     transition: background-color 0.2s;
 }
 
-.btn-eliminar:hover {
+.btn-eliminar:hover,
+.btn-cancelar:hover {
     background-color: #a72828;
     color: white;
 }
-
-.btn-editar {
-    margin-right: 10px;
-}
-
 
 
 /*==================================================================================*/

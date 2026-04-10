@@ -27,7 +27,7 @@
             <div class="admin-menu">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-                <h2>Panel Superadministrador</h2>
+                <h2>Panel {{nombre_panel}}</h2>
 
                 <ul>
                     <li>Dashboard</li>
@@ -55,7 +55,6 @@
                     <a href="{{ url_for('gestion_vehiculos') }}" class="btn">Gestionar vehículos</a>
                     <a href="{{ url_for('gestion_rutas') }}" class="btn">Gestionar rutas</a>
                     <a href="{{ url_for('gestion_alerta') }}" class="btn">Gestionar alertas</a>
-                    <a href="{{ url_for('reporte_inasistencia') }}" class="btn">Reporte inasistencia</a><!---Informar que un estudiante no usará la ruta-->
                 </div>
 
             </div>

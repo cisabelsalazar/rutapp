@@ -26,7 +26,7 @@
             <div class="admin-menu">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-                <h2>Panel Administrador</h2>
+                <h2>Panel {{nombre_panel}}</h2>
 
                 <ul>
                     <li>Dashboard</li>
@@ -42,7 +42,7 @@
             </div>
 
 
-            <form class="form-crear_usuarios" action="/guardar_usuario" method="POST">
+            <form id="formCrearUsuarios" class="form-crear_usuarios" action="/guardar_usuario" method="POST">
 
                 <h1>Crear nuevo usuario</h1>
 
@@ -87,7 +87,8 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-guardar">Guardar</button>
+                <button type="button" class="btn btn-guardar" onclick="confirmarCreacionUsuario()">
+                    Guardar</button>
                 <a href="{{ url_for('usuarios') }}" class="btn btn-volver">Volver</a>
                 </a>
 

@@ -1138,6 +1138,7 @@ input[type="text"]:focus {
 }
 
 /* ===== TABLA ALERTAS: Contenedor de tabla de alertas ===== */
+/*estilos tabla Alertas módulo conductor*/
 .table-container-aler { 
     overflow-x: auto; 
 }
@@ -1618,8 +1619,15 @@ h1 {
     color: #2c4b62;
 }
 
+.tabla-alertas-container {      /*Aplica estilos a tabla alertas adminiy superadmin*/
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c4b62;
+}
+
 /* ===== TABLA: Estilos para tabla HTML ===== */
-.tabla-usuarios-container table {
+.tabla-usuarios-container table,
+.tabla-alertas-container {        /*estilos tabal alertas admin y superadmin*/
     width: 80%;                  /* Ancho de la tabla */
     max-width: 1400px;           /* Ancho máximo */
     border-collapse: collapse;   /* Elimina espacio entre celdas */
@@ -1635,6 +1643,14 @@ h1 {
     font-weight: bold;
 }
 
+.tabla-alertas-container th {
+    background-color: #295a6b;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
 .tabla-usuarios-container td {
     border: 1px solid #ccc;
     padding: 20px;
@@ -1642,9 +1658,11 @@ h1 {
     color: #333;
 }
 
-/* ===== FILAS ALTERNADAS: Colores alternados en filas ===== */
-.tabla-usuarios-container tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+.tabla-alertas-container td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    color: #333;
 }
 
 /* ===== CELDAS ACCIONES: Botones de acción en tabla ===== */
@@ -1775,7 +1793,6 @@ h1 {
     position: absolute;
     top: 220px;
     left: 20px;
-
     margin-left: 0; /* anula el margin del botón general */
 }
 
@@ -1786,12 +1803,22 @@ h1 {
     padding: 12px;  /* aumenta el padding para que el botón sea más grande */
 }
 
+.vista-alertas .btn-volver {
+    position: absolute;
+    top: 150px;
+    right: 150px;
+    margin-right: 0;
+
+}
+
+
 /* ===== BOTONES DE ACCIÓN: Botones para guardar, crear, editar ===== */
 .btn-guardar,
 .btn-crear,
 .btn-editar,
 .btn-actualizar,
-.btn-cancelar {
+.btn-cancelar,
+.btn-rep-inasistencia {
     color: black;
     border: 2px solid #28a745;
     margin-left: 15px;
@@ -1802,7 +1829,8 @@ h1 {
 .btn-crear:hover,
 .btn-editar:hover,
 .btn-actualizar:hover,
-.btn-cancelar:hover {
+.btn-cancelar:hover,
+.btn-rep-inasistencia {
     background-color: #28a745;
     color: white;
 }
@@ -1822,6 +1850,8 @@ h1 {
 .btn-editar {
     margin-right: 10px;
 }
+
+
 
 /*==================================================================================*/
 /* 12. RESPONSIVE / ADAPTACIÓN MÓVILES: Media queries para pantallas pequeñas     */

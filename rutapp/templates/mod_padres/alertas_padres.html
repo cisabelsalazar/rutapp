@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Alertas Padres</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+</head>
+
+<body class=" padre-body bg-secundario vista-alertas">
+
+    <header>
+        {% include 'layout/header.html' %}
+    </header>
+
+    <main>
+
+        <div class="padre-layout">
+
+            <img src="{{ url_for('static', filename='img/imagen_padres.png') }}" alt="Imagen de fondo" class="Imagen" />
+
+            <div class="padre-layout">
+
+                <!-- Menú lateral -->
+                <div class="padre-menu">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+
+                    <h2>Panel Padre de Familia</h2>
+
+                    <ul class="padre-menu">
+                        <li><a href="{{ url_for('padres') }}">Dashboard</a></li>
+                        <li><a href="{{ url_for('informacion_conductor') }}">Información conductor</a></li>
+                        <!-- <li><a href="{{ url_for('estudiantes_padre') }}">Estudiantes</a></li> -->
+                        <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar sesión</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contenido principal -->
+                <div class="padre-content">
+                    <a href="{{ url_for('reportar_inasistencia') }}" class="btn rep-inasistencia">Reportar
+                        inasistencia</a><!-- Botón para reportar inasistencia -->
+
+                    <a href="{{ url_for('padres') }}" class="btn btn-volver">
+                        <!-- Botón para volver vista alertas-->
+                        Volver
+                    </a>
+
+                    <h1>Alertas del Estudiante</h1>
+
+                    <table class="tabla-alertas-container">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Mensaje</th>
+                                <th>Hora</th>
+                                <th>Estado</th>
+                                <th>Observación Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if alertas %}
+                            {% for alerta in alertas %}
+                            <tr>
+                                <td>{{ alerta.tipo_alerta }}</td>
+                                <td>{{ alerta.mensaje }}</td>
+                                <td>{{ alerta.fecha_hora.strftime('%I:%M %p') }}</td>
+                                <td>{{ alerta.estado }}</td>
+                                <td>{{ alerta.observacion_admin or 'Sin observación' }}</td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="5">No hay alertas para este estudiante</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+    </main>
+
+    <footer class="footer">
+        {% include 'layout/footer.html' %}
+    </footer>
+
+</body>
+
+</html>

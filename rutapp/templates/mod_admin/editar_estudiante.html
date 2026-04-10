@@ -25,7 +25,7 @@
             <div class="admin-menu">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-                <h2>Panel Superadministrador</h2>
+                <h2>Panel {{nombre_panel}}</h2>
 
                 <ul>
                     <li>Dashboard</li>
@@ -76,9 +76,7 @@
                     <input type="text" name="id_ruta" value="{{ estudiante.id_ruta }}" required>
                 </div>
 
-
-
-                <button type="button" class="btn btn-guardar" onclick="confirmarGuardado()">
+                <button type="button" class="btn btn-guardar" onclick="confirmarGuardadoEstudiante()">
                     Guardar cambios
                 </button>
 
@@ -93,28 +91,6 @@
     <footer class="footer">
         {% include 'layout/footer.html' %}
     </footer>
-
-    <script>
-        function confirmarGuardado() {
-            Swal.fire({
-                title: '¿Guardar cambios?',
-                text: 'Se actualizará la información del estudiante',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, guardar',
-                cancelButtonText: 'Cancelar',
-                customClass: {
-                    popup: 'swal-popup',
-                    confirmButton: 'swal-confirm-btn',
-                    cancelButton: 'swal-cancel-btn'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('formEditarEstudiante').submit();
-                }
-            });
-        }
-    </script>
 
 </body>
 

@@ -24,7 +24,7 @@
             <div class="admin-menu">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-                <h2>Panel Superadministrador</h2>
+                <h2>Panel {{nombre_panel}}</h2>
 
                 <ul>
                     <li>Dashboard</li>
@@ -105,9 +105,11 @@
 
             </div>
 
-            <a href="{{ url_for(ruta_volver) }}" class="btn btn-volver">Volver</a><!---Boton volver a la vista de usuarios (dependiendo del rol del usuario) -->
+            <!---Boton volver a la vista de usuarios (dependiendo del rol del usuario) -->
+            <a href="{{ url_for('volver_panel') }}" class="btn btn-volver">Volver</a>
+            <!---Botón para volver al panel--->
 
-             <!--  Boton crear nuevo estudiante (vista lista de estudiantes) -->
+            <!--  Boton crear nuevo estudiante (vista lista de estudiantes) -->
 
             <a href="{{url_for('crear_estudiante') }}"
                 class="btn btn-crear"><!--  Boton crear nuevo estudiante (vista lista de estudiantes) -->
@@ -120,23 +122,6 @@
         {# ===== FOOTER ===== #}
         {% include 'layout/footer.html' %}
     </footer>
-
-    <!-- Script personalizado ventana emergente de confirmación -->
-    <script>
-        function confirmarEliminacion(id) {
-            Swal.fire({
-                text: 'Esta acción eliminará el estudiante permanentemente. ¿Deseas continuar?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('formEliminar' + id).submit();
-                }
-            });
-        }
-    </script>
 </body>
 
 </html>

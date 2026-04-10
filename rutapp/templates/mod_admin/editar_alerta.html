@@ -1,27 +1,23 @@
-<!---PANEL ADMINISTRDOR-->
+<!---GESTION DE ALERTAS MODULO ADMINSUPERADMIN(OBSERVACIONES)-->
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RUTAPP - Panel Administrador</title>
+    <title>Gestionar alerta</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
 </head>
 
-<body class="bg-secundario admin-page">
+<body class="bg-secundario">
 
     <header>
-        {# Incluye el encabezado (header) de la página #}
         {% include 'layout/header.html' %}
     </header>
 
     <main>
-
         <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
             class="Imagen" />
-
         <div class="admin-layout">
 
             <div class="admin-menu">
@@ -43,25 +39,29 @@
             </div>
 
             <div class="admin-content">
-                <h2>Bienvenido</h2>
-                <p>Desde este panel podrá gestionar la información del sistema RUTAPP.</p>
 
-                <img src="{{ url_for('static', filename='img/mapa.png') }}" alt="Mapa de rutas en tiempo real"
-                    class="mapa-admin">
+                <h1>Gestionar alerta</h1>
+                <a href="{{ url_for('gestion_alerta') }}" class="btn btn-volver">
+                    Volver
+                </a>
 
-                <div class="admin-buttons">
-                    <a href="{{ url_for('usuarios') }}" class="btn">Gestionar usuarios</a>
-                    <a href="{{ url_for('gestion_estudiantes') }}" class="btn">Gestionar estudiantes</a>
-                    <a href="{{ url_for('gestion_vehiculos') }}" class="btn">Gestionar vehículos</a>
-                    <a href="{{ url_for('gestion_rutas') }}" class="btn">Gestionar rutas</a>
-                    <a href="{{ url_for('gestion_alerta') }}" class="btn">Gestionar alertas</a>
-                    
-                </div>
+                <form method="POST" class="form-alerta-conductor">
+                    <label>Estado</label>
+                    <select name="estado" required>
+                        <option value="nueva" {% if alerta.estado=='nueva' %}selected{% endif %}>Nueva</option>
+                        <option value="leida" {% if alerta.estado=='leida' %}selected{% endif %}>Leída</option>
+                        <option value="en_proceso" {% if alerta.estado=='en_proceso' %}selected{% endif %}>En proceso
+                        </option>
+                        <option value="resuelta" {% if alerta.estado=='resuelta' %}selected{% endif %}>Resuelta</option>
+                    </select>
 
+                    <label>Observación administrador</label>
+                    <textarea name="observacion_admin">{{ alerta.observacion_admin or '' }}</textarea>
+
+                    <button type="submit" class="btn btn-guardar">Guardar</button>
+                </form>
             </div>
-
         </div>
-
     </main>
 
     <footer class="footer">

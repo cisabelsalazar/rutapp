@@ -8,6 +8,7 @@
 </head>
 
 <body class="bg-secundario vista-usuario">
+    {% from 'components/buttons_macro.html' import action_toolbar %}
 
     <header>
         {# Incluye el encabezado (header) de la página #}
@@ -41,6 +42,10 @@
             <div class="tabla-usuarios-container">
 
                 <h1>Gestion de Usuarios</h1>
+
+                <div class="toolbar-container">
+                    {{ action_toolbar(botones) }}
+                </div>
 
                 <table>
 
@@ -107,14 +112,6 @@
             </div>
 
             <br>
-            <div>
-                <!--  Boton volver (vista lista de usuarios) -->
-                <a href="{{ url_for('volver_panel') }}" class="btn btn-volver">Volver</a> <!---Botón para volver al panel--->
-                <!--  Boton crear nuevo usuario (vista lista de usuarios) -->
-                <a href="{{ url_for('crear_usuario') }}" class="btn btn-crear">Crear nuevo usuario</a>
-
-            </div>
-
 
         </div>
     </main>

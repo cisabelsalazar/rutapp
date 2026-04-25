@@ -90,11 +90,25 @@ def login():
 @app.route('/usuarios') #Esta es la ruta Usuarios
 def usuarios(): #Esta es la función de Usuarios
 
+
     if 'usuario' not in session: #Aqui se hace la verificación de sesión
         return redirect(url_for('mod_admin/login'))#Regresa al home
     
     if session['rol'] not in [1, 2, 3, 4]:# Aqui se verifica el rol del usuario
         return "Acceso no autorizado"
+    
+    botones = [
+    {
+        "texto": "← Volver",
+        "url": url_for("usuarios"),
+        "class": "btn-secondary"
+    },
+    {
+        "texto": "+ Nuevo usuario",
+        "url": url_for("crear_usuario"),
+        "class": "btn-primary"
+    }
+]
     
     cursor = conexion.cursor(dictionary=True)#Cursor creado para interactuar con MySQL
 
@@ -115,7 +129,7 @@ def usuarios(): #Esta es la función de Usuarios
     lista_usuarios = cursor.fetchall()#Aquí se traen todos los resultados de la consulta.
     cursor.close()
 
-    return render_template('mod_admin/usuarios.html', usuarios = lista_usuarios)#Manda la lista a usuarios.html
+    return render_template('mod_admin/usuarios.html', usuarios = lista_usuarios, botones=botones)#Manda la lista a usuarios.html
 
 #====== Ruta crear usuario======
 @app.route('/crear_usuario')

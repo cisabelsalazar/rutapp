@@ -42,12 +42,14 @@
                 <h3>Información del Conductor</h3>
                 
                 <div class="info-grid-infocon">
-                    <p><strong>Nombre:</strong> Luis Martinez</p>
-                    <p><strong>Teléfono:</strong> 55-5555-5555</p>
-                    <p><strong>Correo:</strong> lmartinez@email.com</p>
-                    <p><strong>vehiculo:</strong> BMW</p>
-                    <p><strong>Placa:</strong> MTY-205</p>
-                    <p><strong>Ruta</strong> 301</p>
+                     <div class="info-grid-infocon">
+                      <p><strong>Nombre:</strong> {{ conductor.nombre }}</p>
+                      <p><strong>Teléfono:</strong> {{ conductor.telefono }}</p>
+                      <p><strong>Correo:</strong> {{ conductor.correo }}</p>
+                      <p><strong>Vehículo:</strong> {{ conductor.vehiculo }}</p>
+                      <p><strong>Placa:</strong> {{ conductor.placa }}</p>
+                      <p><strong>Ruta:</strong> {{ conductor.ruta }}</p>
+                     </div>
                 </div>
                       <div class="button-group-infocon">
                         <div class="button-group-infocon">

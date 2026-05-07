@@ -76,6 +76,33 @@ CREATE TABLE ESTUDIANTE(
     FOREIGN KEY (id_ruta) REFERENCES RUTA(id_ruta) ON DELETE SET NULL
 );
 
+DROP TABLE IF EXISTS ALERTAS;
+
+CREATE TABLE ALERTAS(
+    id_alerta INT AUTO_INCREMENT PRIMARY KEY,
+
+    id_usuario_emisor VARCHAR(20) NOT NULL,
+    id_usuario_receptor VARCHAR(20) NULL,
+
+    id_estudiante INT NULL,
+    id_ruta INT NULL,
+
+    tipo_alerta VARCHAR(50) NOT NULL,
+    mensaje TEXT NOT NULL,
+
+    fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    estado ENUM('nueva','leida','en_proceso','resuelta') DEFAULT 'nueva',
+    prioridad ENUM('alta','media','baja') DEFAULT 'media',
+
+    observacion_admin TEXT NULL,
+
+    FOREIGN KEY (id_usuario_emisor) REFERENCES USUARIO(id_usuario),
+    FOREIGN KEY (id_usuario_receptor) REFERENCES USUARIO(id_usuario),
+    FOREIGN KEY (id_estudiante) REFERENCES ESTUDIANTE(id_estudiante),
+    FOREIGN KEY (id_ruta) REFERENCES RUTA(id_ruta)
+);
+
 --- QUERY 
 SELECT * FROM rol ORDER BY id_rol;
 SELECT * FROM permiso ORDER BY id_permiso;
@@ -83,6 +110,7 @@ SELECT * FROM rol_permiso ORDER BY id_rol;
 SELECT * FROM usuario ORDER BY id_usuario;
 SELECT * FROM ruta ORDER BY id_ruta;
 SELECT * FROM estudiante ORDER BY id_estudiante;
+SELECT * FROM alertas ORDER BY id_alerta;
 
 
 -- INFORMACION BASE DE DATOS - ROL

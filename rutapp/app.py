@@ -85,6 +85,22 @@ def inicio():
 def login():
     return render_template('mod_admin/login.html')
 
+#=============================================
+# FUNCION PARA BOTONES VOLVER 
+#=============================================
+
+def obtener_url_volver():
+    if session ['rol'] == 1:
+        return url_for('superadministrador')
+    elif session ['rol'] == 2:
+        return url_for('administrador')
+    elif session ['rol'] == 3:
+        return url_for('conductor')
+    elif session ['rol'] == 4:
+        return url_for('padre de familia')
+    else:
+        return url_for('login')
+
 #=========   RUTA USUARIOS   =========
 
 @app.route('/usuarios') #Esta es la ruta Usuarios
@@ -99,12 +115,12 @@ def usuarios(): #Esta es la función de Usuarios
     
     botones = [
     {
-        "texto": "← Volver",
-        "url": url_for("usuarios"),
+        "texto": "Volver",
+        "url": obtener_url_volver(),
         "class": "btn-secondary"
     },
     {
-        "texto": "+ Nuevo usuario",
+        "texto": "Nuevo usuario",
         "url": url_for("crear_usuario"),
         "class": "btn-primary"
     }
@@ -130,6 +146,7 @@ def usuarios(): #Esta es la función de Usuarios
     cursor.close()
 
     return render_template('mod_admin/usuarios.html', usuarios = lista_usuarios, botones=botones)#Manda la lista a usuarios.html
+
 
 #====== Ruta crear usuario======
 @app.route('/crear_usuario')
@@ -274,7 +291,7 @@ def administrador():
     return render_template('mod_admin/admin.html')
 
 #============================================================================================
-#===============ALERTAS DEL SISTEMA (mod admin)=====================
+#===============ALERTAS DEL SISTEMA (mod admin y supadmin)=====================
 #=============================================================================================
 @app.route('/gestion_alerta')#Rura gestion de alertas Modulo admin y supadmin
 def gestion_alerta():#función para mostrar las alertas en el panel del admin y supadmin
@@ -284,6 +301,17 @@ def gestion_alerta():#función para mostrar las alertas en el panel del admin y 
 
     if session['rol'] not in [1, 2]:
         return "Acceso no autorizado"
+    
+    estado = request.args.get('estado') #Captura el estado
+    
+    botones = [
+    {
+        "texto": "Volver",
+        "url": obtener_url_volver(),
+        "class": "btn-secondary"
+    },
+
+]
 
     cursor = conexion.cursor(dictionary=True)# Crear cursor para interactuar con la base de datos
 
@@ -301,16 +329,25 @@ def gestion_alerta():#función para mostrar las alertas en el panel del admin y 
         ON a.id_estudiante = e.id_estudiante
     LEFT JOIN RUTA r 
         ON a.id_ruta = r.id_ruta
-    ORDER BY a.fecha_hora DESC
     """
 
-    cursor.execute(consulta) #Ejecuta la consulta SQL
+    parametros = []
+
+    if estado:
+        consulta += " WHERE a.estado = %s"
+        parametros.append(estado)
+
+    consulta += " ORDER BY a.fecha_hora DESC"
+
+
+    cursor.execute(consulta, parametros) #Ejecuta la consulta SQL
     alertas = cursor.fetchall() #Trae todas las alertas obtenidas de la consulta
     cursor.close() #Cierra el cursor
 
     return render_template(
         'mod_admin/alertas.html', 
-        alertas=alertas
+        alertas = alertas,
+        botones = botones
     ) #Renderiza la plantilla gestion_alerta.html y le pasa la lista de alertas obtenida de la consulta
 
 
@@ -342,8 +379,8 @@ def editar_alerta(id_alerta):
         conexion.commit()
         cursor.close()
 
-        flash('Alerta gestionada correctamente', 'success')#nO ESTA FUNCIONANDO REVISAR
-        return redirect(url_for('editar_alerta', id_alerta=id_alerta))
+        flash('Alerta gestionada correctamente', 'success')
+        return redirect(url_for('gestion_alerta'))
 
     
     # GET: Cargar datos actuales de la alerta para mostrar en el formulario
@@ -551,6 +588,19 @@ def gestion_estudiantes():
     if session['rol'] not in [1, 2]:
         return "Acceso no autorizado"
     
+    botones = [
+    {
+        "texto": "Volver",
+        "url": obtener_url_volver(),
+        "class": "btn-secondary"
+    },
+    {
+        "texto": "Crear estudiante",
+        "url": url_for("crear_estudiante"),
+        "class": "btn-primarty"
+    }
+]
+    
     cursor = conexion.cursor(dictionary=True)
 
     consulta = """
@@ -567,18 +617,16 @@ def gestion_estudiantes():
     cursor.execute(consulta)
     lista_estudiantes = cursor.fetchall()
     cursor.close()
-    
-    # ruta_volver = {
-    #     1: 'superadministrador',
-    #     2: 'administrador'
-    # }.get(session['rol'])
 
     return render_template(
         'mod_admin/estudiantes.html',
-        # ruta_volver=ruta_volver,
-        estudiantes=lista_estudiantes
+        estudiantes = lista_estudiantes,
+        botones = botones
     )
+
+#=======================================================
 #==== Ruta Crear Estudiante ====
+#=======================================================
 
 @app.route('/crear_estudiante')
 def crear_estudiante():
@@ -598,7 +646,6 @@ def guardar_estudiante():
         id_ruta= request.form['id_ruta']
 
         cursor =conexion.cursor()
-
 
 
         # Valida Id dubplicado

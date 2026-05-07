@@ -15,7 +15,7 @@
         {# Incluye el encabezado (header) de la página #}
         {% include 'layout/header.html' %}
     </header>
-    
+
     <img src="{{ url_for('static', filename='img/imagen_padres.png') }}" alt="Imagen de fondo" class="Imagen" />
 
     <div class="padre-layout">
@@ -26,11 +26,15 @@
 
             <h2>Panel Padre de Familia</h2>
 
-            <ul class="padre-menu">
+            <ul>
                 <li><a href="{{ url_for('padres') }}">Dashboard</a></li>
                 <li><a href="{{ url_for('informacion_conductor') }}">Información conductor</a></li>
                 <!-- <li><a href="{{ url_for('estudiantes_padre') }}">Estudiantes</a></li> -->
-                <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar sesión</a></li>
+                <li>
+                    <a href="{{ url_for('logout') }}" class="btn-logout">
+                        Cerrar sesión
+                    </a>
+                </li>
             </ul>
         </div>
 

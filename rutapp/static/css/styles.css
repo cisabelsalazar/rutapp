@@ -5,26 +5,32 @@
 /*==================================================================================*/
 /* 1. RESET GENERAL: Elimina márgenes y padding por defecto del navegador           */
 /*==================================================================================*/
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
 }
 
-body.admin-page, 
+
+/*body.admin-page, 
 body.supadmin-page { 
     height: 100vh; 
-    overflow: hidden; /* Elimina el scroll por completo */
-}
+  /*  overflow: hidden; /* Elimina el scroll por completo */
+/*}*/
 
 main {
     flex: 1;
 }
 
-.main-container {
+.main-container { /*Contenedor principal*/
     height: 100vh; /* 100% del alto de la ventana visual */
     display: flex;
-    overflow: hidden;
+ /*   overflow: hidden;*/ /*scroll null*/
 }
 
 /*==================================================================================*/
@@ -292,64 +298,98 @@ main {
 /*==================================================================================*/
 /* 7. PANEL ADMINISTRADOR Y SUPERADMINISTRADOR: Estilos para panel admin           */
 /*==================================================================================*/
-body, html {
+/*body, html {
     height: 100%;
     margin: 0;
-    overflow: hidden; /* Elimina el scroll por completo */
-}
+    overflow: auto; /*Permite scroll vertical*/
+  /*  overflow: hidden; /* Elimina el scroll por completo */
+/*}*/
 
-.admin-layout {
+.admin-layout,
+.conductor-layout,
+.padre-layout {
     display: flex;
-    min-height: 100vh;
-    height: auto; /* Se expande si el contenido crece */
+    height: 100vh;
+    overflow: hidden; /* bloquea scroll global */
 }
 
-/* ===== MENÓ LATERAL ADMIN: Barra de navegación lateral ===== */
-.admin-menu {
-    width: 200px;
+/* ===== MENÚ LATERAL DE LOS MODULOS: Barra de navegación lateral ===== */
+.admin-menu,
+.conductor-menu,
+.padre-menu {
+    width: 260px;
     background-color: #2c3e50;
     color: white;
     flex-shrink: 0;
-    height: auto; /* Altura automática según contenido */
-    min-height: 100vh;
+    height: 100vh; /* Altura  contenido */
+    overflow-y: auto; /*scroll si el menú crece*/
     padding: 30px;
 }
 
-.admin-menu .logo {
+.admin-menu .logo,
+.conductor-menu .logo,
+.padre-menu .logo {
     width: 120px;
     display: block;
     margin: 0 auto 10px;
 }
 
-.admin-menu h2 {
+.admin-menu h2,
+.conductor-menu h2,
+.padre-menu h2 {
     text-align: center;
     font-size: 18px;
     margin-bottom: 30px;
 }
 
-.admin-menu ul {
+.admin-menu ul,
+.conductor-menu ul,
+.padre-menu ul { /*Estilo botones del menu lateral*/
     list-style: none;
     padding: 0;
 }
 
-.admin-menu li {
+.admin-menu li,
+.conductor-menu li,
+.padre-menu li { /*Estilo botones del menu lateral*/
     padding: 12px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.admin-menu li:hover {
-    background-color: #1a252f;
-    border-radius: 4px;
+.admin-menu a:hover,
+.conductor-menu a:hover,
+.padre-menu a:hover {
+    background-color: #34495e;
+}
+
+.admin-menu a,
+.conductor-menu a,
+.padre-menu a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.admin-menu a:visited, /*Estilo de visitado*/
+.conductor-menu a:visited,
+.padre-menu a:visited {
+    color: white;
 }
 
 /* ===== CONTENIDO ADMIN: Área principal de contenido ===== */
-.admin-content {
+.admin-content,
+.conductor-content,
+.padre-content {
     flex-grow: 1;
     padding: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-y: auto; /* scroll para todos */
 }
 
 /* ===== BOTONES ADMIN: Estilos para botones de acciones ===== */
@@ -387,14 +427,20 @@ body, html {
 }
 
 /* ===== BOTÓN CERRAR SESIÓN: Estilo para logout ===== */
+
 .btn-logout {
-    background-color: #e74c3c;  /* Rojo */
-    color: white;               /* Texto blanco */
+    background-color: #e74c3c;
+    color: white;
     padding: 10px 15px;
     border-radius: 6px;
-    text-decoration: none;      /* Quita subrayado del texto */
+    text-decoration: none;
     font-weight: bold;
-    display: inline-block;
+
+    display: block;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+
     transition: background-color 0.3s;
 }
 
@@ -428,15 +474,15 @@ body, html {
 }
 
 /* ===== LAYOUT CONDUCTOR Y PADRE: Estructura flex del panel ===== */
-.conductor-layout,
+/*.conductor-layout,
 .padre-layout {
     display: flex;
     min-height: 100vh;
     height: auto; /* Se expande si el contenido crece */
-}
+/*}*/
 
 /* ===== MENÚ LATERAL CONDUCTOR Y PADRE: Barra lateral de navegación ===== */
-.conductor-menu,
+/*.conductor-menu, /*TRABAJANDO EN ESTO PARA AJUSTARLO
 .padre-menu {
     width: 220px;
     background-color: #2c3e50;
@@ -447,14 +493,14 @@ body, html {
     height: auto;
     display: flex;
     flex-direction: column;
-}
+}*/
 
-.conductor-menu h2,
+/*.conductor-menu h2,
 .padre-menu h2 {
     text-align: center;
     font-size: 18px;
     margin-bottom: 30px;
-}
+}*/
 
 /*===== Imagen fondo modulo padres======*/
 
@@ -466,63 +512,63 @@ body, html {
     min-height: 100vh;
 }
 
-/* ===== ENLACES DEL MENÚ: Estilos para los links de navegación ===== */
-.conductor-menu a:not(.btn-logout),
+/* ===== ENLACES DEL MENÚ: Estilos para los links de navegación menu lateral===== */
+/*.conductor-menu a:not(.btn-logout),
 .padre-menu a:not(.btn-logout) {
     color: white;
     text-decoration: none;
     display: block;
     padding: 10px;
     border-radius: 8px;
-    transition: background-color 0.3s;
-}
+    transition: background-color 0.3s;/*ELIMINAR*/
+}*/
 
-.conductor-menu a:visited,
+/*.conductor-menu a:visited,
 .padre-menu a:visited {
     color: white;
-    text-decoration: none;
-}
+    text-decoration: none;/*ELIMINAR*/
+}*/
 
-.conductor-buttons a,
-.padre-buttons a {
+/*.conductor-buttons a, /*REVISAR QUE HACE ESTO*/
+/*.padre-buttons a {
     color: black;
     text-decoration: none;
     display: inline-block;
     padding: 10px 15px;
     border-radius: 8px;
-}
+}*/
 
 /* ===== LISTA DEL MENÚ: Estilos para items del menú ===== */
-.conductor-menu ul,
+/*.conductor-menu ul,
 .padre-menu ul {
     list-style: none;
     padding: 0;
     margin: 0;
-}
+}*/ /*ELIMINAR*/
 
 /* ===== ITEMS DEL MENÚ: Elementos con transiciones suaves ===== */
-.conductor-menu li,
+/*.conductor-menu li,
 .padre-menu li {
     margin-bottom: 15px;
     cursor: pointer;
     transition: background-color 0.3s;
-}
+}*//*ELIMINAR*/
 
-.conductor-menu li:hover,
+/*.conductor-menu li:hover,
 .padre-menu li:hover {
     background-color: #34495e;
     border-radius: 8px;
-}
+}*//*ELIMINAR*/
 
 /* ===== CONTENIDO CONDUCTOR Y PADRE: Área principal ===== */
-.conductor-content,
+/*.conductor-content,
 .padre-content {
     padding: 30px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
+}*/
 
 /* ===== BOTONES CONDUCTOR Y PADRE: Botones de acciones ===== */
 .conductor-buttons,

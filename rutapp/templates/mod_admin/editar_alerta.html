@@ -41,9 +41,6 @@
             <div class="admin-content">
 
                 <h1>Gestionar alerta</h1>
-                <a href="{{ url_for('gestion_alerta') }}" class="btn btn-volver">
-                    Volver
-                </a>
 
                 <form method="POST" class="form-alerta-conductor">
                     <label>Estado</label>
@@ -59,6 +56,10 @@
                     <textarea name="observacion_admin">{{ alerta.observacion_admin or '' }}</textarea>
 
                     <button type="submit" class="btn btn-guardar">Guardar</button>
+                    
+                    <a href="{{ url_for('gestion_alerta') }}" class="btn btn-cancelar">
+                        Cancelar
+                    </a>
                 </form>
             </div>
         </div>

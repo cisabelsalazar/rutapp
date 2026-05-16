@@ -101,10 +101,15 @@ def obtener_url_volver():
     else:
         return url_for('login')
 
+#============================================================
 #=========   RUTA USUARIOS   =========
+#============================================================
 
 @app.route('/usuarios') #Esta es la ruta Usuarios
 def usuarios(): #Esta es la función de Usuarios
+
+    # Captura el rol seleccionado desde el filtro
+    rol_actual = request.args.get("rol")
 
 
     if 'usuario' not in session: #Aqui se hace la verificación de sesión
@@ -129,7 +134,7 @@ def usuarios(): #Esta es la función de Usuarios
     cursor = conexion.cursor(dictionary=True)#Cursor creado para interactuar con MySQL
 
 
-    consulta = """ #Aquí estás guardando una consulta SQL dentro de una variable
+    consulta = """ #Aquí se esta guardando una consulta SQL dentro de una variable
     SELECT u.id_usuario,
        u.nombre_usuario,
        u.nombres_y_apellidos,
@@ -141,11 +146,24 @@ def usuarios(): #Esta es la función de Usuarios
     JOIN rol r ON u.id_rol = r.id_rol
     """
 
-    cursor.execute(consulta)#Ejecuta la consulta SQL que guardamos en la variable consulta
+    parametros = []
+
+    if rol_actual:# Agrega condición SQL solo si el usuario seleccionó un rol
+        consulta += " WHERE r.nombre_rol = %s"
+        parametros.append(rol_actual)
+
+    consulta += " ORDER BY u.id_rol DESC"
+
+    cursor.execute(consulta,parametros)#Ejecuta la consulta SQL que guardamos en la variable consulta
     lista_usuarios = cursor.fetchall()#Aquí se traen todos los resultados de la consulta.
     cursor.close()
 
-    return render_template('mod_admin/usuarios.html', usuarios = lista_usuarios, botones=botones)#Manda la lista a usuarios.html
+    return render_template(
+        'mod_admin/usuarios.html',
+        usuarios = lista_usuarios,
+        botones=botones,
+        rol_actual=rol_actual
+    )#Manda la lista a usuarios.html
 
 
 #====== Ruta crear usuario======
@@ -296,13 +314,15 @@ def administrador():
 @app.route('/gestion_alerta')#Rura gestion de alertas Modulo admin y supadmin
 def gestion_alerta():#función para mostrar las alertas en el panel del admin y supadmin
 
+    estado_actual = request.args.get("estado")
+
     if 'usuario' not in session:
         return redirect(url_for('login'))
 
     if session['rol'] not in [1, 2]:
         return "Acceso no autorizado"
     
-    estado = request.args.get('estado') #Captura el estado
+    # estado = request.args.get('estado') #Captura el estado
     
     botones = [
     {
@@ -333,9 +353,9 @@ def gestion_alerta():#función para mostrar las alertas en el panel del admin y 
 
     parametros = []
 
-    if estado:
+    if estado_actual:
         consulta += " WHERE a.estado = %s"
-        parametros.append(estado)
+        parametros.append(estado_actual)
 
     consulta += " ORDER BY a.fecha_hora DESC"
 
@@ -347,7 +367,8 @@ def gestion_alerta():#función para mostrar las alertas en el panel del admin y 
     return render_template(
         'mod_admin/alertas.html', 
         alertas = alertas,
-        botones = botones
+        botones = botones,
+        estado_actual = estado_actual
     ) #Renderiza la plantilla gestion_alerta.html y le pasa la lista de alertas obtenida de la consulta
 
 
@@ -573,14 +594,16 @@ def estudiantes_padre():
 def ver_ruta():
     return render_template('mod_padres/ver_ruta.html')
 
-
-
 #===============================================================================
 #==========GESTIONAR ESTUDIANTES (mod_admin mod_supadmin) ==========
 #==================================================================================
 
 @app.route('/gestion_estudiantes')
 def gestion_estudiantes():
+
+    ruta_actual = request.args.get("ruta")
+    grado_actual = request.args.get("grado")
+    conductor_actual = request.args.get("conductor")
 
     if 'usuario' not in session:
         return redirect(url_for('login'))
@@ -597,11 +620,16 @@ def gestion_estudiantes():
     {
         "texto": "Crear estudiante",
         "url": url_for("crear_estudiante"),
-        "class": "btn-primarty"
+        "class": "btn-primary"
     }
 ]
     
     cursor = conexion.cursor(dictionary=True)
+
+    # ===== CONSULTA PARA OBTENER RUTAS ESCOLARES =====
+    cursor.execute("SELECT nombre_ruta FROM ruta")
+
+    rutas = cursor.fetchall()
 
     consulta = """
     SELECT e.id_estudiante,
@@ -609,19 +637,45 @@ def gestion_estudiantes():
            e.grado,
            e.direccion,
            e.telefono,
+           e.id_ruta,
            r.nombre_ruta
     FROM estudiante e
     LEFT JOIN ruta r ON e.id_ruta = r.id_ruta
+    WHERE 1=1
     """
 
-    cursor.execute(consulta)
+    parametros = []
+
+    if ruta_actual:
+        consulta += " AND r.nombre_ruta = %s"
+        parametros.append(ruta_actual)
+
+    if grado_actual:
+        consulta += " AND e.grado = %s"
+        parametros.append(grado_actual)
+    
+    if conductor_actual:
+        consulta += " AND r.id_conductor = %s"
+        parametros.append(conductor_actual)
+
+    consulta += " ORDER BY e.nombre DESC"
+
+    print(ruta_actual)
+    print(consulta)
+    print(parametros)
+
+    cursor.execute(consulta, parametros)
     lista_estudiantes = cursor.fetchall()
     cursor.close()
 
     return render_template(
         'mod_admin/estudiantes.html',
         estudiantes = lista_estudiantes,
-        botones = botones
+        botones = botones,
+        rutas = rutas,
+        ruta_actual = ruta_actual,
+        grado_actual = grado_actual,
+        conductor_actual = conductor_actual
     )
 
 #=======================================================

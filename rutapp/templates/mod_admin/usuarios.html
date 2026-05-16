@@ -1,61 +1,151 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><!-- Documento HTML5 -->
+<html lang="es"><!-- Idioma principal de la página -->
 
 <head>
-    <title>Gestión de Usuarios</title>
+
+    <title>Gestión de Usuarios</title><!-- Título mostrado en la pestaña del navegador -->
+
+    <!-- Hoja de estilos principal del proyecto -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+
+    <!-- Librería Font Awesome para uso de íconos -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 
+<!-- Clases utilizadas para estilos generales de la vista -->
 <body class="bg-secundario vista-usuario">
-    <!-- Importa la macro de botones (necesario para usar action_toolbar) -->
+
+    <!-- Importa la macro reutilizable de botones -->
     {% from 'components/buttons_macro.html' import action_toolbar %}
 
+    <!-- ===== HEADER ===== -->
     <header>
-        {# Incluye el encabezado (header) de la página #}
+
+        <!-- Incluye el encabezado reutilizable -->
         {% include 'layout/header.html' %}
+
     </header>
 
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
     <main>
 
-        <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
+        <!-- Imagen decorativa de fondo -->
+        <img src="{{ url_for('static', filename='img/imagen_login.png') }}"
+            alt="Imagen de fondo Login"
             class="Imagen" />
 
+        <!-- Contenedor principal del panel administrativo -->
         <div class="admin-layout">
 
+            <!-- ===== MENÚ LATERAL ADMINISTRATIVO ===== -->
             <div class="admin-menu">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
+                <!-- Logo principal del proyecto -->
+                <img src="{{ url_for('static', filename='img/logo.png') }}"
+                    alt="Logo RUTAPP"
+                    class="logo">
+
+                <!-- Nombre dinámico del panel según el rol -->
                 <h2>Panel {{nombre_panel}}</h2>
+
+                <!-- Opciones del menú lateral -->
                 <ul>
+
                     <li>Dashboard</li>
                     <li>Usuarios</li>
                     <li>Rutas</li>
                     <li>Ubicación en tiempo real</li>
+
+                    <!-- Botón cerrar sesión -->
                     <li>
+
                         <a href="{{ url_for('logout') }}" class="btn-logout">
                             Cerrar sesión
                         </a>
+
                     </li>
+
                 </ul>
+
             </div>
 
+            <!-- ===== CONTENIDO CENTRAL DEL PANEL ===== -->
             <div class="admin-content">
 
+                <!-- Contenedor general de la tabla -->
                 <div class="tabla-usuarios-container">
 
-                    <h1>Gestion de Usuarios</h1>
+                    <!-- Título principal -->
+                    <h1>Gestión de Usuarios</h1>
 
-                    <div class="toolbar-container">
-                        {{ action_toolbar(botones) }}
+                    <!-- Barra superior con botones y filtros -->
+                    <div class="top-bar top-bar-usuarios">
+
+                        <!-- Toolbar reutilizable -->
+                        <div class="toolbar-container">
+
+                            {{ action_toolbar(botones) }}
+
+                        </div>
+
+                        <!-- ===== FILTRO POR ROL ===== -->
+                        <div class="filtros-usuarios">
+
+                            <!-- Ícono visual del filtro -->
+                            <i class="fa-solid fa-filter"></i>
+
+                            <!-- Formulario GET para filtrar usuarios -->
+                            <form method="GET">
+
+                                <!-- Select que envía automáticamente el filtro -->
+                                <select name="rol" onchange="this.form.submit()">
+
+                                    <!-- Opción para mostrar todos los usuarios -->
+                                    <option value="" {% if not rol_actual %}selected{% endif%}>
+                                        Todos
+                                    </option>
+
+                                    <!-- Filtro Administradores -->
+                                    <option value="Administrador"
+                                        {% if rol_actual=='Administrador' %}selected{% endif %}>
+                                        Administradores
+                                    </option>
+
+                                    <!-- Filtro Conductores -->
+                                    <option value="Conductor"
+                                        {% if rol_actual=='Conductor' %}selected{% endif %}>
+                                        Conductores
+                                    </option>
+
+                                    <!-- Filtro Padres -->
+                                    <option value="Padre de familia"
+                                        {% if rol_actual=='Padre de familia' %}selected{% endif %}>
+                                        Padres
+                                    </option>
+
+                                </select>
+
+                            </form>
+
+                        </div>
+
                     </div>
 
+                    <!-- Contenedor con scroll para la tabla -->
                     <div class="tabla-scroll">
 
+                        <!-- ===== TABLA DE USUARIOS ===== -->
                         <table>
 
+                            <!-- Encabezado de la tabla -->
                             <thead>
+
                                 <tr>
+
                                     <th>id</th>
                                     <th>Usuario</th>
                                     <th>Nombre completo</th>
@@ -63,16 +153,23 @@
                                     <th>Teléfono</th>
                                     <th>Rol</th>
                                     <th>Acciones</th>
+
                                 </tr>
+
                             </thead>
 
+                            <!-- ===== CUERPO DE LA TABLA ===== -->
                             <tbody>
 
+                                <!-- Verifica si existen usuarios -->
                                 {% if usuarios %}
+
+                                <!-- Recorre la lista de usuarios -->
                                 {% for usuario in usuarios %}
 
                                 <tr>
 
+                                    <!-- Datos dinámicos del usuario -->
                                     <td>{{ usuario.id_usuario }}</td>
                                     <td>{{ usuario.nombre_rol }}</td>
                                     <td>{{ usuario.nombres_y_apellidos }}</td>
@@ -80,54 +177,79 @@
                                     <td>{{ usuario.telefono }}</td>
                                     <td>{{ usuario.nombre_rol }}</td>
 
-                                    <!--  Boton de editar usuario -->
+                                    <!-- ===== BOTONES DE ACCIÓN ===== -->
+                                    <td style="width: 18%;">
 
-                                    <td style="width: 20%;"> <!---Ancho fijo para la columna de acciones--->
                                         <div class="acciones">
 
+                                            <!-- Botón editar usuario -->
                                             <a href="{{url_for('editar_usuario', id_usuario = usuario.id_usuario) }}"
                                                 class="btn btn-editar">
+
                                                 Editar
+
                                             </a>
 
-                                            <!--  Boton de eliminar usuario -->
-
+                                            <!-- Formulario para eliminar usuario -->
                                             <form id="formEliminar{{usuario.id_usuario}}"
                                                 action="{{ url_for('eliminar_usuario', id_usuario=usuario.id_usuario) }}"
                                                 method="POST">
 
-                                                <button type="button" class="btn btn-eliminar"
+                                                <!-- Botón eliminar con confirmación -->
+                                                <button type="button"
+                                                    class="btn btn-eliminar"
                                                     onclick="confirmarEliminacion('{{usuario.id_usuario}}')">
+
                                                     Eliminar
+
                                                 </button>
+
                                             </form>
+
                                         </div>
+
                                     </td>
+
                                 </tr>
+
                                 {% endfor %}
+
                                 {% else %}
+
+                                <!-- Mensaje mostrado si no existen usuarios -->
                                 <tr>
-                                    <td colspan="6">No hay usuarios registrados</td>
+
+                                    <td colspan="6">
+                                        No hay usuarios registrados
+                                    </td>
+
                                 </tr>
+
                                 {% endif %}
+
                             </tbody>
 
                         </table>
+
                     </div>
 
                 </div>
+
             </div>
 
             <br>
 
         </div>
+
     </main>
 
+    <!-- ===== FOOTER ===== -->
     <footer class="footer">
-        {# ===== FOOTER ===== #}
-        {% include 'layout/footer.html' %}
-    </footer>
 
+        <!-- Incluye el footer reutilizable -->
+        {% include 'layout/footer.html' %}
+
+    </footer>
 
 </body>
 

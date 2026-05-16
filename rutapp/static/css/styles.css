@@ -1,8 +1,4 @@
 /*==================================================================================*/
-/*                               CSS PROYECTO RUTAPP                                 */
-/*==================================================================================*/
-
-/*==================================================================================*/
 /* 1. RESET GENERAL: Elimina márgenes y padding por defecto del navegador           */
 /*==================================================================================*/
 
@@ -14,6 +10,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
+    /*overflow: hidden; /*Quita el scroll*/
 }
 
 
@@ -25,6 +22,7 @@ body.supadmin-page {
 
 main {
     flex: 1;
+    height: 100vh; /*Contenido principal con altura controlada (probando si es óptimo)*/
 }
 
 .main-container { /*Contenedor principal*/
@@ -33,7 +31,9 @@ main {
  /*   overflow: hidden;*/ /*scroll null*/
 }
 
-/*==================================================================================*/
+/*=============/*==================================================================================*/
+/*                               CSS PROYECTO RUTAPP                                 */
+/*=====================================================================*/
 /* 2. HEADER Y FOOTER: Estilos para encabezado y pie de página                     */
 /*==================================================================================*/
 .header {
@@ -300,8 +300,6 @@ main {
 }
 
 
-
-
 /*==================================================================================*/
 /* 7. PANEL ADMINISTRADOR Y SUPERADMINISTRADOR: Estilos para panel admin           */
 /*==================================================================================*/
@@ -400,18 +398,13 @@ main {
 .conductor-content,
 .padre-content {
     flex-grow: 1;
-
     padding: 30px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-
     margin-left: 220px;
     margin-top: 60px;
-
     width: calc(100% - 220px);
-
     overflow-y: auto;
 }
 
@@ -477,12 +470,11 @@ main {
 
 /* ===== MAPA ADMIN: Estilos para mapa en panel admin ===== */
 .mapa-admin {
-    max-width: 500px;
+    max-width: 450px;
     width: 100%;
     margin-top: 20px;
     border-radius: 8px;
 }
-
 
 
 /*==================================================================================*/
@@ -544,13 +536,13 @@ main {
     padding: 10px;
     border-radius: 8px;
     transition: background-color 0.3s;/*ELIMINAR*/
-}*/
+/*}*/
 
 /*.conductor-menu a:visited,
 .padre-menu a:visited {
     color: white;
     text-decoration: none;/*ELIMINAR*/
-}*/
+/*}*/
 
 /*.conductor-buttons a, /*REVISAR QUE HACE ESTO*/
 /*.padre-buttons a {
@@ -941,7 +933,7 @@ input[type="text"]:focus {
     overflow-y: auto;
 }
 /*=======================================================================*/
-/* ===== ESTILO GENERAL PARA TODAS LAS TABLAS ===== */
+           /* ===== ESTILO GENERAL PARA TODAS LAS TABLAS ===== */
 /*=======================================================================*/
 
 .table-container {
@@ -1043,19 +1035,23 @@ table {
 
 /* ===== BOTONES GENERALES: Estilos base para botones ===== */
 
-/*Estilos Boton volver, Nuevo usuarios, */
+/*Estilos Boton volver, Nuevo usuarios */
 
 .toolbar-container {
     width: 100%;
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 15px;
-    padding-right: 230px;
+    margin-bottom: 5px;
+    padding-right: 80px; /*Posicion del boton sobre la tabla*/
 }
 
 .action-toolbar {
     display: flex;
     gap: 10px;
+}
+.btn-volver:hover {
+    background-color: #a72828;
+    color: white;
 }
 
 .btn {
@@ -1600,23 +1596,33 @@ h1 {
 }
 
 /*==================================================================================*/
-/* 9. SECCION ESTILOS PARA FORMULARIOS              */
+/* 9. SECCION ESTILOS GLOBALES PARA FORMULARIOS */
 /*==================================================================================*/
 /* ===== CONTENEDOR FORMULARIOS: Estilos base para formularios ===== */
+
+/*=== Estilos generales para formularios de creación y edición 
+      de usuarios y estudiantes ===*/
+
 .form-crear_usuarios,
 .form-editar_usuario,
 .form-crear_estudiante, 
 .form-editar_estudiante{
-    width: 30%;/* Ancho fijo para consistencia */
-    margin: 20px auto; /* Centrado horizontal */
-    padding: 10px;/* Espaciado interno */
-    border-radius: 12px;/* Bordes redondeados */
-    box-shadow: 0px 0px 20px rgba(0,0,0,0.2);/* Sombra para profundidad */
-    background-color: rgba(255, 255, 255, 0.7);/* Fondo semitransparente */
-    height: 550px;/* Altura fija para mantener consistencia */
+
+    width: 30%; /* Ancho fijo del formulario */
+    margin: 120px auto; /* Espaciado superior y centrado horizontal */
+    padding: 10px; /* Espacio interno entre el contenido y el borde */
+    border-radius: 12px; /* Bordes redondeados para apariencia moderna */
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.2);    /* Sombra suave para dar profundidad visual */
+    background-color: rgba(255, 255, 255, 0.7);    /* Fondo blanco semitransparente */
+    height: 550px;    /* Altura fija para mantener uniformidad visual */
+    display:block;    /* Permite que el formulario ocupe toda la línea disponible */
+    position: relative;    /* Permite mover el formulario respecto a su posición original */
+    left: 25%;    /* Desplaza el formulario hacia la derecha */
+    transform: translate(-50%); /* Ajusta el posicionamiento horizontal para centrar visualmente */
 }
 
-.form-inasistencia {/* Estilos específicos para formulario de inasistencia, con altura ajustada para contenido más compacto */
+/* Estilos específicos para formulario de inasistencia, con altura ajustada para contenido más compacto */
+.form-inasistencia {
     width: 100%;/* Ancho fijo para consistencia */
     margin: 20px auto; /* Centrado horizontal */
     padding: 60px;/* Espaciado interno */
@@ -1684,20 +1690,51 @@ h1 {
     margin-top:-15px;
 }
 
+/*=== Estilos para el select de rol 
+      en el formulario editar usuario ===*/
+
+.filtro-editar-usuario select{
+
+    width:30%;    /* El select ocupa todo el ancho disponible del contenedor */
+    padding:6px;    /* Espaciado interno para mejorar la visualización */
+    border-radius:8px;    /* Bordes redondeados */
+    border:2px solid #216c8f;    /* Borde azul personalizado */
+    background-color:#fff;    /* Fondo blanco */
+    font-size:12px;    /* Tamaño del texto */
+    font-weight:bold;    /* Texto en negrilla */
+    color:#333;    /* Color del texto */
+    cursor:pointer;    /* Cambia el cursor al pasar sobre el select */
+    outline:none;    /* Elimina el borde predeterminado del navegador */
+    transition:0.3s ease;    /* Suaviza cambios visuales como hover o focus */
+}
+
+/*=== Efecto visual al seleccionar el campo ===*/
+
+.filtro-editar-usuario select:focus{
+
+    border-color:#17485f;    /* Cambia el color del borde al enfocar el select */
+    box-shadow:0px 0px 8px rgba(33,108,143,0.4);    /* Agrega un efecto de iluminación alrededor */
+}
 
 /*==================================================================================*/
 /* 10. TABLA DE USUARIOS: Estilos para lista y gestión de usuarios               */
 /*==================================================================================*/
 /* ===== CONTENEDOR TABLA USUARIOS: Contenedor principal de tabla ===== */
 
-.tabla-scroll {
-
+.tabla-scroll { /*Control interno Scroll tablas admin, supadmin y alertas*/
+    width: 92%;
+    max-width: 1400px;
     max-height: 500px;
-
     overflow-y: auto;
+    margin: 0 auto;
 }
 
-.tabla-usuarios-container {
+/*=============================================================*/
+/*10.1 Estilos para tabla de GESTION DE USUARIOS en modulo Admin y Superadmin*/
+/*============================================================*/
+
+.tabla-usuarios-container{ /*tabla usuarios modulo administrador y supadmin*/
+
     display: flex;
     flex-direction: column;      /* Apila el h1 y la tabla */
     align-items: center;         /* Centra todo horizontalmente */
@@ -1705,6 +1742,7 @@ h1 {
     width: 95%;                  /* Ocupa casi todo el ancho */
     overflow-y: auto;
     max-height: 600px;
+    box-sizing: border-box;
 }
 
 .tabla-usuarios-container h1 {
@@ -1717,16 +1755,8 @@ h1 {
     padding: 10px 0;
 }
 
-.tabla-alertas-container {      /*Aplica estilos a tabla alertas adminiy superadmin*/
-    text-align: center;
-    margin-bottom: 20px;
-    color: #2c4b62;
-}
-
-/* ===== TABLA: Estilos para tabla HTML ===== */
-.tabla-usuarios-container table,
-.tabla-alertas-container {        /*estilos tabal alertas admin y superadmin*/
-    width: 80%;                  /* Ancho de la tabla */
+.tabla-usuarios-container table { /*Estilo tabla vista gestion de usuarios*/
+    width: 100%;                  /* Ancho de la tabla */
     max-width: 1400px;           /* Ancho máximo */
     border-collapse: collapse;   /* Elimina espacio entre celdas */
     background-color: rgba(255, 255, 255, 0.7);
@@ -1739,13 +1769,227 @@ h1 {
     padding: 12px;
     text-align: center;
     font-weight: bold;
-    position: sticky;
+    position: sticky; /*El encabezado queda fijo al hacer scroll*/
     top: 0;
-    z-index: 10;
+    z-index: 10; /*Evita que otras filas pasen por encima del encabezado.*/
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
     
 }
 
+
+.tabla-usuarios-container td {
+    border: 1px solid #ccc;
+    padding: 12px;   /*Define tamaño alto de celda*/
+    font-size: 13px; /*Define tamaño de texto*/
+    text-align: center;
+    color: #333;
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+}
+
+.tabla-usuarios-container tr:hover { /*Sombreado al pasar el cursor sobre la fila de la tabla*/
+    background-color: #eaf4f8;
+}
+
+/*===== Estilos para ajuste tamaño columnas 
+tabla Usuarios módulos admin y superadmin===== */
+
+.tabla-usuarios-container th:nth-child(1){
+    width: 65px;
+}
+
+.tabla-usuarios-container td:nth-child(2),
+.tabla-usuarios-container th:nth-child(3){
+    width: 100px;
+}
+
+.tabla-usuarios-container td:nth-child(4){
+    width: 150px;
+}
+
+.tabla-usuarios-container td:nth-child(5) {
+    width: 80px;
+    
+}
+
+.tabla-usuarios-container td:nth-child(6){
+    width: 90px;
+}
+
+.tabla-usuarios-container td:nth-child(7) {
+    width: 70px;
+}
+
+/*=== 10.3 Estilos para filtros de la TABLA GESTIÓN DE USUARIOS 
+      Módulo Administrador y Superadministrador ===*/
+
+/* Contenedor principal del filtro */
+.filtros-usuarios{
+    position: relative; /* Permite posicionar el ícono dentro del contenedor */
+}
+
+/* Estilo del ícono de filtro */
+.filtros-usuarios i{
+    position:absolute; /* Posiciona el ícono sobre el select */
+    left:12px; /* Espacio desde el borde izquierdo */
+    top:50%; /* Centra verticalmente el ícono */
+    transform:translateY(-50%); /* Ajuste fino del centrado vertical */
+    color:#aaa7a7; /* Color gris claro del ícono */
+    pointer-events:none; /* Evita que el ícono bloquee el clic del select */
+}
+
+/* Estilos del select desplegable */
+.filtros-usuarios select {
+    padding:6px 10px 8px 35px; /* Espacio interno, dejando lugar para el ícono */
+    border-radius: 8px; /* Bordes redondeados */
+    border: 2px solid #216c8f; /* Borde azul */
+    font-weight: bold; /* Texto en negrilla */
+    font-size: 12px; /* Tamaño del texto */
+}
+
+/* Contenedor auxiliar para alinear ícono y select */
+.filtro-select{
+    display:flex; /* Organiza elementos en línea horizontal */
+    align-items:center; /* Centra verticalmente los elementos */
+    gap:8px; /* Espacio entre elementos */
+}
+
+/* Barra superior de la vista de usuarios */
+.top-bar-usuarios{
+    display:flex; /* Organiza toolbar y filtros horizontalmente */
+    justify-content:space-between; /* Separa elementos a izquierda y derecha */
+    align-items:center; /* Centra verticalmente */
+    margin-bottom:15px; /* Espacio inferior antes de la tabla */
+    width:90%; /* Reduce ligeramente el ancho para mejor distribución */
+}
+
+/* Ajustes específicos para toolbar dentro de top-bar */
+.top-bar-usuarios .toolbar-container{
+    width:auto; /* El ancho se ajusta automáticamente al contenido */
+    padding: 0; /* Elimina padding lateral */
+    margin:0; /* Elimina márgenes externos */
+}
+
+
+/*=============================================================*/
+/*Estilos para tabla CENTRO DE GESTION DE ALERTAS en modulo Admin y Superadmin*/
+/*============================================================*/
+
+.tabla-alertas-container{ /*tabla usuarios modulo administrador y supadmin*/
+
+    display: flex;
+    flex-direction: column;      /* Apila el h1 y la tabla */
+    align-items: center;         /* Centra todo horizontalmente */
+    margin: 30px auto;           /* Espacio superior e inferior */
+    width: 95%;                  /* Ocupa casi todo el ancho */
+    overflow-y: auto;
+    max-height: 600px;
+    box-sizing: border-box;
+}
+
+.tabla-alertas-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c4b62;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 10px 0;
+}
+
+.tabla-alertas-container table { /*Estilo tabla vista gestion de usuarios*/
+    width: 100%;                  /* Ancho de la tabla */
+    max-width: 1400px;           /* Ancho máximo */
+    border-collapse: collapse;   /* Elimina espacio entre celdas */
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
 .tabla-alertas-container th {
+    background-color: #295a6b;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+    position: sticky; /*El encabezado queda fijo al hacer scroll*/
+    top: 0;
+    z-index: 10; /*Evita que otras filas pasen por encima del encabezado.*/
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+    
+}
+
+.tabla-alertas-container td {
+    border: 1px solid #ccc;
+    padding: 12px;   /*Define tamaño alto de celda*/
+    font-size: 13px; /*Define tamaño de texto*/
+    text-align: center;
+    color: #333;
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+}
+
+.tabla-alertas-container tr:hover { /*Sombreado al pasar el cursor sobre la fila de la tabla*/
+    background-color: #eaf4f8;
+}
+
+/*===== Ajuste tamaño columnas tabla Alertas módulos admin y superadmin===== */
+
+.tabla-alertas-container th:nth-child(1),
+.tabla-alertas-container td:nth-child(2),
+.tabla-alertas-container th:nth-child(3){
+    width: 100px;
+}
+
+.tabla-alertas-container td:nth-child(4){
+    width: 85px;
+}
+
+.tabla-alertas-container td:nth-child(5) {
+    width: 220px;
+    text-align: justify;
+}
+
+.tabla-alertas-container td:nth-child(6),
+.tabla-alertas-container td:nth-child(7) {
+    width: 85px;
+}
+
+/*===Estilos para filtros de la TABLA ALERTAS Mod Admin Supadmin*/
+
+.filtros-alertas {
+    display: flex;
+    gap: 12px;
+
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filtros-alertas a {
+    text-decoration: none;
+    background-color: #295a6b;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.filtros-alertas a:hover {
+    background-color: #279a9e;
+    transform: translateY(-2px); /*El boton se mueve hacia arriba un poco*/
+}
+
+.filtro-activo {
+    background-color: #2b9eab !important;
+
+    box-shadow: 0 0 15px rgba(185, 89, 15, 0.6);
+
+    transform: translateY(-2px);
+}
+
+
+
+ /*seccion en revision para unificar estilos de tablas en adminy superadmin TABLA ALERTAS*/
+/*.tabla-alertas-container th {
     background-color: #295a6b;
     color: white;
     padding: 20px;
@@ -1753,19 +1997,27 @@ h1 {
     font-weight: bold;
 }
 
-.tabla-usuarios-container td {
-    border: 1px solid #ccc;
-    padding: 20px;
-    text-align: center;
-    color: #333;
-}
 
 .tabla-alertas-container td {
     border: 1px solid #ccc;
     padding: 10px;
     text-align: center;
     color: #333;
-}
+}*/
+
+/*=========================================================================================*/
+/*Estilos para contenedor de tabla alertas modulo admin-supadmin*/
+
+/*.tabla-alertas-container {        /*estilos tabal alertas admin y superadmin*/
+   /* width: 80%;                  /* Ancho de la tabla */
+   /* max-width: 1400px;           /* Ancho máximo */
+   /* border-collapse: collapse;   /* Elimina espacio entre celdas */
+   /* background-color: rgba(255, 255, 255, 0.7);*/
+   /* box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}*/
+
+
+ /*seccion en revision para unificar estilos de tablas en adminy superadmin TABLA ALERTAS*/
 
 /* ===== CELDAS ACCIONES: Botones de acción en tabla ===== */
 .acciones {
@@ -1811,6 +2063,11 @@ h1 {
     background-color: #28a745;
     color: white;
 }
+
+
+
+
+
 
 /*==================================================================================*/
 /* 11. BOTONES GENERALES: Estilos base para botones                               */

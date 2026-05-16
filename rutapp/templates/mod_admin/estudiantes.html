@@ -5,6 +5,8 @@
     <title>Gestión de Estudiantes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+    <!-- Librería Font Awesome para uso de íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body class="bg-secundario vista-gestudiantes">
@@ -42,82 +44,129 @@
                 </ul>
             </div>
 
+            <!-- ===== CONTENIDO CENTRAL DEL PANEL ===== -->
             <div class="admin-content">
 
                 <div class="tabla-usuarios-container">
 
                     <h1>Gestion de Estudiantes</h1>
 
-                    <div class="toolbar-container">
-                        {{ action_toolbar(botones) }}
+                    <!-- Barra superior con botones y filtros -->
+                    <div class="top-bar top-bar-usuarios">
+
+                        <div class="toolbar-container">
+                            {{ action_toolbar(botones) }}
+                        </div>
+
+                        <!-- ===== FILTRO POR RUTA ===== -->
+                        <div class="filtros-usuarios">
+
+                            <!-- Ícono visual del filtro -->
+                            <i class="fa-solid fa-filter"></i>
+
+                            <!-- Formulario GET para filtrar rutas -->
+                            <form method="GET">
+
+                                <!-- Select que envía automáticamente el filtro -->
+                                <select name="ruta" onchange="this.form.submit()">
+
+                                    <!-- Opción para mostrar todos las rutas -->
+                                    <option value="" {% if not ruta_actual %}selected{% endif %}>
+                                        Todas
+                                    </option>
+
+                                    <!-- Recorre dinámicamente las rutas obtenidas desde la BD -->
+                                    {% for ruta in rutas %}
+
+                                    <option value="{{ ruta.nombre_ruta }}"
+                                    {% if ruta_actual == ruta.nombre_ruta %}selected{% endif %}>
+
+                                        {{ ruta.nombre_ruta }}
+
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                            </form>
+
+                        </div>
+
                     </div>
 
-                    <table>
+                    <!-- Contenedor con scroll para la tabla -->
+                    <div class="tabla-scroll">
 
-                        <thead>
-                            <tr>
-                                <th>id</th>
-                                <th>Nombre completo</th>
-                                <th>Teléfono</th>
-                                <th>Dirección</th>
-                                <th>Grado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
+                        <table>
 
-                        <tbody>
+                            <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Estudiante</th>
+                                    <th>Teléfono</th>
+                                    <th>Dirección</th>
+                                    <th>Grado</th>
+                                    <th>Ruta</th>
+                                    <th>Acciones</th>
+                                    
+                                </tr>
+                            </thead>
 
-                            {% if estudiantes %}
-                            {% for estudiante in estudiantes %}
+                            <tbody>
 
-                            <tr>
+                                {% if estudiantes %}
+                                {% for estudiante in estudiantes %}
 
-                                <td>{{ estudiante.id_estudiante }}</td>
-                                <td>{{ estudiante.nombre}}</td>
-                                <td>{{ estudiante.telefono }}</td>
-                                <td>{{ estudiante.direccion }}</td>
-                                <td>{{ estudiante.grado }}</td>
+                                <tr>
 
-                                <!--  Boton de editar estudiante -->
+                                    <td>{{ estudiante.id_estudiante }}</td>
+                                    <td>{{ estudiante.nombre}}</td>
+                                    <td>{{ estudiante.telefono }}</td>
+                                    <td>{{ estudiante.direccion }}</td>
+                                    <td>{{ estudiante.grado }}</td>
+                                    <td>{{ estudiante.id_ruta }}</td>
 
-                                <td style="width: 20%;">
-                                    <div class="acciones">
+                                    <!--  Boton de editar estudiante -->
 
-                                        <a href="{{url_for('editar_estudiante', id_estudiante = estudiante.id_estudiante) }}"
-                                            class="btn btn-editar">
-                                            Editar
-                                        </a>
+                                    <td style="width: 20%;">
+                                        <div class="acciones">
 
-                                        <!--  Boton de eliminar estudiante -->
+                                            <a href="{{url_for('editar_estudiante', id_estudiante = estudiante.id_estudiante) }}"
+                                                class="btn btn-editar">
+                                                Editar
+                                            </a>
 
-                                        <form id="formEliminar{{estudiante.id_estudiante}}"
-                                            action="{{ url_for('eliminar_estudiante', id_estudiante=estudiante.id_estudiante) }}"
-                                            method="POST">
+                                            <!--  Boton de eliminar estudiante -->
 
-                                            <button type="button" class="btn btn-eliminar"
-                                                onclick="confirmarEliminacion('{{estudiante.id_estudiante}}')">
-                                                Eliminar
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            {% else %}
-                            <tr>
-                                <td colspan="6">No hay estudiantes registrados</td>
-                            </tr>
-                            {% endif %}
-                        </tbody>
+                                            <form id="formEliminar{{estudiante.id_estudiante}}"
+                                                action="{{ url_for('eliminar_estudiante', id_estudiante=estudiante.id_estudiante) }}"
+                                                method="POST">
 
-                    </table>
+                                                <button type="button" class="btn btn-eliminar"
+                                                    onclick="confirmarEliminacion('{{estudiante.id_estudiante}}')">
+                                                    Eliminar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="6">No hay estudiantes registrados</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
 
+                        </table>
+
+                    </div>
                 </div>
+
+                <!--  Boton crear nuevo estudiante (vista lista de estudiantes) -->
+
             </div>
-
-            <!--  Boton crear nuevo estudiante (vista lista de estudiantes) -->
-
-        </div>
 
     </main>
     <footer class="footer">

@@ -48,32 +48,43 @@
 
                 <div class="form-group">
                     <label>Id estudiante:</label>
-                    <input type="text" name="id_estudiante" required>
+                    <input type="text" name="id_estudiante" maxlength="10" required>
                 </div>
 
                 <div class="form-group">
                     <label>Nombre:</label>
-                    <input type="text" name="nombre" required>
+                    <input type="text" name="nombre" maxlength="30" required>
                 </div>
 
                 <div class="form-group">
                     <label>Grado:</label>
-                    <input type="text" name="grado" required>
+                    <input type="text" name="grado" maxlength="5" required>
                 </div>
 
                 <div class="form-group">
                     <label>Dirección:</label>
-                    <input type="text" name="direccion" required>
+                    <input type="text" name="direccion" maxlength="30" required>
                 </div>
 
                 <div class="form-group">
                     <label>Teléfono:</label>
-                    <input type="text" name="telefono" required>
+                    <input type="text" name="telefono" maxlength="10" required>
                 </div>
 
-                <div class="form-group">
-                    <label>Id ruta:</label>
-                    <input type="text" name="id_ruta">
+                <div class="form-group filtro-editar-estudiante">
+                    <label>Ruta:</label>
+                    <select name="id_ruta">
+                        <option value="">Seleccione una ruta</option>
+
+                        {% for ruta in rutas %}
+
+                        <option value="{{ ruta.id_ruta }}">
+                            {{ ruta.id_ruta }} - {{ ruta.nombre_ruta }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
                 </div>
 
                 <button type="button" class="btn btn-guardar" onclick="confirmarCreacionEstudiante()">

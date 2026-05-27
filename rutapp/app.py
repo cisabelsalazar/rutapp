@@ -1,23 +1,26 @@
 # RUTAPP - APLICACIÓN DE GESTIÓN DE RUTAS ESCOLARES
 # Desarrollada por: Cristina Salazar, Camilo Ocampo, Victor Velandia
 
-#==========================================
-# IMPORTACIÓN DE LIBRERÍAS Y CONFIGURACIÓN INICIAL
-#==========================================
+#==================================================
+# IMPORTACIÓN DE LIBRERÍAS 
+#==================================================
 
-from flask import Flask, render_template, request, redirect, url_for,session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import mysql.connector
+
+from werkzeug.security import generate_password_hash, check_password_hash
+import hashlib
 
 #==========================================
 # CONFIGURACIÓN DE LA APLICACIÓN FLASK
 #==========================================
 
 app = Flask(__name__)
-app.secret_key = "rutapp_secreto"   #   Clave secreta para manejar sesiones y flash messages en Flask
+app.secret_key = "rutapp_secreto"   # Clave secreta para manejar sesiones y flash messages en Flask
 
-#==========================================
+#==================================================
 # CONFIGURACIÓN DE LA CONEXIÓN A LA BASE DE DATOS
-#==========================================
+#==================================================
 
 conexion = mysql.connector.connect(
     host="localhost",
@@ -25,11 +28,12 @@ conexion = mysql.connector.connect(
     password="Cristina+-2026",
     database="rutapp_bd"
 )
+
 #===========================================
-# VARIABLES GLOBALES PARA HTML
+#FUNCIONES AUXILIARES Y VARIABLES GLOBALES PARA HTML
 #===========================================
 
-# Aquí se definen variables globales que estarán disponibles en todas las plantillas HTML del proyecto.
+# Variables globales disponibles en todas las vistas HTML
 @app.context_processor # Decorador para inyectar variables globales en todas las plantillas HTML
 def inyectar_datos_globales(): # Función que devuelve un diccionario con datos globales disponibles en todas las plantillas
     nombres_roles = {
@@ -44,7 +48,27 @@ def inyectar_datos_globales(): # Función que devuelve un diccionario con datos 
     return {
         'nombre_panel' : nombres_roles.get(rol, 'Usuario') # Devuelve el nombre del panel según el rol, o 'Usuario' si no se encuentra
     }
-#Ruta global para regreso al panel
+
+#=============================================
+# FUNCION PARA BOTON VOLVER 
+#=============================================
+
+def obtener_url_volver():
+    if session ['rol'] == 1:
+        return url_for('superadministrador')
+    elif session ['rol'] == 2:
+        return url_for('administrador')
+    elif session ['rol'] == 3:
+        return url_for('conductor')
+    elif session ['rol'] == 4:
+        return url_for('padre de familia')
+    else:
+        return url_for('login')
+
+# ==========================================
+# RUTA GLOBAL VOLVER AL PANEL
+# ==========================================
+
 @app.route('/volver_panel')
 def volver_panel():
 
@@ -63,47 +87,209 @@ def volver_panel():
         return redirect(url_for('padre de familia'))
     return redirect(url_for('login'))
 
+# ==========================================
+# AUTENTICACIÓN
+# ==========================================
 
-
-#============================================
-#         RUTAS PROYECTO RUTAPP
-#============================================
-
-#============================================
-# AUTENTICACIÓN - RESPONSABLE: CRISTINA SALAZAR
-#============================================
-
-#============================================
-#   RUTA HOME
-#============================================
-
-@app.route('/') #Esta es la ruta principal o index del proyecto
+# Ruta principal
+@app.route('/')
 def inicio():
     return render_template('mod_admin/login.html')
 
-@app.route('/login') #Esta es la ruta de login
+
+# Ruta login
+@app.route('/login')
 def login():
     return render_template('mod_admin/login.html')
 
-#=============================================
-# FUNCION PARA BOTONES VOLVER 
-#=============================================
+# ==========================================
+# VALIDACIÓN LOGIN
+# ==========================================
 
-def obtener_url_volver():
-    if session ['rol'] == 1:
-        return url_for('superadministrador')
-    elif session ['rol'] == 2:
-        return url_for('administrador')
-    elif session ['rol'] == 3:
-        return url_for('conductor')
-    elif session ['rol'] == 4:
-        return url_for('padre de familia')
-    else:
-        return url_for('login')
+@app.route('/validar_login', methods=['POST'])
+def valida_login():
+    correo = request.form['correo'].strip()
+    password = request.form['password'].strip()
 
-#============================================================
-#=========   RUTA USUARIOS   =========
-#============================================================
+    cursor = conexion.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT * 
+        FROM usuario
+        WHERE correo = %s
+    """, (correo,))
+
+    usuario = cursor.fetchone()
+
+    if usuario:
+        hash_guardado = usuario['hash_password']
+
+        acceso = False
+
+        # Usuarios nuevos (scrypt)
+        if hash_guardado.startswith("scrypt:"):
+            acceso = check_password_hash(hash_guardado, password)
+
+        # Usuarios viejos (MD5)
+        else:
+            acceso = hashlib.md5(password.encode()).hexdigest() == hash_guardado
+
+        if acceso:
+            session['usuario'] = usuario['id_usuario']
+            session['rol'] = usuario['id_rol']
+
+            if usuario['id_rol'] == 1:
+                return redirect(url_for('superadministrador'))
+            elif usuario['id_rol'] == 2:
+                return redirect(url_for('administrador'))
+            elif usuario['id_rol'] == 3:
+                return redirect(url_for('conductor'))
+            elif usuario['id_rol'] == 4:
+                return redirect(url_for('padres'))
+
+    return "Usuario o contraseña incorrectos"
+
+#===========================================
+# RUTA PARA RECUPERAR CONTRASEÑA
+#===========================================
+
+@app.route('/recuperar_password')
+def recuperar_password():
+    return render_template('mod_admin/recuperar_password.html')
+
+#============================================
+#RUTA PARA BUSCAR SI EXISTE CORREO DE USUARIO
+#============================================ 
+
+@app.route('/buscar_correo', methods=['POST'])
+def buscar_correo():
+    
+    correo = request.form['email']
+    print(correo)
+
+    cursor = conexion.cursor(dictionary=True)
+
+    consulta = """
+    SELECT * FROM usuario WHERE correo = %s
+    """
+
+    cursor.execute(consulta, (correo,))
+    correo_usuario =cursor.fetchone()
+    cursor.close()
+
+    if correo_usuario:
+        session['correo_recuperacion'] = correo #GUARDA EL CORREO
+        return redirect(url_for('nueva_password'))
+
+    else: 
+        return "Correo no registrado"
+    
+#===========================================
+# RUTA PARA CREAR NUEVA CONTRASEÑA
+#===========================================
+
+@app.route('/nueva_password')
+def nueva_password():
+    return render_template('mod_admin/nueva_password.html')
+
+#===========================================
+# RUTA PARA ACTUALIZAR CONTRASEÑA
+#===========================================
+
+@app.route('/actualizar_password', methods=['POST'])
+def actualizar_password():
+
+    cursor = conexion.cursor(dictionary=True)
+
+    correo = session['correo_recuperacion']
+
+    nueva_password = request.form['password']
+    confirmar_password = request.form['confirmar_password']
+
+    print(nueva_password)
+    print(confirmar_password)
+
+    if nueva_password == confirmar_password:
+        hash_password = generate_password_hash(nueva_password)
+
+       
+        sql = """
+        UPDATE usuario
+        SET hash_password = %s
+        WHERE correo = %s
+        """
+
+        valores = (hash_password, correo)
+
+        cursor.execute(sql, valores)
+        conexion.commit()
+
+        session.pop('correo_recuperacion', None)
+
+        cursor.close()
+
+        flash('La contraseña fue actualizada correctamente', 'success')
+        return redirect(url_for('login'))   
+    
+    else: 
+        flash('Las contraseñas no coinciden', 'error')
+        return redirect(url_for('nueva_password'))
+        
+
+
+# ==========================================
+# LOGOUT
+# ==========================================
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('inicio'))#retorna al home/pág inicio
+
+# ==========================================
+# PANELES DEL SISTEMA
+# ==========================================
+
+# ==========================================
+# PANEL SUPERADMINISTRADOR
+# ==========================================
+
+@app.route('/supadmin')
+def superadministrador():
+
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    if session['rol'] != 1:
+        return 'Acceso no autorizado 1'
+    
+    return render_template('mod_admin/supadmin.html')
+
+
+# ==========================================
+# PANEL ADMINISTRADOR
+# ==========================================
+
+@app.route('/admin')
+def administrador():
+
+    if 'usuario' not in session:
+        return redirect(url_for('login')) #Si no hay sesión iniciada regresa al login
+    
+    if session['rol'] != 2:
+        return f"Acceso no autorizado 2 | {session['rol']} |"
+    
+    return render_template('mod_admin/admin.html')
+
+
+
+# ==========================================
+# MÓDULO USUARIOS
+# ==========================================
+
+# ==========================================
+# LISTAR USUARIOS
+# ==========================================
 
 @app.route('/usuarios') #Esta es la ruta Usuarios
 def usuarios(): #Esta es la función de Usuarios
@@ -133,8 +319,8 @@ def usuarios(): #Esta es la función de Usuarios
     
     cursor = conexion.cursor(dictionary=True)#Cursor creado para interactuar con MySQL
 
-
-    consulta = """ #Aquí se esta guardando una consulta SQL dentro de una variable
+#Aquí se esta guardando una consulta SQL dentro de una variable
+    consulta = """ 
     SELECT u.id_usuario,
        u.nombre_usuario,
        u.nombres_y_apellidos,
@@ -165,18 +351,22 @@ def usuarios(): #Esta es la función de Usuarios
         rol_actual=rol_actual
     )#Manda la lista a usuarios.html
 
+# ==========================================
+# FORMULARIO CREAR USUARIO
+# ==========================================
 
-#====== Ruta crear usuario======
 @app.route('/crear_usuario')
 def crear_usuario():
     return render_template('mod_admin/crear_usuarios.html')
 
-#====== RUTA GUARDAR USUARIO===
-from werkzeug.security import generate_password_hash #Importa la función para encriptar contraseñas
+# ==========================================
+# GUARDAR NUEVO USUARIO
+# ==========================================
 
 @app.route('/guardar_usuario', methods=['POST'])
 def guardar_usuario():
         
+        #CAPTURA DE DATOS DEL FORMULARIO
         id_usuario =request.form['id_usuario']
         nombre_usuario = request.form['nombre_usuario']
         nombres_y_apellidos = request.form['nombres_y_apellidos']
@@ -185,6 +375,23 @@ def guardar_usuario():
         password = generate_password_hash(request.form['password']) #Aqui se encripta la contraseña
         rol = request.form['rol']
 
+         # VALIDACIÓN LONGITUD DE CAMPOS
+        if len(id_usuario) > 10:
+            return "El número de identificación no puede superar 10 caracteres"
+
+        if len(nombre_usuario) > 30:
+            return "El nombre de usuario no puede superar 30 caracteres"
+
+        if len(nombres_y_apellidos) > 50:
+            return "El nombre completo no puede superar 50 caracteres"
+
+        if len(correo) > 50:
+            return "El correo no puede superar 50 caracteres"
+
+        if len(telefono) > 10:
+            return "El teléfono no puede superar 10 caracteres"
+        
+        # CONEXIÓN Y VALIDACIONES EN BASE DE DATOS
         cursor = conexion.cursor()
 
         #validar cédula duplicada
@@ -197,13 +404,28 @@ def guardar_usuario():
         if cursor.fetchone():
             return "El correo ingresado ya está registrado"
         
+        # INSERTAR USUARIO
         sql= """
         INSERT INTO usuario
-        (id_usuario, nombre_usuario, nombres_y_apellidos, correo, telefono, hash_password, id_rol)
+        (
+        id_usuario,
+        nombre_usuario, 
+        nombres_y_apellidos, 
+        correo, telefono, 
+        hash_password, 
+        id_rol
+        )
         VALUES( %s, %s, %s, %s, %s, %s, %s)
         """
 
-        valores = (id_usuario, nombre_usuario, nombres_y_apellidos, correo, telefono, password, rol)
+        valores = (
+            id_usuario, 
+            nombre_usuario, 
+            nombres_y_apellidos, 
+            correo, telefono, 
+            password, 
+            rol
+        )
 
         cursor.execute(sql, valores)
         conexion.commit()
@@ -213,23 +435,10 @@ def guardar_usuario():
         return redirect(url_for('usuarios'))
         
 
-#====== RUTA ELIMINAR USUARIO =====
 
-# - Elimina un usuario de la base de datos
-# - Se ejecuta únicamente mediante método POST por seguridad
-@app.route('/eliminar_usuario/<id_usuario>', methods=['POST'])
-def eliminar_usuario(id_usuario):
-
-    cursor = conexion.cursor() # Crear cursor
-    sql = "DELETE FROM usuario WHERE id_usuario = %s"# Consulta SQL para eliminar el usuario
-    cursor.execute(sql, (id_usuario,))# Ejecutar la consulta
-    conexion.commit() # Guardar cambios en la base de datos
-    cursor.close() # Cerrar cursor
-    flash('Usuario eliminado correctamente', 'success')
-
-    return redirect(url_for('usuarios')) # Redirigir a la lista de usuarios
-
-#====== RUTA EDITAR USUARIO ======
+# ==========================================
+# EDITAR USUARIO
+# ==========================================
 
 # - GET  -> muestra el formulario con los datos actuales
 # - POST -> guarda los cambios realizados en la BD
@@ -246,6 +455,17 @@ def editar_usuario(id_usuario):
         correo = request.form['correo']
         telefono = request.form['telefono']
         rol = request.form['rol'] #para actualizar el rol cuando se edita usuario
+
+
+         # VALIDACIÓN LONGITUD DE CAMPOS
+        if len(nombres) > 30:
+            return "El nombre de usuario no puede superar 30 caracteres"
+
+        if len(correo) > 50:
+            return "El correo no puede superar 50 caracteres"
+
+        if len(telefono) > 10:
+            return "El teléfono no puede superar 10 caracteres"
 
         # Consulta SQL para actualizar la información del usuario
         sql = """
@@ -278,325 +498,31 @@ def editar_usuario(id_usuario):
 
     return render_template('mod_admin/editar_usuario.html', usuario=usuario_data) # Envía los datos al formulario editar_usuario.html
   
+# ==========================================
+# ELIMINAR USUARIO
+# ==========================================
+
+# - Elimina un usuario de la base de datos
+# - Se ejecuta únicamente mediante método POST por seguridad
+@app.route('/eliminar_usuario/<id_usuario>', methods=['POST'])
+def eliminar_usuario(id_usuario):
+
+    cursor = conexion.cursor() # Crear cursor
+    sql = "DELETE FROM usuario WHERE id_usuario = %s"# Consulta SQL para eliminar el usuario
+    cursor.execute(sql, (id_usuario,))# Ejecutar la consulta
+    conexion.commit() # Guardar cambios en la base de datos
+    cursor.close() # Cerrar cursor
+    flash('Usuario eliminado correctamente', 'success')
+
+    return redirect(url_for('usuarios')) # Redirigir a la lista de usuarios
 
 # ==========================================
-#          PANELES DEL SISTEMA
+# MODULO ESTUDIANTES
 # ==========================================
-#============= PANEL SUPER ADMINISTRADOR ===============
 
-@app.route('/supadmin')
-def superadministrador():
-
-    if 'usuario' not in session:
-        return redirect(url_for('login'))
-
-    if session['rol'] != 1:
-        return 'Acceso no autorizado 1'
-    
-    return render_template('mod_admin/supadmin.html')
-
-
-#============= PANEL ADMINISTRADOR====================
-@app.route('/admin')
-def administrador():
-
-    if 'usuario' not in session:
-        return redirect(url_for('login')) #Si no hay sesión iniciada regresa al login
-    
-    if session['rol'] != 2:
-        return f"Acceso no autorizado 2 | {session['rol']} |"
-    
-    return render_template('mod_admin/admin.html')
-
-#============================================================================================
-#===============ALERTAS DEL SISTEMA (mod admin y supadmin)=====================
-#=============================================================================================
-@app.route('/gestion_alerta')#Rura gestion de alertas Modulo admin y supadmin
-def gestion_alerta():#función para mostrar las alertas en el panel del admin y supadmin
-
-    estado_actual = request.args.get("estado")
-
-    if 'usuario' not in session:
-        return redirect(url_for('login'))
-
-    if session['rol'] not in [1, 2]:
-        return "Acceso no autorizado"
-    
-    # estado = request.args.get('estado') #Captura el estado
-    
-    botones = [
-    {
-        "texto": "Volver",
-        "url": obtener_url_volver(),
-        "class": "btn-secondary"
-    },
-
-]
-
-    cursor = conexion.cursor(dictionary=True)# Crear cursor para interactuar con la base de datos
-
-    # Consulta para traer alertas con datos del conductor, estudiante y ruta
-    consulta = """
-    SELECT 
-        a.*,
-        u.nombres_y_apellidos AS conductor_nombre,
-        e.nombre AS estudiante_nombre,
-        r.nombre_ruta
-    FROM ALERTAS a
-    LEFT JOIN USUARIO u 
-        ON a.id_usuario_emisor = u.id_usuario
-    LEFT JOIN ESTUDIANTE e 
-        ON a.id_estudiante = e.id_estudiante
-    LEFT JOIN RUTA r 
-        ON a.id_ruta = r.id_ruta
-    """
-
-    parametros = []
-
-    if estado_actual:
-        consulta += " WHERE a.estado = %s"
-        parametros.append(estado_actual)
-
-    consulta += " ORDER BY a.fecha_hora DESC"
-
-
-    cursor.execute(consulta, parametros) #Ejecuta la consulta SQL
-    alertas = cursor.fetchall() #Trae todas las alertas obtenidas de la consulta
-    cursor.close() #Cierra el cursor
-
-    return render_template(
-        'mod_admin/alertas.html', 
-        alertas = alertas,
-        botones = botones,
-        estado_actual = estado_actual
-    ) #Renderiza la plantilla gestion_alerta.html y le pasa la lista de alertas obtenida de la consulta
-
-
-#===============================================================
-#========Ruta para editar alerta (mod admin y supadmin)=========
-#===============================================================
-
-@app.route('/editar_alerta/<id_alerta>', methods=['GET', 'POST'])
-def editar_alerta(id_alerta):
-    cursor = conexion.cursor(dictionary=True)
-
-    # POST: Guardar cambios en la alerta
-    if request.method == 'POST':
-        estado = request.form.get('estado')
-        observacion = request.form.get('observacion_admin')
-
-        consulta_update = """
-        UPDATE ALERTAS
-        SET estado = %s,
-            observacion_admin = %s
-        WHERE id_alerta = %s
-        """
-
-        cursor.execute(consulta_update, (
-            estado, 
-            observacion, 
-            id_alerta
-        ))
-        conexion.commit()
-        cursor.close()
-
-        flash('Alerta gestionada correctamente', 'success')
-        return redirect(url_for('gestion_alerta'))
-
-    
-    # GET: Cargar datos actuales de la alerta para mostrar en el formulario
-    consulta = """ SELECT * FROM ALERTAS WHERE id_alerta = %s """
-    cursor.execute(consulta, (id_alerta,))
-    alerta = cursor.fetchone()
-    cursor.close()
-
-    return render_template(# Return de la consulta
-        'mod_admin/editar_alerta.html', 
-        alerta=alerta
-    )
-    
-#============================================================================================
-#============================ PANEL CONDUCTOR==========================
-#============================================================================================
-@app.route('/conductor')
-def conductor():
-
-    # if 'usuario' not in session:
-    #     return redirect(url_for('login'))
-
-    # if session['rol'] != 3:
-    #     return "Acceso no autorizado"
-        
-    return render_template('mod_conductor/conductor.html')
-
-@app.route('/conductor/mi_ruta')#Revisado por Cristina OK#
-def mi_ruta():
-    # if 'usuario' not in session:
-    #     return redirect(url_for('login'))
-    # if session['rol'] != 3:
-    #     return "Acceso no autorizado"
-    return render_template('mod_conductor/mi_ruta.html')
-
-@app.route('/conductor/estudiantes')
-def estudiantes_conductor():
-    return render_template('mod_conductor/estudiantes_conductor.html')
-
-#==========================================================
-# ======== Ruta para gestionar alertas (conductor)=========
-#=========================================================
-
-@app.route('/conductor/alertas', methods=['GET', 'POST'])#Revisado por Cristina OK#
-def alertas_conductor():
-    cursor = conexion.cursor(dictionary=True)# Crear cursor para interactuar con la base de datos
-
-    id_conductor = session.get('usuario') # Obtener el ID del conductor desde la sesión
-
-    #Crear alerta
-    if request.method == 'POST':
-        id_estudiante = request.form.get('id_estudiante')
-        id_ruta = request.form.get('id_ruta')
-        tipo_alerta = request.form.get('tipo_alerta')
-        mensaje = request.form.get('mensaje')
-
-        consulta_insert = """
-        INSERT INTO ALERTAS(
-        id_usuario_emisor,
-        id_estudiante,
-        id_ruta,
-        tipo_alerta,
-        mensaje
-        )
-        VALUES (%s, %s, %s, %s, %s)
-        """
-
-        cursor.execute(consulta_insert,(
-            id_conductor,
-            id_estudiante,
-            id_ruta,
-            tipo_alerta,
-            mensaje
-        ))
-
-        conexion.commit()
-        cursor.close()
-        flash('Alerta creada correctamente', 'success')
-        return redirect(url_for('alertas_conductor'))
-    
-    #Mostrar alertas enviadas por el conductor
-    consulta="""
-    SELECT *
-    FROM ALERTAS
-    WHERE id_usuario_emisor = %s
-    ORDER BY fecha_hora DESC
-    """
-
-    cursor.execute(consulta, (id_conductor,))
-    alertas = cursor.fetchall()
-
-    cursor.close()
-
-    return render_template('mod_conductor/alertas_conductor.html', alertas=alertas)
-
-
-@app.route('/conductor/compartir_ubicacion')
-def compartir_ubicacion():  
-    return "<h2>Módulo en construcción</h2>"
-
-#======================================================================================
-#======================= PANEL PADRES DE FAMILIA==================
-#======================================================================================
-@app.route('/padres')
-def padres():
-
-    # if 'usuario' not in session:
-    #     return redirect(url_for('login'))
-    
-    # if session['rol'] != 4:
-    #     return "Acceso no autorizado"
-    
-    return render_template('mod_padres/padre.html')
-
-#======== Ruta para gestion de alertas (padres)=========
-
-@app.route('/padres/alertas')
-def alertas_padres():
-    cursor = conexion.cursor(dictionary=True)
-
-     #Temporal: para luego conectamos con sesión del padre
-    id_estudiante = 7895462
-
-    consulta = """
-    SELECT *
-    FROM ALERTAS
-    WHERE id_estudiante = %s
-    ORDER BY fecha_hora DESC
-    """
-    cursor.execute(consulta, (id_estudiante,))
-    alertas = cursor.fetchall()
-    cursor.close()
-
-    return render_template(
-        'mod_padres/alertas_padres.html', 
-        alertas=alertas
-    )
-
-#======== Ruta para reporte de inasistencia (padres)=========
-@app.route('/reportar_inasistencia', methods=['GET', 'POST'])
-def reportar_inasistencia():
-    cursor = conexion.cursor(dictionary=True)
-
-    #Temporal: luego conectamos con sesión del padre
-    id_padre = session.get('usuario')
-
-    if request.method == 'POST':
-        estudiante = request.form.get('estudiante')
-        fecha = request.form.get('fecha')
-        motivo = request.form.get('motivo')
-        observacion = request.form.get('observacion')
-
-        mensaje = f"Inasistencia reportada para{estudiante} el día {fecha}. Motivo: {motivo}. Observación{observacion}"
-
-        consulta_insert = """
-        INSERT INTO ALERTAS(
-            id_usuario_emisor,
-            tipo_alerta,
-             mensaje
-        )
-        VALUES (%s, %s, %s)
-        """
-        cursor.execute(consulta_insert, (
-            id_padre,
-            'inasistencia',
-            mensaje
-        ))
-
-        conexion.commit()
-        cursor.close()
-
-        flash('Inasistencia reportada correctamente', 'success')
-        return redirect(url_for('alertas_padres'))
-    cursor.close()
-    return render_template('mod_padres/reportar_inasistencia.html')
-
-
-
-@app.route('/padres/informacion_conductor')
-def informacion_conductor():
-    return render_template('mod_padres/informacion_conductor.html')
-
-
-@app.route('/estudiantes_padre')
-def estudiantes_padre():
-    return "<h2>Módulo de rutas en construcción</h2>"
-
-
-@app.route('/padres/ver_ruta')
-def ver_ruta():
-    return render_template('mod_padres/ver_ruta.html')
-
-#===============================================================================
-#==========GESTIONAR ESTUDIANTES (mod_admin mod_supadmin) ==========
-#==================================================================================
+#===========================================
+# LISTAR ESTUDIANTES
+#===========================================
 
 @app.route('/gestion_estudiantes')
 def gestion_estudiantes():
@@ -660,10 +586,6 @@ def gestion_estudiantes():
 
     consulta += " ORDER BY e.nombre DESC"
 
-    print(ruta_actual)
-    print(consulta)
-    print(parametros)
-
     cursor.execute(consulta, parametros)
     lista_estudiantes = cursor.fetchall()
     cursor.close()
@@ -678,16 +600,31 @@ def gestion_estudiantes():
         conductor_actual = conductor_actual
     )
 
-#=======================================================
-#==== Ruta Crear Estudiante ====
-#=======================================================
+#===========================================
+# FORMULARIO CREAR ESTUDIANTE
+#===========================================
 
 @app.route('/crear_estudiante')
 def crear_estudiante():
-    return render_template('mod_admin/crear_estudiante.html')
 
-#================================================================
-#=============RUTA GUARDA ESTUDIANTE=======
+    cursor = conexion.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM ruta") # Selecciona ruta escolar para asignar
+
+    rutas = cursor.fetchall()
+
+    cursor.close()
+    
+    return render_template(
+        'mod_admin/crear_estudiante.html',
+        rutas = rutas
+    )
+
+
+
+#===========================================
+# GUARDAR ESTUDIANTE
+#===========================================
 
 @app.route('/guardar_estudiante', methods=['POST'])
 def guardar_estudiante():
@@ -699,8 +636,20 @@ def guardar_estudiante():
         telefono= request.form['telefono']
         id_ruta= request.form['id_ruta']
 
-        cursor =conexion.cursor()
+        if len(id_estudiante) > 10:
+            return "El número de identificación no puede superar 10 caracteres"
+        if len(nombre) > 30:
+            return "El nombre de estudiante no puede superar los 30 caracteres"
+        if len(grado) > 5:
+            return "El grado no puede superar 5 caracteres"
+        if len(direccion) > 30:
+            return "La dirección no puede superar los 30 caracteres"
+        if len(telefono) > 10:
+            return "El teléfono no puede superar los 10 caracteres"
+        
 
+        #CONEXION Y VALIDACION EN BASE DE DATOS
+        cursor =conexion.cursor()
 
         # Valida Id dubplicado
         cursor.execute ("SELECT * FROM estudiante WHERE id_estudiante = %s", (id_estudiante,))
@@ -721,33 +670,20 @@ def guardar_estudiante():
 
         return redirect(url_for('gestion_estudiantes')) 
 
-#====== RUTA ELIMINAR ESTUDIANTE =====
-
-# - Elimina un estudiante de la base de datos
-# - Se ejecuta únicamente mediante método POST por seguridad
-@app.route('/eliminar_estudiante/<id_estudiante>', methods=['POST'])
-def eliminar_estudiante(id_estudiante):
-
-    cursor = conexion.cursor() # Crear cursor
-
-    if request.method == 'POST':
-
-        sql = "DELETE FROM estudiante WHERE id_estudiante = %s"# Consulta SQL para eliminar el estudiante
-        cursor.execute(sql, (id_estudiante,))# Ejecutar la consulta
-        conexion.commit() # Guardar cambios en la base de datos
-        cursor.close() # Cerrar cursor
-        flash('Estudiante eliminado correctamente', 'success')
-
-    return redirect(url_for('gestion_estudiantes')) # Redirigir a la lista de estudiantes
-
-#====== RUTA EDITAR ESTUDIANTE ======
+#===========================================
+# EDITAR ESTUDIANTE
+#===========================================
 
 # - GET  -> muestra el formulario con los datos actuales
 # - POST -> guarda los cambios realizados en la BD
 @app.route('/editar_estudiante/<id_estudiante>', methods=['GET', 'POST'])
 def editar_estudiante(id_estudiante):
 
+
     cursor = conexion.cursor(dictionary=True) # Crear cursor en formato diccionario para acceder por nombre de campo
+    cursor.execute("SELECT * FROM ruta") # Selecciona ruta escolar para asignar
+    rutas = cursor.fetchall()
+    
 
     # POST guardar cambios
     if request.method == 'POST': # POST: cuando el usuario da clic en "Guardar cambios"
@@ -758,6 +694,16 @@ def editar_estudiante(id_estudiante):
         direccion = request.form['direccion']
         telefono = request.form['telefono']
         id_ruta = request.form['id_ruta']
+
+        #VALIDACION LONGITUD DE CAMPOS
+        if len(nombre) > 30:
+            return "El nombre de estudiante no puede superar los 30 caracteres"
+        if len(grado) > 5:
+            return "El grado no puede superar 5 caracteres"
+        if len(direccion) > 30:
+            return "La dirección no puede superar los 30 caracteres"
+        if len(telefono) > 10:
+            return "El teléfono no puede superar los 10 caracteres"
 
         # Consulta SQL para actualizar la información del estudiante        
         sql = """
@@ -772,7 +718,7 @@ def editar_estudiante(id_estudiante):
 
         valores = (nombre, grado, direccion, telefono, id_ruta, id_estudiante)
 
-        cursor.execute(sql, valores)
+        cursor.execute(sql, valores, rutas)
         conexion.commit()
         cursor.close()
 
@@ -794,68 +740,337 @@ def editar_estudiante(id_estudiante):
         2: 'administrador'
     }.get(session['rol'])
 
-    return render_template('mod_admin/editar_estudiante.html', # Renderiza el formulario de edición con los datos actuales del estudiante
-                           ruta_volver=ruta_volver, 
-                           estudiante=estudiante  ) # Envía los datos al formulario editar_estudiante.html
+    return render_template(
+        'mod_admin/editar_estudiante.html', # Renderiza el formulario de edición con los datos actuales del estudiante
+        ruta_volver=ruta_volver, 
+        estudiante=estudiante,
+        rutas = rutas  
+    ) # Envía los datos al formulario editar_estudiante.html
+
+#===========================================
+# ELIMINAR ESTUDIANTES
+#===========================================
+
+# - Elimina un estudiante de la base de datos
+# - Se ejecuta únicamente mediante método POST por seguridad
+@app.route('/eliminar_estudiante/<id_estudiante>', methods=['POST'])
+def eliminar_estudiante(id_estudiante):
+
+    cursor = conexion.cursor() # Crear cursor
+
+    if request.method == 'POST':
+
+        sql = "DELETE FROM estudiante WHERE id_estudiante = %s"# Consulta SQL para eliminar el estudiante
+        cursor.execute(sql, (id_estudiante,))# Ejecutar la consulta
+        conexion.commit() # Guardar cambios en la base de datos
+        cursor.close() # Cerrar cursor
+        flash('Estudiante eliminado correctamente', 'success')
+
+    return redirect(url_for('gestion_estudiantes')) # Redirigir a la lista de estudiantes
+
+#===========================================
+# MODULO ALERTAS
+#===========================================
+
+#===========================================
+# GESTION DE ALERTAS
+#===========================================
+
+@app.route('/gestion_alerta')#Rura gestion de alertas Modulo admin y supadmin
+def gestion_alerta():#función para mostrar las alertas en el panel del admin y supadmin
+
+    estado_actual = request.args.get("estado")
+
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    if session['rol'] not in [1, 2]:
+        return "Acceso no autorizado"
+    
+    # estado = request.args.get('estado') #Captura el estado
+    
+    botones = [
+    {
+        "texto": "Volver",
+        "url": obtener_url_volver(),
+        "class": "btn-secondary"
+    },
+
+]
+
+    cursor = conexion.cursor(dictionary=True)# Crear cursor para interactuar con la base de datos
+
+    # Consulta para traer alertas con datos del conductor, estudiante y ruta
+    consulta = """
+    SELECT 
+        a.*,
+        u.nombres_y_apellidos AS conductor_nombre,
+        e.nombre AS estudiante_nombre,
+        r.nombre_ruta
+    FROM ALERTAS a
+    LEFT JOIN USUARIO u 
+        ON a.id_usuario_emisor = u.id_usuario
+    LEFT JOIN ESTUDIANTE e 
+        ON a.id_estudiante = e.id_estudiante
+    LEFT JOIN RUTA r 
+        ON a.id_ruta = r.id_ruta
+    """
+
+    parametros = []
+
+    if estado_actual:
+        consulta += " WHERE a.estado = %s"
+        parametros.append(estado_actual)
+
+    consulta += " ORDER BY a.fecha_hora DESC"
+
+
+    cursor.execute(consulta, parametros) #Ejecuta la consulta SQL
+    alertas = cursor.fetchall() #Trae todas las alertas obtenidas de la consulta
+    cursor.close() #Cierra el cursor
+
+    return render_template(
+        'mod_admin/alertas.html', 
+        alertas = alertas,
+        botones = botones,
+        estado_actual = estado_actual
+    ) #Renderiza la plantilla gestion_alerta.html y le pasa la lista de alertas obtenida de la consulta
+
+
+#===========================================
+# EDITAR ALERTAS (mod admin y supadmin)
+#===========================================
+
+@app.route('/editar_alerta/<id_alerta>', methods=['POST'])
+def editar_alerta(id_alerta):
+    cursor = conexion.cursor()
+
+    estado = request.form.get('estado')
+    observacion = request.form.get('observacion_admin')
+
+    consulta_update = """
+        UPDATE ALERTAS
+        SET estado = %s,
+            observacion_admin = %s
+        WHERE id_alerta = %s
+    """
+
+    cursor.execute(consulta_update, (estado, observacion, id_alerta))
+    conexion.commit()
+    cursor.close()
+
+    flash('Alerta gestionada correctamente', 'success')
+
+    return redirect(url_for('gestion_alerta'))
+    
+
+
+#===========================================
+# GESTIONAR ALERTAS (Panel conductor)
+#===========================================
+
+@app.route('/conductor/alertas', methods=['GET', 'POST'])#Revisado por Cristina OK#
+def alertas_conductor():
+    cursor = conexion.cursor(dictionary=True)# Crear cursor para interactuar con la base de datos
+
+    id_conductor = session.get('usuario') # Obtener el ID del conductor desde la sesión
+
+    #Crear alerta
+    if request.method == 'POST':
+        id_estudiante = request.form.get('id_estudiante')
+        id_ruta = request.form.get('id_ruta')
+        tipo_alerta = request.form.get('tipo_alerta')
+        mensaje = request.form.get('mensaje')
+
+        consulta_insert = """
+        INSERT INTO ALERTAS(
+        id_usuario_emisor,
+        id_estudiante,
+        id_ruta,
+        tipo_alerta,
+        mensaje
+        )
+        VALUES (%s, %s, %s, %s, %s)
+        """
+
+        cursor.execute(consulta_insert,(
+            id_conductor,
+            id_estudiante,
+            id_ruta,
+            tipo_alerta,
+            mensaje
+        ))
+
+        conexion.commit()
+        cursor.close()
+        flash('Alerta creada correctamente', 'success')
+        return redirect(url_for('alertas_conductor'))
+    
+    #Mostrar alertas enviadas por el conductor
+    consulta="""
+    SELECT *
+    FROM ALERTAS
+    WHERE id_usuario_emisor = %s
+    ORDER BY fecha_hora DESC
+    """
+
+    cursor.execute(consulta, (id_conductor,))
+    alertas = cursor.fetchall()
+
+    cursor.close()
+
+    return render_template('mod_conductor/alertas_conductor.html', alertas=alertas)
+
+
+@app.route('/conductor/compartir_ubicacion')
+def compartir_ubicacion():  
+    return "<h2>Módulo en construcción</h2>"
 
 
 
+#===========================================
+# GESTIONAR  ALERTAS (Panel padres)
+#===========================================
 
-#============== RUTA VALIDACION DE LOGIN====================== CRISTINA SALAZAR
-
-from werkzeug.security import check_password_hash # Importa la función para verificar contraseñas encriptadas
-import hashlib # Importa la librería para manejar hash MD5 (usuarios antiguos)
-
-@app.route('/validar_login', methods=['POST'])
-def valida_login():
-    correo = request.form['correo'].strip()
-    password = request.form['password'].strip()
-
+@app.route('/padres/alertas')
+def alertas_padres():
     cursor = conexion.cursor(dictionary=True)
 
-    cursor.execute("""
-        SELECT * 
-        FROM usuario
-        WHERE correo = %s
-    """, (correo,))
+     #Temporal: para luego conectamos con sesión del padre
+    id_estudiante = 7895462
 
-    usuario = cursor.fetchone()
+    consulta = """
+    SELECT *
+    FROM ALERTAS
+    WHERE id_estudiante = %s
+    ORDER BY fecha_hora DESC
+    """
+    cursor.execute(consulta, (id_estudiante,))
+    alertas = cursor.fetchall()
+    cursor.close()
 
-    if usuario:
-        hash_guardado = usuario['hash_password']
+    return render_template(
+        'mod_padres/alertas_padres.html', 
+        alertas=alertas
+    )
 
-        acceso = False
-
-        # Usuarios nuevos (scrypt)
-        if hash_guardado.startswith("scrypt:"):
-            acceso = check_password_hash(hash_guardado, password)
-
-        # Usuarios viejos (MD5)
-        else:
-            acceso = hashlib.md5(password.encode()).hexdigest() == hash_guardado
-
-        if acceso:
-            session['usuario'] = usuario['id_usuario']
-            session['rol'] = usuario['id_rol']
-
-            if usuario['id_rol'] == 1:
-                return redirect(url_for('superadministrador'))
-            elif usuario['id_rol'] == 2:
-                return redirect(url_for('administrador'))
-            elif usuario['id_rol'] == 3:
-                return redirect(url_for('conductor'))
-            elif usuario['id_rol'] == 4:
-                return redirect(url_for('padres'))
-
-    return "Usuario o contraseña incorrectos"
-    
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect(url_for('inicio'))#retorna al home/pág inicio
 
 # ==========================================
-# GESTIÓN DE VEHÍCULOS Y RUTAS
+# MODULO CONDUCTOR
+# ==========================================
+
+@app.route('/conductor')
+def conductor():
+
+    # if 'usuario' not in session:
+    #     return redirect(url_for('login'))
+
+    # if session['rol'] != 3:
+    #     return "Acceso no autorizado"
+        
+    return render_template('mod_conductor/conductor.html')
+
+@app.route('/conductor/mi_ruta')#Revisado por Cristina OK#
+def mi_ruta():
+    # if 'usuario' not in session:
+    #     return redirect(url_for('login'))
+    # if session['rol'] != 3:
+    #     return "Acceso no autorizado"
+    return render_template('mod_conductor/mi_ruta.html')
+
+@app.route('/conductor/estudiantes')
+def estudiantes_conductor():
+    return render_template('mod_conductor/estudiantes_conductor.html')
+
+
+# ==========================================
+# MODULO PADRES DE FAMILIA
+# ==========================================
+@app.route('/padres')
+def padres():
+
+    # if 'usuario' not in session:
+    #     return redirect(url_for('login'))
+    
+    # if session['rol'] != 4:
+    #     return "Acceso no autorizado"
+    
+    return render_template('mod_padres/padre.html')
+
+
+# ==========================================
+# GESTIONAR REPORTE INASISTENCIA
+# ==========================================
+
+@app.route('/reportar_inasistencia', methods=['GET', 'POST'])
+def reportar_inasistencia():
+    cursor = conexion.cursor(dictionary=True)
+
+    #Temporal: luego conectamos con sesión del padre
+    id_padre = session.get('usuario')
+
+    if request.method == 'POST':
+        estudiante = request.form.get('estudiante')
+        fecha = request.form.get('fecha')
+        motivo = request.form.get('motivo')
+        observacion = request.form.get('observacion')
+
+        mensaje = f"Inasistencia reportada para{estudiante} el día {fecha}. Motivo: {motivo}. Observación{observacion}"
+
+        consulta_insert = """
+        INSERT INTO ALERTAS(
+            id_usuario_emisor,
+            tipo_alerta,
+             mensaje
+        )
+        VALUES (%s, %s, %s)
+        """
+        cursor.execute(consulta_insert, (
+            id_padre,
+            'inasistencia',
+            mensaje
+        ))
+
+        conexion.commit()
+        cursor.close()
+
+        flash('Inasistencia reportada correctamente', 'success')
+        return redirect(url_for('alertas_padres'))
+    cursor.close()
+    return render_template('mod_padres/reportar_inasistencia.html')
+
+# ==========================================
+# VER INFORMACION CONDUCTOR
+# ==========================================
+
+
+@app.route('/padres/informacion_conductor')
+def informacion_conductor():
+    return render_template('mod_padres/informacion_conductor.html')
+
+# ==========================================
+# VER ESTUDIANTE
+# ==========================================
+
+@app.route('/estudiantes_padre')
+def estudiantes_padre():
+    return "<h2>Módulo de rutas en construcción</h2>"
+# ==========================================
+# VER RECORRIDO RUTA ESCOLAR
+# ==========================================
+
+@app.route('/padres/ver_ruta')
+def ver_ruta():
+    return render_template('mod_padres/ver_ruta.html')
+
+
+
+
+
+
+
+# ==========================================
+# MODULO VEHÍCULOS Y RUTAS
 # RESPONSABLE: CAMILO OCAMPO
 # ==========================================
 @app.route('/gestion_vehiculos')
@@ -867,11 +1082,19 @@ def monitorear_ruta():
     return "<h2>Módulo de alertas en construcción</h2>"
 
 # Aquí se desarrollarán las rutas relacionadas con:
-# - Registro de vehículos
-# - Listado de vehículos
-# - Creación de rutas
-# - Edición de rutas
-# - Asignación de vehículo o conductor a la ruta
+# - gestionar_rutas
+# - crear_ruta
+# - editar_ruta
+# - eliminar_ruta
+
+# - gestionar_vehiculos
+# - crear_vehiculo
+# - editar_vehiculo
+# - eliminar_vehiculo
+
+# - asignar conductor
+# - asignar estudiantes
+# - asignar vehículo
 
 
 #==========================================
@@ -885,15 +1108,15 @@ def gestion_rutas():
 
 
 #Aquí se desarrollarán las rutas relacionadas con:
-#- Registro de estudiantes
-#- Edición de estudiantes
-#- Eliminación de estudiantes
-#- Asignación de estudiantes a rutas
+# - ver su ruta
+# - reportar alertas
+# - compartir ubicación
+# - marcar estudiantes recogidos
+# - modificar recorrido temporalmente
+
+
 #- Consultar estudiantes por ruta
 #- Listar estudiantes por conductor o ruta
-
-
-
 
 
 

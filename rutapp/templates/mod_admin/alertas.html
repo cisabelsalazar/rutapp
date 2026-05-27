@@ -22,6 +22,7 @@
     <main><!---Contenido principal de la página-->
         <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
             class="Imagen" />
+        <script src="{{ url_for('static', filename='js/control_moda.js') }}"></script>
 
         <div class="admin-layout">
 
@@ -49,36 +50,37 @@
                 <div class="tabla-alertas-container">
 
                     <h1>Centro de Gestión de Alertas</h1><!---Título principal-->
+                    
 
                     <div class="toolbar-container">
                         {{ action_toolbar(botones) }}
                     </div>
 
                     <div class="filtros-alertas"> <!---Filtro para alertas-->
-                        
+
                         <a href="{{ url_for('gestion_alerta') }}"
-                        class="{% if not estado_actual %}filtro-activo{% endif %}">
-                        Todas
+                            class="{% if not estado_actual %}filtro-activo{% endif %}">
+                            Todas
                         </a>
 
                         <a href="{{ url_for('gestion_alerta', estado='nueva') }}"
-                        class="{% if estado_actual == 'nueva' %}filtro-activo{% endif %}">
-                        Nuevas
+                            class="{% if estado_actual == 'nueva' %}filtro-activo{% endif %}">
+                            Nuevas
                         </a>
 
                         <a href="{{ url_for('gestion_alerta', estado='leida') }}"
-                        class="{% if estado_actual == 'leida' %}filtro-activo{% endif %}">
-                        Leídas
+                            class="{% if estado_actual == 'leida' %}filtro-activo{% endif %}">
+                            Leídas
                         </a>
 
                         <a href="{{ url_for('gestion_alerta', estado='en_proceso' ) }}"
-                        class="{% if estado_actual == 'en_proceso'%}filtro-activo{% endif %}">
-                        En proceso
+                            class="{% if estado_actual == 'en_proceso'%}filtro-activo{% endif %}">
+                            En proceso
                         </a>
 
                         <a href="{{ url_for('gestion_alerta', estado='resuelta') }}"
-                        class="{% if estado_actual == 'resuelta' %}filtro-activo{% endif %}">
-                        Resueltas
+                            class="{% if estado_actual == 'resuelta' %}filtro-activo{% endif %}">
+                            Resueltas
                         </a>
                     </div>
 
@@ -119,12 +121,14 @@
                                     <td style="width: 10%;"><!---ancho fijo para la columna de acciones-->
 
                                         <div class="acciones">
-
-                                            <a href="{{ url_for('editar_alerta', id_alerta=alerta.id_alerta) }}"
-                                                class="btn-read"><!---Enlace para gestionar la alerta-->
+                                            <button class="btn-read"
+                                                onclick="abrirModal(
+                                                    '{{ alerta.id_alerta }}',
+                                                    '{{ alerta.estado }}',
+                                                    `{{ alerta.observacion_admin|default('') }}`
+                                                )">
                                                 Gestionar
-                                            </a>
-                                        </div>
+                                            </button>
                                     </td>
                                 </tr><!---Fin de la fila de la alerta-->
                                 {% endfor %}<!---Fin del bucle de alertas-->
@@ -141,5 +145,39 @@
     </footer>
 
 </body><!---Fin del cuerpo del documento-->
+
+<!-- MODAL -->
+<div id="modalAlerta" class="modal">
+    <div class="modal-contenido">
+
+
+        <form id="formAlerta" method="POST">
+
+            <label>Estado</label>
+            <select id="estado" name="estado">
+                <option value="nueva">Nueva</option>
+                <option value="leida">Leída</option>
+                <option value="en_proceso">En proceso</option>
+                <option value="resuelta">Resuelta</option>
+            </select>
+
+            <label>Observación</label>
+            <textarea id="observacion" name="observacion_admin"></textarea>
+
+            <button type="submit" class="btn-guardar">Guardar</button>
+            <button type="button" class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+
+        </form>
+
+    </div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="toast" id="mensajeFlash">
+      {{ messages[0][1] }}
+    </div>
+  {% endif %}
+{% endwith %}
 
 </html><!---Fin del documento HTML-->

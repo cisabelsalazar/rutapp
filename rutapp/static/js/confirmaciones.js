@@ -92,3 +92,26 @@ function confirmarCreacionEstudiante() {
         }
     });
 }
+
+
+//Confirmación nueva contraseña creada//
+
+function confirmarNuevaPassword() {
+    Swal.fire({
+        title: '¿Cambiar Contraseña?',
+        text: 'La contraseña del usuario será actualizada',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, actualizar',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'swal-popup',
+            confirmButton: 'swal-confirm-btn',
+            cancelButton: 'swal-cancel-btn'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('formRecuperarPassword').submit();
+        }
+    });
+}

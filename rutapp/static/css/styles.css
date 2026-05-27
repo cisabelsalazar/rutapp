@@ -287,17 +287,7 @@ main {
     background-color: #caa140;
 }
 
-.forgot-password {
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: #2d74de;
-    text-decoration: none;
-    transition: text-decoration 0.3s;
-}
 
-.forgot-password:hover {
-    text-decoration: underline;
-}
 
 
 /*==================================================================================*/
@@ -1306,8 +1296,13 @@ td {
     cursor: pointer;
     font-size: 13px;
     color: white;
-    background-color: #5d91c6;
+    background-color: #295a6b;
     transition: filter 0.2s;
+}
+
+.btn-read:hover{
+    background-color: #279a9e;
+    transform: translateY(-2px); /*El boton se mueve hacia arriba un poco*/
 }
 
 .btn-resolve {
@@ -1716,6 +1711,104 @@ h1 {
     box-shadow:0px 0px 8px rgba(33,108,143,0.4);    /* Agrega un efecto de iluminación alrededor */
 }
 
+
+/*=== Estilos para el select de rol 
+      en el formulario crear y editar estudiante ===*/
+
+.filtro-editar-estudiante select{
+
+    width:40%;    /* El select ocupa todo el ancho disponible del contenedor */
+    padding:6px;    /* Espaciado interno para mejorar la visualización */
+    border-radius:8px;    /* Bordes redondeados */
+    border:2px solid #216c8f;    /* Borde azul personalizado */
+    background-color:#fff;    /* Fondo blanco */
+    font-size:12px;    /* Tamaño del texto */
+    font-weight:bold;    /* Texto en negrilla */
+    color:#333;    /* Color del texto */
+    cursor:pointer;    /* Cambia el cursor al pasar sobre el select */
+    outline:none;    /* Elimina el borde predeterminado del navegador */
+    transition:0.3s ease;    /* Suaviza cambios visuales como hover o focus */
+}
+
+/*================*/
+/*ESTILO PARA FORMULARIO RECUPERAR CONTRASEÑA LOGIN*/
+/*===================*/
+.form-recuperar_password{
+
+    width: 40%; /* Ancho fijo del formulario */
+    margin: 200px auto; /* Espaciado superior y centrado horizontal */
+    padding: 50px; /* Espacio interno entre el contenido y el borde */
+    border-radius: 12px; /* Bordes redondeados para apariencia moderna */
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.2);    /* Sombra suave para dar profundidad visual */
+    background-color: rgba(255, 255, 255, 0.7);    /* Fondo blanco semitransparente */
+    height: 250px;    /* Altura fija para mantener uniformidad visual */
+    display:block;    /* Permite que el formulario ocupe toda la línea disponible */
+    position: relative;    /* Permite mover el formulario respecto a su posición original */
+    left: 30%;    /* Desplaza el formulario hacia la derecha */
+    transform: translate(-50%); /* Ajusta el posicionamiento horizontal para centrar visualmente */
+}
+
+.form-recuperar_password .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.form-recuperar_password label {
+    width: 155px;
+    font-weight: bold;
+    color: rgb(85, 82, 82);
+    text-align: left;
+}
+
+.form-recuperar_password input {
+    width: 30%;
+    flex: 1;
+    padding:10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.2s;
+}
+
+
+.form-recuperar_password h2 {/* Estilo específico para título de formulario de inasistencia */
+    text-align: center;
+    margin-bottom: 20px;
+    color: rgb(85, 82, 82);
+    margin-top:-15px;
+}
+
+/*ESTILO BOTON RECUPERAR CONTRASEÑA*/
+
+.forgot-password {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px; /* Espacio entre botón y texto */
+    margin-top: 20px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: text-decoration 0.3s;
+}
+
+.forgot-password button {
+    width: 40%;           /* Tamaño botón inicio de sesión */
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #2d84c7;
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.forgot-password button:hover {
+    background-color: #caa140;
+}
+
+
+
 /*==================================================================================*/
 /* 10. TABLA DE USUARIOS: Estilos para lista y gestión de usuarios               */
 /*==================================================================================*/
@@ -1869,6 +1962,96 @@ tabla Usuarios módulos admin y superadmin===== */
     margin:0; /* Elimina márgenes externos */
 }
 
+/*=============================================================*/
+/* Estilos para tabla de GESTION DE ESTUDIANTES en modulo Admin y Superadmin*/
+/*============================================================*/
+
+.tabla-estudiantes-container{ /*tabla usuarios modulo administrador y supadmin*/
+
+    display: flex;
+    flex-direction: column;      /* Apila el h1 y la tabla */
+    align-items: center;         /* Centra todo horizontalmente */
+    margin: 30px auto;           /* Espacio superior e inferior */
+    width: 95%;                  /* Ocupa casi todo el ancho */
+    overflow-y: auto;
+    max-height: 600px;
+    box-sizing: border-box;
+}
+
+.tabla-estudiantes-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c4b62;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 10px 0;
+}
+
+.tabla-estudiantes-container table { /*Estilo tabla vista gestion de usuarios*/
+    width: 100%;                  /* Ancho de la tabla */
+    max-width: 1400px;           /* Ancho máximo */
+    border-collapse: collapse;   /* Elimina espacio entre celdas */
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.tabla-estudiantes-container th {
+    background-color: #295a6b;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+    position: sticky; /*El encabezado queda fijo al hacer scroll*/
+    top: 0;
+    z-index: 10; /*Evita que otras filas pasen por encima del encabezado.*/
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+    
+}
+
+
+.tabla-estudiantes-container td {
+    border: 1px solid #ccc;
+    padding: 12px;   /*Define tamaño alto de celda*/
+    font-size: 13px; /*Define tamaño de texto*/
+    text-align: center;
+    color: #333;
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+}
+
+.tabla-estudiantes-container tr:hover { /*Sombreado al pasar el cursor sobre la fila de la tabla*/
+    background-color: #eaf4f8;
+}
+
+/*===== Estilos para ajuste tamaño columnas 
+tabla Usuarios módulos admin y superadmin===== */
+
+.tabla-estudiantes-container th:nth-child(1){
+    width: 70px;
+}
+
+.tabla-estudiantes-container td:nth-child(2),
+.tabla-estudiantes-container th:nth-child(3){
+    width: 100px;
+}
+
+.tabla-estudiantes-container td:nth-child(4){
+    width: 90px;
+}
+
+.tabla-estudiantes-container td:nth-child(5) {
+    width: 60px;
+    
+}
+
+.tabla-estudiantes-container td:nth-child(6){
+    width: 60px;
+}
+
+.tabla-estudiantes-container td:nth-child(7) {
+    width: 150px;
+}
+
 
 /*=============================================================*/
 /*Estilos para tabla CENTRO DE GESTION DE ALERTAS en modulo Admin y Superadmin*/
@@ -1986,6 +2169,75 @@ tabla Usuarios módulos admin y superadmin===== */
     transform: translateY(-2px);
 }
 
+/*ESTILO VENTANA EMERGENTE EDITAR ALERTA ADMIN SUPADMIN*/
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.modal-contenido {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 420px;
+
+    box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.896);
+
+    animation: aparecer 0.3s ease;
+
+}
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-contenido label {
+    display: block;
+    margin-top: 10px;
+    font-weight: 600;
+    color: #2c4b62;
+}
+
+.modal-contenido select,
+.modal-contenido textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+
+    border-radius: 8px;
+    border: 1px solid #193742;
+
+    font-size: 14px;
+}
+
+/*Estilo mensaje ventana emergente alertas*/
+.alert-success {
+    background-color: #2ecc71;
+    color: white;
+    padding: 12px;
+    margin: 15px 0;
+
+    border-radius: 8px;
+    text-align: center;
+
+    font-weight: 500;
+}
 
 
  /*seccion en revision para unificar estilos de tablas en adminy superadmin TABLA ALERTAS*/
@@ -2179,6 +2431,21 @@ tabla Usuarios módulos admin y superadmin===== */
 .btn-eliminar:hover,
 .btn-cancelar:hover {
     background-color: #a72828;
+    color: white;
+}
+
+
+/*=== BOTON OLVIDASTE TU CONTRASEÑA?===*/
+
+.btn-forgot_password {
+    color: black;
+    border: 2px solid #b1adad;
+    margin-left: 15px;
+    transition: background-color 0.2s;
+}
+
+.btn-forgot_password:hover {
+    background-color: grey;
     color: white;
 }
 

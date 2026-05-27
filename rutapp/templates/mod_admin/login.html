@@ -10,9 +10,10 @@
 
 <body class="bg-home"><!--- Agrega la clase "bg-home" para aplicar el fondo específico de la página de inicio -->
 
+
     <header>
-    {# Incluye el encabezado (header) de la página #}
-    {% include 'layout/header.html' %}
+        {# Incluye el encabezado (header) de la página #}
+        {% include 'layout/header.html' %}
     </header>
 
     <main><!--- Contenedor principal de la página de inicio -->
@@ -34,6 +35,7 @@
                 conductores y administradores interactuar de forma segura y eficiente.
             </p>
 
+
             <form action="/validar_login" method="POST">
 
                 <div class="form-group">
@@ -48,7 +50,9 @@
 
                 <div class="form-actions">
                     <button type="submit">Iniciar sesión</button>
-                    <a href="/recuperar-password" class="forgot-password">
+
+                    <a href="{{ url_for('recuperar_password') }}"
+                        class="btn btn-forgot_password">
                         ¿Olvidaste tu contraseña?
                     </a>
                 </div>
@@ -56,7 +60,9 @@
             </form>
 
 
-       <!---     <a href="{{url_for('login')}}" class="btn-ingresar">Ingresar al Sistema</a>
+
+
+            <!---     <a href="{{url_for('login')}}" class="btn-ingresar">Ingresar al Sistema</a>
         </div>
 
       <h2 class="titulo-home">¿Cómo deseas ingresar?</h2>
@@ -90,6 +96,25 @@
     <footer class="footer">
         <p>© 2026 RUTAPP - Proyecto ADSO SENA</p>
     </footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+
+        <script>
+            Swal.fire({
+                icon: "{{ category }}",
+                title: "{{ message }}",
+                confirmButtonText: "Aceptar"
+            });
+        </script>
+
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 
 </body>
 

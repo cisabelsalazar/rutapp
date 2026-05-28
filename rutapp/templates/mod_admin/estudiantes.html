@@ -33,7 +33,11 @@
 
                 <ul>
                     <li>Dashboard</li>
-                    <li>Usuarios</li>
+                    <li>
+                        <a href="{{ url_for('usuarios') }}">
+                            Usuarios
+                        </a>
+                    </li>
                     <li>Rutas</li>
                     <li>Ubicación en tiempo real</li>
                     <li>
@@ -78,8 +82,8 @@
                                     <!-- Recorre dinámicamente las rutas obtenidas desde la BD -->
                                     {% for ruta in rutas %}
 
-                                    <option value="{{ ruta.nombre_ruta }}"
-                                    {% if ruta_actual == ruta.nombre_ruta %}selected{% endif %}>
+                                    <option value="{{ ruta.nombre_ruta }}" {% if ruta_actual==ruta.nombre_ruta
+                                        %}selected{% endif %}>
 
                                         {{ ruta.nombre_ruta }}
 
@@ -110,7 +114,7 @@
                                     <th>id Ruta</th>
                                     <th>Nombre Ruta</th>
                                     <th>Acciones</th>
-                                    
+
                                 </tr>
                             </thead>
 

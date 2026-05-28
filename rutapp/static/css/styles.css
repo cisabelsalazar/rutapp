@@ -36,29 +36,38 @@ main {
 /*=====================================================================*/
 /* 2. HEADER Y FOOTER: Estilos para encabezado y pie de página                     */
 /*==================================================================================*/
-.header {
+.navbar {
+    display: flex;
+    justify-content: flex-end;
     background-color: #2c3e50;
-    padding: 12px;
+    padding: 15px 30px;
     text-align: left;
-
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-
     z-index: 1000;
 }
 
-.header a {
+.navbar a {
     color: white;
     margin: 0 15px;
     text-decoration: none;
     font-weight: bold;
+    text-align: left;
+
 }
 
-.header a:hover {
-    text-decoration: underline;
+.navbar a:hover {
+    color: #dc6b1b;
 }
+
+.usuario-nav {
+    font-size: 16px;
+    font-weight: bold;
+    color: rgb(231, 179, 49);
+}
+
 
 .footer {
     margin-top: 30px;
@@ -66,6 +75,7 @@ main {
     font-size: 12px;
     color: white;
 }
+
 
 /*==================================================================================*/
 /* 3. HOME / PÁGINA DE BIENVENIDA: Estilos para página inicial                    */
@@ -441,12 +451,10 @@ main {
     border-radius: 6px;
     text-decoration: none;
     font-weight: bold;
-
     display: block;
     width: 100%;
     text-align: center;
     box-sizing: border-box;
-
     transition: background-color 0.3s;
 }
 
@@ -1733,7 +1741,7 @@ h1 {
 /*================*/
 /*ESTILO PARA FORMULARIO RECUPERAR CONTRASEÑA LOGIN*/
 /*===================*/
-.form-recuperar_password{
+.form-recuperar-password{
 
     width: 40%; /* Ancho fijo del formulario */
     margin: 200px auto; /* Espaciado superior y centrado horizontal */
@@ -1741,27 +1749,27 @@ h1 {
     border-radius: 12px; /* Bordes redondeados para apariencia moderna */
     box-shadow: 0px 0px 20px rgba(0,0,0,0.2);    /* Sombra suave para dar profundidad visual */
     background-color: rgba(255, 255, 255, 0.7);    /* Fondo blanco semitransparente */
-    height: 250px;    /* Altura fija para mantener uniformidad visual */
+    height: 220px;    /* Altura fija para mantener uniformidad visual */
     display:block;    /* Permite que el formulario ocupe toda la línea disponible */
     position: relative;    /* Permite mover el formulario respecto a su posición original */
     left: 30%;    /* Desplaza el formulario hacia la derecha */
     transform: translate(-50%); /* Ajusta el posicionamiento horizontal para centrar visualmente */
 }
 
-.form-recuperar_password .form-group {
+.form-recuperar-password .form-group {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.form-recuperar_password label {
+.form-recuperar-password label {
     width: 155px;
     font-weight: bold;
     color: rgb(85, 82, 82);
     text-align: left;
 }
 
-.form-recuperar_password input {
+.form-recuperar-password input {
     width: 30%;
     flex: 1;
     padding:10px;
@@ -1771,7 +1779,7 @@ h1 {
 }
 
 
-.form-recuperar_password h2 {/* Estilo específico para título de formulario de inasistencia */
+.form-recuperar-password h2 {/* Estilo específico para título de formulario de inasistencia */
     text-align: center;
     margin-bottom: 20px;
     color: rgb(85, 82, 82);
@@ -1789,24 +1797,74 @@ h1 {
     font-size: 0.9rem;
     text-decoration: none;
     transition: text-decoration 0.3s;
+    
 }
 
-.forgot-password button {
+.forgot-password-button {
     width: 40%;           /* Tamaño botón inicio de sesión */
-    padding: 12px;
+    padding: 6px 10px;
     border-radius: 8px;
-    background-color: #2d84c7;
-    color: white;
-    border: none;
+    background-color: white;
+    color: black;
+    border: 2px solid #17485f;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.2s;
+     box-shadow: 0px 4px 0px #9da2a5, 0px 8px 10px rgba(0,0,0,0.3);
 }
 
-.forgot-password button:hover {
-    background-color: #caa140;
+.forgot-password-button:hover {
+    background-color: #2d84c7;
+    color: white; /*Cambia de color la letra al pasar el cursor*/
 }
 
+/*==================================================*/
+/*ESTILO PARA FORMULARIO RECUPERAR CONTRASEÑA LOGIN*/
+/*================================================*/
+.form-nueva-password{
+
+    width: 40%; /* Ancho fijo del formulario */
+    margin: 200px auto; /* Espaciado superior y centrado horizontal */
+    padding: 50px; /* Espacio interno entre el contenido y el borde */
+    border-radius: 12px; /* Bordes redondeados para apariencia moderna */
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.2);    /* Sombra suave para dar profundidad visual */
+    background-color: rgba(255, 255, 255, 0.7);    /* Fondo blanco semitransparente */
+    height: 280px;    /* Altura fija para mantener uniformidad visual */
+    display:block;    /* Permite que el formulario ocupe toda la línea disponible */
+    position: relative;    /* Permite mover el formulario respecto a su posición original */
+    left: 30%;    /* Desplaza el formulario hacia la derecha */
+    transform: translate(-50%); /* Ajusta el posicionamiento horizontal para centrar visualmente */
+}
+
+.form-nueva-password .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.form-nueva-password label {
+    width: 155px;
+    font-weight: bold;
+    color: rgb(85, 82, 82);
+    text-align: left;
+}
+
+.form-nueva-password input {
+    width: 30%;
+    flex: 1;
+    padding:10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.2s;
+}
+
+
+.form-nueva-password h2 {/* Estilo específico para título de formulario de inasistencia */
+    text-align: center;
+    margin-bottom: 20px;
+    color: rgb(85, 82, 82);
+    margin-top:-15px;
+}
 
 
 /*==================================================================================*/
@@ -2435,16 +2493,18 @@ tabla Usuarios módulos admin y superadmin===== */
 }
 
 
-/*=== BOTON OLVIDASTE TU CONTRASEÑA?===*/
+/*=== ENLACE OLVIDASTE TU CONTRASEÑA?===*/
 
-.btn-forgot_password {
+.forgot-password-login {
     color: black;
-    border: 2px solid #b1adad;
-    margin-left: 15px;
     transition: background-color 0.2s;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    display: inline-block;
 }
 
-.btn-forgot_password:hover {
+.forgot-password-login:hover {
     background-color: grey;
     color: white;
 }

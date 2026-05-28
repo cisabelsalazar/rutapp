@@ -34,7 +34,11 @@
 
                 <ul>
                     <li>Dashboard</li>
-                    <li>Usuarios</li>
+                    <li>
+                        <a href="{{ url_for('usuarios') }}">
+                            Usuarios
+                        </a>
+                    </li>
                     <li>Rutas</li>
                     <li>Ubicación en tiempo real</li>
                     <li>
@@ -50,7 +54,7 @@
                 <div class="tabla-alertas-container">
 
                     <h1>Centro de Gestión de Alertas</h1><!---Título principal-->
-                    
+
 
                     <div class="toolbar-container">
                         {{ action_toolbar(botones) }}
@@ -121,8 +125,7 @@
                                     <td style="width: 10%;"><!---ancho fijo para la columna de acciones-->
 
                                         <div class="acciones">
-                                            <button class="btn-read"
-                                                onclick="abrirModal(
+                                            <button class="btn-read" onclick="abrirModal(
                                                     '{{ alerta.id_alerta }}',
                                                     '{{ alerta.estado }}',
                                                     `{{ alerta.observacion_admin|default('') }}`
@@ -173,11 +176,11 @@
 </div>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <div class="toast" id="mensajeFlash">
-      {{ messages[0][1] }}
-    </div>
-  {% endif %}
+{% if messages %}
+<div class="toast" id="mensajeFlash">
+    {{ messages[0][1] }}
+</div>
+{% endif %}
 {% endwith %}
 
 </html><!---Fin del documento HTML-->

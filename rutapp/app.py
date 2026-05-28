@@ -137,6 +137,7 @@ def valida_login():
         if acceso:
             session['usuario'] = usuario['id_usuario']
             session['rol'] = usuario['id_rol']
+            session['nombre_usuario'] = usuario['nombre_usuario']
 
             if usuario['id_rol'] == 1:
                 return redirect(url_for('superadministrador'))

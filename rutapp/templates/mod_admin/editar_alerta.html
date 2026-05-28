@@ -27,7 +27,11 @@
 
                 <ul>
                     <li>Dashboard</li>
-                    <li>Usuarios</li>
+                    <li>
+                        <a href="{{ url_for('usuarios') }}">
+                            Usuarios
+                        </a>
+                    </li>
                     <li>Rutas</li>
                     <li>Ubicación en tiempo real</li>
                     <li>
@@ -56,7 +60,7 @@
                     <textarea name="observacion_admin">{{ alerta.observacion_admin or '' }}</textarea>
 
                     <button type="submit" class="btn btn-guardar">Guardar</button>
-                    
+
                     <a href="{{ url_for('gestion_alerta') }}" class="btn btn-cancelar">
                         Cancelar
                     </a>

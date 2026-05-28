@@ -11,12 +11,12 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
 
     <!-- Librería Font Awesome para uso de íconos -->
-    <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 
 <!-- Clases utilizadas para estilos generales de la vista -->
+
 <body class="bg-secundario vista-usuario">
 
     <!-- Importa la macro reutilizable de botones -->
@@ -34,8 +34,7 @@
     <main>
 
         <!-- Imagen decorativa de fondo -->
-        <img src="{{ url_for('static', filename='img/imagen_login.png') }}"
-            alt="Imagen de fondo Login"
+        <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
             class="Imagen" />
 
         <!-- Contenedor principal del panel administrativo -->
@@ -45,9 +44,7 @@
             <div class="admin-menu">
 
                 <!-- Logo principal del proyecto -->
-                <img src="{{ url_for('static', filename='img/logo.png') }}"
-                    alt="Logo RUTAPP"
-                    class="logo">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
                 <!-- Nombre dinámico del panel según el rol -->
                 <h2>Panel {{nombre_panel}}</h2>
@@ -56,17 +53,14 @@
                 <ul>
 
                     <li>Dashboard</li>
-                    <li>Usuarios</li>
                     <li>Rutas</li>
                     <li>Ubicación en tiempo real</li>
 
                     <!-- Botón cerrar sesión -->
                     <li>
-
                         <a href="{{ url_for('logout') }}" class="btn-logout">
                             Cerrar sesión
                         </a>
-
                     </li>
 
                 </ul>
@@ -110,20 +104,19 @@
                                     </option>
 
                                     <!-- Filtro Administradores -->
-                                    <option value="Administrador"
-                                        {% if rol_actual=='Administrador' %}selected{% endif %}>
+                                    <option value="Administrador" {% if rol_actual=='Administrador' %}selected{% endif
+                                        %}>
                                         Administradores
                                     </option>
 
                                     <!-- Filtro Conductores -->
-                                    <option value="Conductor"
-                                        {% if rol_actual=='Conductor' %}selected{% endif %}>
+                                    <option value="Conductor" {% if rol_actual=='Conductor' %}selected{% endif %}>
                                         Conductores
                                     </option>
 
                                     <!-- Filtro Padres -->
-                                    <option value="Padre de familia"
-                                        {% if rol_actual=='Padre de familia' %}selected{% endif %}>
+                                    <option value="Padre de familia" {% if rol_actual=='Padre de familia' %}selected{%
+                                        endif %}>
                                         Padres
                                     </option>
 
@@ -196,8 +189,7 @@
                                                 method="POST">
 
                                                 <!-- Botón eliminar con confirmación -->
-                                                <button type="button"
-                                                    class="btn btn-eliminar"
+                                                <button type="button" class="btn btn-eliminar"
                                                     onclick="confirmarEliminacion('{{usuario.id_usuario}}')">
 
                                                     Eliminar

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Gestión de Estudiantes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+    <!-- Librería Font Awesome para uso de íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body class="bg-secundario vista-gestudiantes">
+    <!-- Importa la macro de botones (necesario para usar action_toolbar) -->
+    {% from 'components/buttons_macro.html' import action_toolbar %}
+
+
+    <header>
+        {# Incluye el encabezado (header) de la página #}
+        {% include 'layout/header.html' %}
+    </header>
+
+    <main>
+
+        <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
+            class="Imagen" />
+
+        <div class="admin-layout">
+
+            <div class="admin-menu">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+
+                <h2>Panel {{nombre_panel}}</h2>
+
+                <ul>
+                    <li>Dashboard</li>
+                    <li>
+                        <a href="{{ url_for('usuarios') }}">
+                            Usuarios
+                        </a>
+                    </li>
+                    <li>Rutas</li>
+                    <li>Ubicación en tiempo real</li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="btn-logout">
+                            Cerrar sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- ===== CONTENIDO CENTRAL DEL PANEL ===== -->
+            <div class="admin-content">
+
+                <div class="tabla-estudiantes-container">
+
+                    <h1>Gestion de Estudiantes</h1>
+
+                    <!-- Barra superior con botones y filtros -->
+                    <div class="top-bar top-bar-usuarios">
+
+                        <div class="toolbar-container">
+                            {{ action_toolbar(botones) }}
+                        </div>
+
+                        <!-- ===== FILTRO POR RUTA ===== -->
+                        <div class="filtros-usuarios">
+
+                            <!-- Ícono visual del filtro -->
+                            <i class="fa-solid fa-filter"></i>
+
+                            <!-- Formulario GET para filtrar rutas -->
+                            <form method="GET">
+
+                                <!-- Select que envía automáticamente el filtro -->
+                                <select name="ruta" onchange="this.form.submit()">
+
+                                    <!-- Opción para mostrar todos las rutas -->
+                                    <option value="" {% if not ruta_actual %}selected{% endif %}>
+                                        Todas
+                                    </option>
+
+                                    <!-- Recorre dinámicamente las rutas obtenidas desde la BD -->
+                                    {% for ruta in rutas %}
+
+                                    <option value="{{ ruta.nombre_ruta }}" {% if ruta_actual==ruta.nombre_ruta
+                                        %}selected{% endif %}>
+
+                                        {{ ruta.nombre_ruta }}
+
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Contenedor con scroll para la tabla -->
+                    <div class="tabla-scroll">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Estudiante</th>
+                                    <th>Teléfono</th>
+                                    <th>Dirección</th>
+                                    <th>Grado</th>
+                                    <th>id Ruta</th>
+                                    <th>Nombre Ruta</th>
+                                    <th>Acciones</th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% if estudiantes %}
+                                {% for estudiante in estudiantes %}
+
+                                <tr>
+
+                                    <td>{{ estudiante.id_estudiante }}</td>
+                                    <td>{{ estudiante.nombre}}</td>
+                                    <td>{{ estudiante.telefono }}</td>
+                                    <td>{{ estudiante.direccion }}</td>
+                                    <td>{{ estudiante.grado }}</td>
+                                    <td>{{ estudiante.id_ruta }}</td>
+                                    <td>{{ estudiante.nombre_ruta }}</td>
+
+                                    <!--  Boton de editar estudiante -->
+
+                                    <td style="width: 20%;">
+                                        <div class="acciones">
+
+                                            <a href="{{url_for('editar_estudiante', id_estudiante = estudiante.id_estudiante) }}"
+                                                class="btn btn-editar">
+                                                Editar
+                                            </a>
+
+                                            <!--  Boton de eliminar estudiante -->
+
+                                            <form id="formEliminar{{estudiante.id_estudiante}}"
+                                                action="{{ url_for('eliminar_estudiante', id_estudiante=estudiante.id_estudiante) }}"
+                                                method="POST">
+
+                                                <button type="button" class="btn btn-eliminar"
+                                                    onclick="confirmarEliminacion('{{estudiante.id_estudiante}}')">
+                                                    Eliminar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="6">No hay estudiantes registrados</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+
+                <!--  Boton crear nuevo estudiante (vista lista de estudiantes) -->
+
+            </div>
+
+    </main>
+    <footer class="footer">
+        {# ===== FOOTER ===== #}
+        {% include 'layout/footer.html' %}
+    </footer>
+</body>
+
+</html>

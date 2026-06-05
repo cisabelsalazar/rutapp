@@ -1,0 +1,10 @@
+
+{% macro action_toolbar(botones=[]) %}
+<div class="action-toolbar toolbar-right">
+    {% for boton in botones %}
+        <a href="{{ boton.url }}" class="btn {{ boton.class }}">
+            {{ boton.texto }}
+        </a>
+    {% endfor %}
+</div>
+{% endmacro %}

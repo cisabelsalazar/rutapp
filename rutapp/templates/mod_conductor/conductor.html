@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUTAPP - Panel Conductor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+
+</head>
+
+<body class="conductor_body">
+
+    <header>
+        {# Encabezado reutilizable #}
+        {% include 'layout/header.html' %}
+    </header>
+
+    <main>
+        <div class="conductor-layout">
+
+            <!-- Menú lateral -->
+            <aside class="conductor-menu">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+
+                <h2>Panel Conductor</h2>
+
+                <ul>
+                    <li><a href="{{ url_for('conductor') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('estudiantes_conductor') }}">Estudiantes</a></li>
+                    
+                    <a href="{{ url_for('logout') }}" class="btn-logout">
+                        Cerrar sesión
+                    </a>
+
+                </ul>
+            </aside>
+
+            <!-- Contenido principal del panel -->
+            <section class="conductor-content">
+                <h2>Bienvenido</h2>
+                <p>Visualice el recorrido y gestione las alertas para los padres de familia.</p>
+
+                <img src="{{ url_for('static', filename='img/mapa.png') }}" alt="Mapa de rutas en tiempo real"
+                    class="mapa-admin">
+
+                <div class="admin-buttons">
+                    <a href="{{ url_for('compartir_ubicacion') }}" class="btn">Compartir ubicación</a>
+                    <a href="{{ url_for('mi_ruta') }}" class="btn">Mis Rutas</a>
+                    <a href="{{ url_for('alertas_conductor') }}" class="btn">Alertas</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        {# Pie de página reutilizable #}
+        {% include 'layout/footer.html' %}
+    </footer>
+
+</body>
+
+</html>

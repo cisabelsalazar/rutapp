@@ -1,0 +1,109 @@
+<!-- ===== FORMULARIO CREAR USUARIO ===== -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Crear usuario</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body class="bg-secundario">
+
+    <header>
+        {# Incluye el encabezado (header) de la página #}
+        {% include 'layout/header.html' %}
+
+    </header>
+
+    <main>
+
+        <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
+            class="Imagen" />
+
+        <div class="admin-layout">
+
+            <div class="admin-menu">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+
+                <h2>Panel {{nombre_panel}}</h2>
+
+                <ul>
+                    <li>Dashboard</li>
+                    <li>
+                        <a href="{{ url_for('usuarios') }}">
+                            Usuarios
+                        </a>
+                    </li>
+                    <li>Rutas</li>
+                    <li>Ubicación en tiempo real</li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="btn-logout">
+                            Cerrar sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+            <form id="formCrearUsuarios" class="form-crear_usuarios" action="/guardar_usuario" method="POST">
+
+                <h1>Crear nuevo usuario</h1>
+
+                <div class="form-group">
+                    <label>Cédula:</label>
+                    <input type="text" name="id_usuario" maxlength="10" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre de usuario:</label> <!-- Campo para nombre de usuario -->
+                    <input type="text" name="nombre_usuario" maxlength="30" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre completo:</label>
+                    <input type="text" name="nombres_y_apellidos" maxlength="50" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Correo:</label>
+                    <input type="email" name="correo" maxlength="50" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Teléfono:</label>
+                    <input type="text" name="telefono" maxlength="10" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" name="password" maxlength="255" required>
+                </div>
+
+                <div class="form-group filtro-editar-usuario">
+
+                    <label>Rol:</label>
+                    <select name="rol">
+                        <!---   <option value="1">Superadministrador</option> --->
+                        <!--- Opción comentada para evitar que se pueda crear un superadministrador desde el formulario -->
+                        <option value="2">Administrador</option>
+                        <option value="3">Conductor</option>
+                        <option value="4">Padre de familia</option>
+                    </select>
+                </div>
+
+                <button type="button" class="btn btn-guardar" onclick="confirmarCreacionUsuario()">
+                    Guardar</button>
+                <a href="{{ url_for('usuarios') }}" class="btn btn-cancelar">Cancelar</a>
+
+            </form>
+
+        </div>
+    </main>
+    <footer class="footer">
+        {# ===== FOOTER ===== #}
+        {% include 'layout/footer.html' %}
+    </footer>
+</body>
+
+</html>

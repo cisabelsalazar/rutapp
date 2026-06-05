@@ -1,0 +1,113 @@
+<!-- ===== FORMULARIO EDITAR Estudiante ===== -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Editar estudiante</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+</head>
+
+<body class="bg-secundario">
+
+    <header>
+        {# Incluye el encabezado (header) de la página #}
+        {% include 'layout/header.html' %}
+    </header>
+
+    <main>
+        <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
+            class="Imagen" />
+
+        <div class="admin-layout">
+
+            <div class="admin-menu">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+
+                <h2>Panel {{nombre_panel}}</h2>
+
+                <ul>
+                    <li>Dashboard</li>
+                    <li>
+                        <a href="{{ url_for('usuarios') }}">
+                            Usuarios
+                        </a>
+                    </li>
+                    <li>Rutas</li>
+                    <li>Ubicación en tiempo real</li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="btn-logout">
+                            Cerrar sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+            <form id="formEditarEstudiante" class="form-editar_estudiante"
+                action="{{ url_for('editar_estudiante', id_estudiante=estudiante.id_estudiante) }}" method="POST">
+
+                <h1>Editar estudiante</h1>
+
+                <div class="form-group">
+                    <label>Id estudiante:</label>
+                    <input type="text" name="id_estudiante" value="{{ estudiante.id_estudiante }}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre del estudiante:</label>
+                    <input type="text" name="nombre" value="{{ estudiante.nombre }}" maxlength="30" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Grado:</label>
+                    <input type="text" name="grado" value="{{ estudiante.grado }}" maxlength="5" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Dirección:</label>
+                    <input type="text" name="direccion" value="{{ estudiante.direccion }}" maxlength="30" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Teléfono:</label>
+                    <input type="text" name="telefono" value="{{ estudiante.telefono }}" maxlength="10" required>
+                </div>
+
+                <div class="form-group filtro-editar-estudiante">
+                    <label>Ruta:</label>
+                    <select name="id_ruta">
+                        <option value="">Seleccione una ruta</option>
+
+                        {% for ruta in rutas %}
+
+                        <option value="{{ ruta.id_ruta }}" {% if estudiante.id_ruta==ruta.id_ruta %}selected{% endif %}>
+
+                            {{ ruta.id_ruta }} - {{ ruta.nombre_ruta }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <button type="button" class="btn btn-guardar" onclick="confirmarGuardadoEstudiante()">
+                    Guardar cambios
+                </button>
+
+                <a href="{{ url_for('gestion_estudiantes') }}" class="btn btn-cancelar">
+                    Cancelar
+                </a>
+
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        {% include 'layout/footer.html' %}
+    </footer>
+
+</body>
+
+</html>

@@ -57,6 +57,113 @@
                             <th>Ruta </th>
                             <th>Estado ⇅</th>
                             <th>Accion</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for estudiante in estudiantes_bd %}
+                        <tr>
+
+                            <td>{{ estudiante.nombre }}</td>
+                            <td>{{ estudiante.grado}}</td>
+                            <td>{{ estudiante.direccion }}</td>
+                            <td>{{ estudiante.telefono}}</td>
+                            <td>{{ estudiante.id_ruta}}</td>
+                            <td>
+                                <span
+                                    class="badge {{ 'bg-success' if estudiante.estado == 'Abordo' else 'bg-warning' }}">
+                                    {{ estudiante.estado }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {% if estudiante.estado != 'Abordo' %}
+                                <a href="{{ url_for('abordar_estudiante', id_estudiante=estudiante.id_estudiante) }}"
+                                    class="btn-subir">
+                                    Subir
+                                </a>
+                                {% else %}
+                                <span style="color: green;">✔ Listo</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <div class="contenedor volver">
+                        <a href="{{ url_for('conductor') }}" class="btn btn-volver">
+                            Volver
+                        </a>
+                    </div>
+                </table>
+
+            </div>
+        </main>
+        <footer class="footer">
+            {# ===== FOOTER ===== #}
+            {% include 'layout/footer.html' %}
+        </footer>
+</body>
+
+</html>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUTAPP - Panel Conductor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+</head>
+
+<body class="conductor_body vista-estudiantes">
+
+    <header>
+        {# Incluye el encabezado (header) de la página #}
+        {% include 'layout/header.html' %}
+    </header>
+
+    <div class="conductor-layout">
+
+        <div class="conductor-menu">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+
+            <h2>Panel Conductor</h2>
+
+            <ul>
+                <li><a href="{{ url_for('conductor') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('mi_ruta') }}">Mis Rutas</a></li>
+                <li><a href="{{ url_for('estudiantes_conductor') }}">Estudiantes</a></li>
+                <li><a href="{{ url_for('alertas_conductor') }}">Alertas</a></li>
+                <li>
+                    <a href="{{ url_for('logout') }}" class="btn-logout">
+                        Cerrar sesión
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <main class="main-content">
+
+            <div class="table-container">
+                <header class="table-header">
+                    <h1>Estudiantes</h1>
+                    <div class="search-box">
+                        <i class="fa fa-search"></i>
+                        <input type="text" placeholder="Search">
+                    </div>
+                </header>
+
+                <table class="students-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre ⇅</th>
+                            <th>grado</th>
+                            <th>Direccion ⇅</th>
+                            <th>telefono</th>
+                            <th>Ruta </th>
+                            <th>Estado ⇅</th>
+                            <th>Accion</th>
                     <div class="volver-container">
                         <a href="{{ url_for('conductor') }}" class="btn-volver-estcon ">
                             Volver

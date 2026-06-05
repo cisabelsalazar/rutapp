@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RUTAPP - Panel Padre de Familia</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
 </head>
 
-<body class="conductor_body">
+<body>
     
     <div class="padre-layout">
 
+        <!-- Menú lateral -->
         <div class="padre-menu">
-            <img
-             src="{{ url_for('static', filename='img/logo.png') }}"
-             alt="Logo RUTAPP"
-             class="logo"
-            >
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
             <h2>Panel Padre de Familia</h2>
 
             <ul>
-                <li><a href="{{ url_for('padres') }}">Dashboard</a></li>
-                <li><a href="{{ url_for('informacion_conductor') }}">Información del conductor</a></li>
-                <li><a href="{{ url_for('estudiantes_padre') }}">Estudiantes</a></li>
+                <li>Inicio</li>
+                <li>Información del conductor</li>
+                <li>Estudiantes</li>
                 <li>Estado de la ruta</li>
                 <li>Reportar inasistencia</li>
                 <li>Cerrar sesión</li>
             </ul>
         </div>
 
+        <!-- Contenido principal -->
         <div class="padre-content">
             <h2>Bienvenido</h2>
             <p>Consulte la información del conductor y el estado de la ruta escolar.</p>
@@ -37,12 +37,12 @@
             <img
              src="{{url_for('static', filename='img/mapa.png') }}"
              alt="Mapa de la ruta"
-             class="mapa-admin"
+             class="mapa-padre de familia"
             >
 
-            <div class="admin-buttons">
-                <a href="{{ url_for('informacion_conductor') }}" class="btn">Ver conductor</a>
-                <a href="{{ url_for('ver_rutar') }}" class="btn">Ver ruta</a>
+            <div class="padre-buttons">
+                <a href="{{ url_for('ver_conductor') }}" class="btn">Ver conductor</a>
+                <a href="{{ url_for('ver_ruta') }}" class="btn">Ver ruta</a>
                 <a hrer="{{ url_for('reportar_inansistencia') }}" class="btn">Reportar inasistencia</a>
             </div>
         </div>
@@ -50,4 +50,10 @@
     </div>
 
 </body>
+
+<footer class="footer">
+    {# ===== FOOTER ===== #}
+    {% include 'layout/footer.html' %}
+</footer>
+
 </html>

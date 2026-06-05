@@ -1,51 +1,62 @@
 /*==================================================================================*/
-/*                               CSS PROYECTO RUTAPP                                 */
+/* 1. RESET GENERAL: Elimina márgenes y padding por defecto del navegador           */
 /*==================================================================================*/
 
 /*==================================================================================*/
-/* 1. RESET GENERAL: Elimina márgenes y padding por defecto del navegador           */
+/* 1. RESET GENERAL: elimina márgenes y padding por defecto del navegador            */
 /*==================================================================================*/
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
+    /*overflow: hidden; /*Quita el scroll*/
 }
 
-body.admin-page, 
-body.supadmin-page { 
-    height: 100vh; 
-    overflow: hidden; /* Elimina el scroll por completo */
-}
+body.admin-page { height: 100vh; overflow: hidden; }
 
-main {
-    flex: 1;
-}
-
-.main-container {
+.main-container { /*Contenedor principal*/
     height: 100vh; /* 100% del alto de la ventana visual */
     display: flex;
-    overflow: hidden;
+ /*   overflow: hidden;*/ /*scroll null*/
 }
 
-/*==================================================================================*/
+/*=============/*==================================================================================*/
+/*                               CSS PROYECTO RUTAPP                                 */
+/*=====================================================================*/
 /* 2. HEADER Y FOOTER: Estilos para encabezado y pie de página                     */
+/*==================================================================================*/
+/* 2. HEADER Y FOOTER                                                                */
 /*==================================================================================*/
 .header {
     background-color: #2c3e50;
-    padding: 12px;
+    padding: 15px 30px;
     text-align: left;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
-.header a {
+.navbar a {
     color: white;
     margin: 0 15px;
     text-decoration: none;
     font-weight: bold;
+    text-align: left;
+
 }
 
-.header a:hover {
-    text-decoration: underline;
+.navbar a:hover {
+    color: #dc6b1b;
 }
+
+.usuario-nav {
+    font-size: 16px;
+    font-weight: bold;
+    color: rgb(231, 179, 49);
+}
+
 
 .footer {
     margin-top: 30px;
@@ -53,6 +64,7 @@ main {
     font-size: 12px;
     color: white;
 }
+
 
 /*==================================================================================*/
 /* 3. HOME / PÁGINA DE BIENVENIDA: Estilos para página inicial                    */
@@ -279,7 +291,6 @@ main {
     font-size: 0.9rem;
     color: #2d74de;
     text-decoration: none;
-    transition: text-decoration 0.3s;
 }
 
 .forgot-password:hover {
@@ -288,51 +299,65 @@ main {
 
 
 
-
 /*==================================================================================*/
 /* 7. PANEL ADMINISTRADOR Y SUPERADMINISTRADOR: Estilos para panel admin           */
 /*==================================================================================*/
+body.admin-page {
+    height: 100vh;        /* Evita scroll vertical innecesario */
+    overflow: hidden;
+}
+
+/*ajuste del scroll en pagina de admin*/
 body, html {
     height: 100%;
     margin: 0;
-    overflow: hidden; /* Elimina el scroll por completo */
+    overflow: hidden; /* Esto elimina el scroll por completo */
 }
 
-.admin-layout {
+.admin-layout,
+.conductor-layout,
+.padre-layout {
     display: flex;
     min-height: 100vh;
-    height: auto; /* Se expande si el contenido crece */
+    height: auto;        /* se expande si el contenido crece */
 }
 
-/* ===== MENÓ LATERAL ADMIN: Barra de navegación lateral ===== */
 .admin-menu {
     width: 200px;
     background-color: #2c3e50;
     color: white;
     flex-shrink: 0;
-    height: auto; /* Altura automática según contenido */
+    height: auto;        /* altura automática según contenido */
     min-height: 100vh;
     padding: 30px;
 }
 
-.admin-menu .logo {
+.admin-menu .logo,
+.conductor-menu .logo,
+.padre-menu .logo {
     width: 120px;
     display: block;
     margin: 0 auto 10px;
 }
 
-.admin-menu h2 {
+.admin-menu h2,
+.conductor-menu h2,
+.padre-menu h2 {
     text-align: center;
     font-size: 18px;
     margin-bottom: 30px;
 }
 
-.admin-menu ul {
+.admin-menu ul,
+.conductor-menu ul,
+.padre-menu ul { /*Estilo botones del menu lateral*/
     list-style: none;
     padding: 0;
 }
 
-.admin-menu li {
+.admin-menu li,
+.conductor-menu li,
+.padre-menu li { /*Estilo botones del menu lateral*/
     padding: 12px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -340,16 +365,18 @@ body, html {
 
 .admin-menu li:hover {
     background-color: #1a252f;
-    border-radius: 4px;
 }
 
-/* ===== CONTENIDO ADMIN: Área principal de contenido ===== */
 .admin-content {
     flex-grow: 1;
     padding: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-left: 220px;
+    margin-top: 60px;
+    width: calc(100% - 220px);
+    overflow-y: auto;
 }
 
 /* ===== BOTONES ADMIN: Estilos para botones de acciones ===== */
@@ -386,18 +413,19 @@ body, html {
     color: black;
 }
 
-/* ===== BOTÓN CERRAR SESIÓN: Estilo para logout ===== */
+
+/* BOTÓN CERRAR SESIÓN */
 .btn-logout {
-    background-color: #e74c3c;  /* Rojo */
-    color: white;               /* Texto blanco */
+    background-color: #e74c3c;  /* rojo */
+    color: white;               /* texto blanco */
     padding: 10px 15px;
     border-radius: 6px;
-    text-decoration: none;      /* Quita subrayado del texto */
+    text-decoration: none;      /* quita subrayado del texto */
     font-weight: bold;
     display: inline-block;
-    transition: background-color 0.3s;
 }
 
+/* Hover */
 .btn-logout:hover {
     background-color: #c0392b;
 }
@@ -408,7 +436,7 @@ body, html {
 
 /* ===== MAPA ADMIN: Estilos para mapa en panel admin ===== */
 .mapa-admin {
-    max-width: 500px;
+    max-width: 400px;
     width: 100%;
     margin-top: 20px;
     border-radius: 8px;
@@ -419,23 +447,13 @@ body, html {
 /*==================================================================================*/
 /* 8. PANEL CONDUCTOR Y PADRE: Estilos para paneles de conductor y padre           */
 /*==================================================================================*/
-.conductor_body {
-    background-image: url('../img/fondocon.png');
-    background-size: cover;  
-    background-position: center; 
-    background-repeat: no-repeat;
-    background-attachment: fixed; 
-}
-
-/* ===== LAYOUT CONDUCTOR Y PADRE: Estructura flex del panel ===== */
 .conductor-layout,
 .padre-layout {
     display: flex;
     min-height: 100vh;
-    height: auto; /* Se expande si el contenido crece */
+    height: auto;           /* se expande si el contenido crece */
 }
 
-/* ===== MENÚ LATERAL CONDUCTOR Y PADRE: Barra lateral de navegación ===== */
 .conductor-menu,
 .padre-menu {
     width: 220px;
@@ -445,76 +463,25 @@ body, html {
     min-height: 100vh;
     padding: 20px;
     height: auto;
-    display: flex;
-    flex-direction: column;
 }
 
-.conductor-menu h2,
-.padre-menu h2 {
-    text-align: center;
-    font-size: 18px;
-    margin-bottom: 30px;
-}
-
-/*===== Imagen fondo modulo padres======*/
-
-.vista-padres {
-
-    background-size: 100%;        
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 100vh;
-}
-
-/* ===== ENLACES DEL MENÚ: Estilos para los links de navegación ===== */
-.conductor-menu a:not(.btn-logout),
-.padre-menu a:not(.btn-logout) {
-    color: white;
-    text-decoration: none;
-    display: block;
-    padding: 10px;
-    border-radius: 8px;
-    transition: background-color 0.3s;
-}
-
-.conductor-menu a:visited,
-.padre-menu a:visited {
-    color: white;
-    text-decoration: none;
-}
-
-.conductor-buttons a,
-.padre-buttons a {
-    color: black;
-    text-decoration: none;
-    display: inline-block;
-    padding: 10px 15px;
-    border-radius: 8px;
-}
-
-/* ===== LISTA DEL MENÚ: Estilos para items del menú ===== */
 .conductor-menu ul,
 .padre-menu ul {
     list-style: none;
     padding: 0;
-    margin: 0;
 }
 
-/* ===== ITEMS DEL MENÚ: Elementos con transiciones suaves ===== */
 .conductor-menu li,
 .padre-menu li {
     margin-bottom: 15px;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
-.conductor-menu li:hover,
+/*.conductor-menu li:hover,
 .padre-menu li:hover {
-    background-color: #34495e;
-    border-radius: 8px;
+    background-color: #1a252f;
 }
 
-/* ===== CONTENIDO CONDUCTOR Y PADRE: Área principal ===== */
 .conductor-content,
 .padre-content {
     padding: 30px;
@@ -522,7 +489,7 @@ body, html {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
+}*/
 
 /* ===== BOTONES CONDUCTOR Y PADRE: Botones de acciones ===== */
 .conductor-buttons,
@@ -837,722 +804,8 @@ input[type="text"]:focus {
     width: 60px;
     height: 60px;
     border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    margin: 0 auto 10px;
-}
-
-.menu {
-    list-style: none;
-}
-
-.menu-item {
-    padding: 12px 0;
-    font-size: 0.9rem;
-    opacity: 0.8;
-    cursor: pointer;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    transition: opacity 0.3s, color 0.3s;
-}
-
-.menu-item:hover {
-    opacity: 1;
-    color: #f1c40f;
-}
-
-/* ===== CONTENIDO PRINCIPAL: Área de contenido central ===== */
-.main-content {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;   /* Centra horizontal */
-    align-items: center;       /* Centra vertical */
-    padding: 40px;
-    overflow-y: auto;
-}
-
-/* ===== CONTENEDOR TABLA: Estilos para tabla de estudiantes ===== */
-.table-container {
-    background-color: white;
-    width: 95%;
-    max-width: 1100px;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    align-self: flex-start; /* Alinea al inicio del contenedor principal */
-    position: relative
-}
-
-.table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-.table-header h1 {
-    font-size: 1.6rem;
-    color: #2c3e50;
-    flex-grow: 1;
-    text-align: center;
-}
-
-.vista-estudiantes .btn-volver {
-    margin-left: 0; /*ajusta para que el botón vuelva a su posición original*/
-    position: absolute; /*posiciona el botón de forma absoluta dentro del contenedor de la tabla*/
-    top: 80px; /*ajusta la posición vertical del botón*/
-    left: 20px; /*ajusta la posición horizontal del botón*/
-
-}
-
-
-/* ===== BÚSQUEDA: Caja de búsqueda de estudiantes ===== */
-.search-box {
-    position: relative;
-}
-
-.search-box input {
-    padding: 8px 12px 8px 35px;
-    border: 1px solid #dfe6e9;
-    border-radius: 6px;
-    outline: none;
-    background-color: #f8f9fa;
-    transition: border-color 0.2s;
-}
-
-.search-box input:focus {
-    border-color: #3498db;
-}
-
-.search-box i {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #b2bec3;
-}
-
-/* ===== TABLA ESTUDIANTES: Estilos para tabla de datos ===== */
-.students-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.students-table thead tr {
-    border-bottom: 2px solid #f1f2f6;
-}
-
-.students-table th {
-    text-align: left;
-    padding: 15px;
-    color: #7f8c8d;
-    font-size: 0.85rem;
-    text-transform: capitalize;
-    background-color: #f8f9fa;
-}
-
-.students-table td {
-    padding: 15px;
-    border-bottom: 1px solid #f1f2f6;
-    color: #2d3436;
-    font-size: 0.9rem;
-}
-
-.students-table tbody tr:nth-child(even) {
-    background-color: #fcfcfc;
-}
-
-/* ===== ACCIONES: Botones de acciones en tabla ===== */
-.actions {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-}
-
-/* ===== BOTONES GENERALES: Estilos base para botones ===== */
-
-/*Estilos Boton volver, Nuevo usuarios, */
-
-.toolbar-container {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 15px;
-    padding-right: 230px;
-}
-
-.action-toolbar {
-    display: flex;
-    gap: 10px;
-}
-
-.btn {
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: bold;
-}
-
-.btn-blue {
-    background-color: #3498db;
-    color: white;
-}
-
-.btn-gray {
-    background-color: #ffffff;
-    color: #636e72;
-    border: 1px solid #dfe6e9;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-/* ===== BOTÓN SUBIR: Para subir archivos/estudiantes ===== */
-.btn-subir {
-    background-color: #28a745;
-    color: white;
-    padding: 5px 15px;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: bold;
-    display: inline-block;
-    transition: 0.3s;
-}
-
-.btn-subir:hover {
-    background-color: #218838;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-/* ===== BADGE: Etiquetas de estado ===== */
-.badge {
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.85em;
-    display: inline-block;
-}
-
-.bg-success { 
-    background-color: #d4edda; 
-    color: #155724; 
-} /* Estado: Abordo */
-
-.bg-warning { 
-    background-color: #fff3cd; 
-    color: #856404; 
-} /* Estado: En parada */
-/*==================================================================================*/
-/* 8.3 PANEL "ALERTAS_CONDUCTOR": Gestión de alertas y notificaciones            */
-/*==================================================================================*/
-/* ===== CONTENEDOR ALERTAS: Contenedor principal para alertas ===== */
-.container-aler {
-    max-width: 1100px;
-    margin: 40px auto;
-    background: var(--bg-card, rgba(245, 245, 245, 0.75));
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-/* ===== ENCABEZADO ALERTAS: Título y botón limpiar ===== */
-.main-header-aler {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-
-}
-
-.btn-clear-aler {
-    color: white;
-    background-color: #e1796b;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s;
-}
-
-.btn-clear-aler:hover {
-    background-color: #d15a44;
-}
-
-.vista-alertas .btn-volver {
-    margin-left: 0; /*ajusta para que el botón vuelva a su posición original*/
-    display:inline-flex; /*mantiene el botón en línea con el título*/
-    align-items: center; /*centra verticalmente el texto del botón*/
-    position: fixed; /*posiciona el botón de forma absoluta dentro del contenedor de la tabla*/
-    top: 147px; /*ajusta la posición vertical del botón*/
-    right: 440px; /*ajusta la posición horizontal del botón*/
-    padding-bottom: 9px; /*ajusta el padding para alinear mejor con el título*/
-
-}
-.vista-alertas h1 {/*ajusta el título para que se alinee mejor con el botón volver*/
-    font-size: 4 rem;
-    color: #2c3e50;
-    flex-grow: 1;
-    text-align: center;
-}
-
-
-.form-alerta-conductor textarea {/* Estilos para el textarea de alerta */
-    width: 100%;
-    min-height: 90px;
-    padding: 12px;
-    border: 1px solid #dcdcdc;
-    border-radius: 10px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    resize: vertical;
-    outline: none;
-    box-sizing: border-box;
-    transition: border 0.3s ease;
-}
-
-.form-alerta-conductor textarea:focus {/* Estilos para el textarea al enfocarse */
-    border-color: #2d84c7;
-    box-shadow: 0 0 5px rgba(45, 132, 199, 0.3);
-}
-
-/* ===== PESTAÑAS FILTRO: Tabs para filtrar alertas ===== */
-.filter-tabs-aler {
-    display: flex;
-    gap: 10px;
-    background: #f8f9fa;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.tab-aler {
-    background: white;
-    border: 1px solid #ddd;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    color: var(--text-light, #666);
-    transition: all 0.2s;
-}
-
-.tab-aler:hover {
-    background-color: #f0f0f0;
-}
-
-.tab-active {
-    background: #5d91c6;
-    border: 1px solid #5d91c6;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    color: white;
-}
-
-/* ===== TABLA ALERTAS: Contenedor de tabla de alertas ===== */
-/*estilos tabla Alertas módulo conductor*/
-.table-container-aler { 
-    overflow-x: auto; 
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-th {
-    text-align: left;
-    padding: 15px;
-    border-bottom: 2px solid var(--border-color, #ddd);
-    color: #555;
-    font-weight: 600;
-    background-color: #f8f9fa;
-}
-
-td {
-    padding: 12px 15px;
-    border-bottom: 1px solid var(--border-color, #ddd);
-    font-size: 14px;
-    color: var(--text-light, #666);
-}
-
-/* ===== INFO USUARIO: Información del usuario en tabla ===== */
-.user-info-aler {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #444;
-    font-weight: 500;
-}
-
-.user-info-aler img {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #ddd;
-    object-fit: cover;
-}
-
-/* ===== BADGES ESTADO: Indicadores de estado de alerta ===== */
-.badge-retraso { 
-    background-color: #e0303b;
-    color: white;
-    padding: 7px 13px;
-    border-radius: 4px;
-    display: inline-block;
-    font-size: 13px;
-}
-
-.badge-incidente { 
-    background-color: #f06292;
-    color: white;
-    padding: 7px 13px;
-    border-radius: 4px;
-    display: inline-block;
-    font-size: 13px;
-}
-
-.badge-ausente { 
-    background-color: #f3c26c;
-    color: white;
-    padding: 7px 13px;
-    border-radius: 4px;
-    display: inline-block;
-    font-size: 13px;
-}
-
-/* ===== BOTONES ACCIONES: Botones para marcar como leído/resuelto ===== */
-.actions-aler { 
-    display: flex; 
-    gap: 8px; 
-}
-
-.btn-read {
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 13px;
-    color: white;
-    background-color: #5d91c6;
-    transition: filter 0.2s;
-}
-
-.btn-resolve {
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 13px;
-    color: white;
-    background-color: #84bb97;
-    transition: filter 0.2s;
-}
-
-.btn-read:hover, 
-.btn-resolve:hover, 
-.btn-clear:hover {
-    filter: brightness(0.9);
-}
-
-/*==================================================================================*/
-/* 8.4 PANEL "INFORMACIÓN_CONDUCTOR": Ficha de información del conductor         */
-/*==================================================================================*/
-.body-infocon {
-    background-image: url('../img/fondocon.png');
-    background-color: #2c3e50;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-
-.background-infocon {
-    width: 100%;
-    height: 100vh;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* ===== TARJETA INFO CONDUCTOR: Tarjeta con información del conductor ===== */
-.card-infocon {
-    background: white;
-    width: 400px;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    padding: 10px;
-}
-
-.card-header-infocon,
-.driver-photo-infocon {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    display: block;
-}
-
-.card-body-infocon {
-    padding: 20px;
-}
-
-.card-body-infocon h3 {
-    color: #2c3e50;
-    margin-bottom: 20px;
-    font-size: 1.2rem;
-    border-bottom: 2px solid #f0f2f5;
-    padding-bottom: 10px;
-    text-align: center;
-}
-
-/* ===== GRILLA INFORMACIÓN: Datos del conductor ===== */
-.info-grid-infocon p {
-    margin-bottom: 8px;
-    color: #555;
-    font-size: 0.9rem;
-}
-
-.info-grid-infocon strong {
-    color: #888;
-    font-weight: 500;
-}
-
-/* ===== BOTONES INFORMACIÓN: Botones de contacto ===== */
-.button-group-infocon {
-    margin-top: 25px;
-    display: flex;       
-    flex-direction: row; 
-    flex-wrap: nowrap;  
-    gap: 8px;           
-    align-items: center;
-    justify-content: space-between; 
-    width: 100%;
-}
-
-.btn-info {
-    border: none;
-    border-radius: 8px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-weight: bold;
-    color: white;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: opacity 0.3s;
-}
-
-.btn-info:hover {
-    opacity: 0.8;
-}
-
-.btn-social {
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    justify-content: center;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-}
-
-.wa { 
-    background-color: #25d366; 
-}
-
-.btn-call {
-    background-color: #4a69bd; 
-    flex-grow: 1; 
-    white-space: nowrap; 
-    font-size: 13px;    
-    padding: 10px 5px;
-}
-
-.btn-msg { 
-    background-color: #4a69bd; 
-    flex-grow: 1; 
-    white-space: nowrap; 
-    font-size: 13px;    
-    padding: 10px 5px;
-}
-
-/*==================================================================================*/
-/* 8.5 PANEL "ESTUDIANTES_PADRE": Información de estudiantes para padre          */
-/*==================================================================================*/
-/* ===== CONTENEDOR PRINCIPAL: Layout del panel padre ===== */
-.main-container-estp {
-    display: flex;
-    width: 100%;
-}
-
-/* ===== SIDEBAR PADRE: Barra lateral del panel padre ===== */
-.sidebar-estp {
-    width: 250px;
-    background-color: rgba(45, 59, 92, 0.95);
-    color: white;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-.logo-section-estp {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.bus-icon-estp {
-    background-color: #0088cc;
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 10px;
-    font-size: 30px;
-}
-
-.sidebar-estp ul {
-    list-style: none;
-}
-
-.sidebar-estp li {
-    padding: 15px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: 0.3s;
-    font-size: 0.9rem;
-}
-
-.sidebar-estp li i {
-    margin-right: 10px;
-}
-
-.sidebar-estp li:hover, 
-.sidebar-estp li.active {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #a2d2ff;
-}
-
-/* ===== CONTENIDO PADRE: Área principal de contenido ===== */
-.content-estp {
-    flex: 1;
-    padding: 40px;
-    align-items: center;
-}
-
-h1 {
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-    color: #333;
-}
-
-/* ===== TARJETA TABLA: Contenedor de tabla con estilo card ===== */
-.table-card-estp {
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.table-header-estp {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-}
-
-/* ===== BÚSQUEDA TABLA: Caja de búsqueda en tabla ===== */
-.search-container-estp {
-    display: flex;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    overflow: hidden;
-    background: white;
-}
-
-.search-container-estp input {
-    border: none;
-    padding: 8px 12px;
-    outline: none;
-    flex: 1;
-}
-
-.search-container-estp button {
-    background: #e9ecef;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    color: #666;
-}
-
-.avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.bold-text-estp {
-    font-weight: bold;
-    color: #222;
-}
-
-.sub-text-estp {
-    color: #777;
-    font-size: 0.9rem;
-}
-
-/* ===== BADGE ESTADO: Indicador de estado ===== */
-.status-badge-estp {
-    background-color: #7cc576;
-    color: white;
-    padding: 5px 12px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    display: inline-block;
-}
-
-/* ===== ENLACE UBICACIÓN: Link de ubicación ===== */
-.link-location-estp {
-    color: #4da3ff;
-    text-decoration: underline;
-    font-size: 0.9rem;
-    cursor: pointer;
-}
-
-/*==================================================================================*/
-/* 9. SECCION ESTILOS PARA FORMULARIOS              */
-/*==================================================================================*/
-/* ===== CONTENEDOR FORMULARIOS: Estilos base para formularios ===== */
-.form-crear_usuarios,
-.form-editar_usuario,
-.form-crear_estudiante, 
-.form-editar_estudiante{
-    width: 30%;/* Ancho fijo para consistencia */
-    margin: 20px auto; /* Centrado horizontal */
-    padding: 10px;/* Espaciado interno */
-    border-radius: 12px;/* Bordes redondeados */
-    box-shadow: 0px 0px 20px rgba(0,0,0,0.2);/* Sombra para profundidad */
-    background-color: rgba(255, 255, 255, 0.7);/* Fondo semitransparente */
-    height: 550px;/* Altura fija para mantener consistencia */
-}
-
-.form-inasistencia {/* Estilos específicos para formulario de inasistencia, con altura ajustada para contenido más compacto */
-    width: 100%;/* Ancho fijo para consistencia */
-    margin: 20px auto; /* Centrado horizontal */
-    padding: 60px;/* Espaciado interno */
-    border-radius: 12px;/* Bordes redondeados */
-    box-shadow: 0px 0px 20px rgba(0,0,0,0.2);/* Sombra para profundidad */
-    background-color: rgba(255, 255, 255, 0.779);/* Fondo semitransparente */
-    height: 350px;/* Altura fija para mantener consistencia */
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.2);
+    background-color: #FFC957;
 }
 
 .form-crear_usuarios .form-group,
@@ -1606,44 +859,33 @@ h1 {
     margin-top:0;
 }
 
-.form-inasistencia h1 {/* Estilo específico para título de formulario de inasistencia */
-    text-align: center;
-    margin-bottom: 20px;
-    color: rgb(85, 82, 82);
-    margin-top:-15px;
-}
 
 
-/*==================================================================================*/
-/* 10. TABLA DE USUARIOS: Estilos para lista y gestión de usuarios               */
-/*==================================================================================*/
-/* ===== CONTENEDOR TABLA USUARIOS: Contenedor principal de tabla ===== */
+/* ==================================================== */
+/* ==== CONTENEDOR PRINCIPAL DE TABLA DE USUARIOS ==== */
+/* ==================================================== */
 .tabla-usuarios-container {
     display: flex;
-    flex-direction: column;      /* Apila el h1 y la tabla */
-    align-items: center;         /* Centra todo horizontalmente */
-    margin: 30px auto;           /* Espacio superior e inferior */
-    width: 95%;                  /* Ocupa casi todo el ancho */
+    flex-direction: column;      /* permite apilar el h1 y la tabla */
+    align-items: center;         /* centra todo horizontalmente */
+    margin: 30px auto;           /* espacio superior e inferior */
+    width: 95%;                  /* ocupa casi todo el ancho */
 }
 
+/* Titulo de la tabla */
 .tabla-usuarios-container h1 {
     text-align: center;
     margin-bottom: 20px;
     color: #2c4b62;
 }
 
-.tabla-alertas-container {      /*Aplica estilos a tabla alertas adminiy superadmin*/
-    text-align: center;
-    margin-bottom: 20px;
-    color: #2c4b62;
-}
-
-/* ===== TABLA: Estilos para tabla HTML ===== */
-.tabla-usuarios-container table,
-.tabla-alertas-container {        /*estilos tabal alertas admin y superadmin*/
-    width: 80%;                  /* Ancho de la tabla */
-    max-width: 1400px;           /* Ancho máximo */
-    border-collapse: collapse;   /* Elimina espacio entre celdas */
+/* ==================================================== */
+/* ==== ESTILO DE LA TABLA ==== */
+/* ==================================================== */
+.tabla-usuarios-container table {
+    width: 100%;                  /* ancho de la tabla */
+    max-width: 1400px;           /* ancho máximo */
+    border-collapse: collapse;   /* elimina espacio entre celdas */
     background-color: rgba(255, 255, 255, 0.7);
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
@@ -1653,32 +895,390 @@ h1 {
     color: white;
     padding: 12px;
     text-align: center;
+}
+
+/* Celdas */
+.tabla-usuarios-container td {
+    border: 1px solid #ccc;
+    padding: 12px;   /*Define tamaño alto de celda*/
+    font-size: 13px; /*Define tamaño de texto*/
+    text-align: center;
+    color: #333;
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+}
+
+.tabla-usuarios-container tr:hover { /*Sombreado al pasar el cursor sobre la fila de la tabla*/
+    background-color: #eaf4f8;
+}
+
+/*===== Estilos para ajuste tamaño columnas 
+tabla Usuarios módulos admin y superadmin===== */
+
+.tabla-usuarios-container th:nth-child(1){
+    width: 65px;
+}
+
+.tabla-usuarios-container td:nth-child(2),
+.tabla-usuarios-container th:nth-child(3){
+    width: 100px;
+}
+
+.tabla-usuarios-container td:nth-child(4){
+    width: 150px;
+}
+
+.tabla-usuarios-container td:nth-child(5) {
+    width: 80px;
+    
+}
+
+.tabla-usuarios-container td:nth-child(6){
+    width: 90px;
+}
+
+.tabla-usuarios-container td:nth-child(7) {
+    width: 70px;
+}
+
+/*=== 10.3 Estilos para filtros de la TABLA GESTIÓN DE USUARIOS 
+      Módulo Administrador y Superadministrador ===*/
+
+/* Contenedor principal del filtro */
+.filtros-usuarios{
+    position: relative; /* Permite posicionar el ícono dentro del contenedor */
+}
+
+/* Estilo del ícono de filtro */
+.filtros-usuarios i{
+    position:absolute; /* Posiciona el ícono sobre el select */
+    left:12px; /* Espacio desde el borde izquierdo */
+    top:50%; /* Centra verticalmente el ícono */
+    transform:translateY(-50%); /* Ajuste fino del centrado vertical */
+    color:#aaa7a7; /* Color gris claro del ícono */
+    pointer-events:none; /* Evita que el ícono bloquee el clic del select */
+}
+
+/* Estilos del select desplegable */
+.filtros-usuarios select {
+    padding:6px 10px 8px 35px; /* Espacio interno, dejando lugar para el ícono */
+    border-radius: 8px; /* Bordes redondeados */
+    border: 2px solid #216c8f; /* Borde azul */
+    font-weight: bold; /* Texto en negrilla */
+    font-size: 12px; /* Tamaño del texto */
+}
+
+/* Contenedor auxiliar para alinear ícono y select */
+.filtro-select{
+    display:flex; /* Organiza elementos en línea horizontal */
+    align-items:center; /* Centra verticalmente los elementos */
+    gap:8px; /* Espacio entre elementos */
+}
+
+/* Barra superior de la vista de usuarios */
+.top-bar-usuarios{
+    display:flex; /* Organiza toolbar y filtros horizontalmente */
+    justify-content:space-between; /* Separa elementos a izquierda y derecha */
+    align-items:center; /* Centra verticalmente */
+    margin-bottom:15px; /* Espacio inferior antes de la tabla */
+    width:90%; /* Reduce ligeramente el ancho para mejor distribución */
+}
+
+/* Ajustes específicos para toolbar dentro de top-bar */
+.top-bar-usuarios .toolbar-container{
+    width:auto; /* El ancho se ajusta automáticamente al contenido */
+    padding: 0; /* Elimina padding lateral */
+    margin:0; /* Elimina márgenes externos */
+}
+
+/*=============================================================*/
+/* Estilos para tabla de GESTION DE ESTUDIANTES en modulo Admin y Superadmin*/
+/*============================================================*/
+
+.tabla-estudiantes-container{ /*tabla usuarios modulo administrador y supadmin*/
+
+    display: flex;
+    flex-direction: column;      /* Apila el h1 y la tabla */
+    align-items: center;         /* Centra todo horizontalmente */
+    margin: 30px auto;           /* Espacio superior e inferior */
+    width: 95%;                  /* Ocupa casi todo el ancho */
+    overflow-y: auto;
+    max-height: 600px;
+    box-sizing: border-box;
+}
+
+.tabla-estudiantes-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c4b62;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 10px 0;
+}
+
+.tabla-estudiantes-container table { /*Estilo tabla vista gestion de usuarios*/
+    width: 100%;                  /* Ancho de la tabla */
+    max-width: 1400px;           /* Ancho máximo */
+    border-collapse: collapse;   /* Elimina espacio entre celdas */
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.tabla-estudiantes-container th {
+    background-color: #295a6b;
+    color: white;
+    padding: 12px;
+    text-align: center;
     font-weight: bold;
+    position: sticky; /*El encabezado queda fijo al hacer scroll*/
+    top: 0;
+    z-index: 10; /*Evita que otras filas pasen por encima del encabezado.*/
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+    
+}
+
+
+.tabla-estudiantes-container td {
+    border: 1px solid #ccc;
+    padding: 12px;   /*Define tamaño alto de celda*/
+    font-size: 13px; /*Define tamaño de texto*/
+    text-align: center;
+    color: #333;
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+}
+
+.tabla-estudiantes-container tr:hover { /*Sombreado al pasar el cursor sobre la fila de la tabla*/
+    background-color: #eaf4f8;
+}
+
+/*===== Estilos para ajuste tamaño columnas 
+tabla Usuarios módulos admin y superadmin===== */
+
+.tabla-estudiantes-container th:nth-child(1){
+    width: 70px;
+}
+
+.tabla-estudiantes-container td:nth-child(2),
+.tabla-estudiantes-container th:nth-child(3){
+    width: 100px;
+}
+
+.tabla-estudiantes-container td:nth-child(4){
+    width: 90px;
+}
+
+.tabla-estudiantes-container td:nth-child(5) {
+    width: 60px;
+    
+}
+
+.tabla-estudiantes-container td:nth-child(6){
+    width: 60px;
+}
+
+.tabla-estudiantes-container td:nth-child(7) {
+    width: 150px;
+}
+
+
+/*=============================================================*/
+/*Estilos para tabla CENTRO DE GESTION DE ALERTAS en modulo Admin y Superadmin*/
+/*============================================================*/
+
+.tabla-alertas-container{ /*tabla usuarios modulo administrador y supadmin*/
+
+    display: flex;
+    flex-direction: column;      /* Apila el h1 y la tabla */
+    align-items: center;         /* Centra todo horizontalmente */
+    margin: 30px auto;           /* Espacio superior e inferior */
+    width: 95%;                  /* Ocupa casi todo el ancho */
+    overflow-y: auto;
+    max-height: 600px;
+    box-sizing: border-box;
+}
+
+.tabla-alertas-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c4b62;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 10px 0;
+}
+
+.tabla-alertas-container table { /*Estilo tabla vista gestion de usuarios*/
+    width: 100%;                  /* Ancho de la tabla */
+    max-width: 1400px;           /* Ancho máximo */
+    border-collapse: collapse;   /* Elimina espacio entre celdas */
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .tabla-alertas-container th {
     background-color: #295a6b;
     color: white;
-    padding: 20px;
+    padding: 12px;
     text-align: center;
     font-weight: bold;
-}
-
-.tabla-usuarios-container td {
-    border: 1px solid #ccc;
-    padding: 20px;
-    text-align: center;
-    color: #333;
+    position: sticky; /*El encabezado queda fijo al hacer scroll*/
+    top: 0;
+    z-index: 10; /*Evita que otras filas pasen por encima del encabezado.*/
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+    
 }
 
 .tabla-alertas-container td {
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 12px;   /*Define tamaño alto de celda*/
+    font-size: 13px; /*Define tamaño de texto*/
     text-align: center;
     color: #333;
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
 }
 
-/* ===== CELDAS ACCIONES: Botones de acción en tabla ===== */
+.tabla-alertas-container tr:hover { /*Sombreado al pasar el cursor sobre la fila de la tabla*/
+    background-color: #eaf4f8;
+}
+
+/*===== Ajuste tamaño columnas tabla Alertas módulos admin y superadmin===== */
+
+.tabla-alertas-container th:nth-child(1),
+.tabla-alertas-container td:nth-child(2),
+.tabla-alertas-container th:nth-child(3){
+    width: 100px;
+}
+
+.tabla-alertas-container td:nth-child(4){
+    width: 85px;
+}
+
+.tabla-alertas-container td:nth-child(5) {
+    width: 220px;
+    text-align: justify;
+}
+
+.tabla-alertas-container td:nth-child(6),
+.tabla-alertas-container td:nth-child(7) {
+    width: 85px;
+}
+
+/*===Estilos para filtros de la TABLA ALERTAS Mod Admin Supadmin*/
+
+.filtros-alertas {
+    display: flex;
+    gap: 12px;
+
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filtros-alertas a {
+    text-decoration: none;
+    background-color: #295a6b;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.filtros-alertas a:hover {
+    background-color: #279a9e;
+    transform: translateY(-2px); /*El boton se mueve hacia arriba un poco*/
+}
+
+.filtro-activo {
+    background-color: #2b9eab !important;
+
+    box-shadow: 0 0 15px rgba(185, 89, 15, 0.6);
+
+    transform: translateY(-2px);
+}
+
+/*ESTILO VENTANA EMERGENTE EDITAR ALERTA ADMIN SUPADMIN*/
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.modal-contenido {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 420px;
+
+    box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.896);
+
+    animation: aparecer 0.3s ease;
+
+}
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-contenido label {
+    display: block;
+    margin-top: 10px;
+    font-weight: 600;
+    color: #2c4b62;
+}
+
+.modal-contenido select,
+.modal-contenido textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+
+    border-radius: 8px;
+    border: 1px solid #193742;
+
+    font-size: 14px;
+}
+
+/*Estilo mensaje ventana emergente alertas*/
+.alert-success {
+    background-color: #2ecc71;
+    color: white;
+    padding: 12px;
+    margin: 15px 0;
+
+    border-radius: 8px;
+    text-align: center;
+
+    font-weight: 500;
+}
+
+
+ /*seccion en revision para unificar estilos de tablas en adminy superadmin TABLA ALERTAS*/
+/*.tabla-alertas-container th {
+    background-color: #295a6b;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+/* ==================================================== */
+/* ==== BOTONES DE ACCIONES (Editar / Eliminar) ==== */
+/* ==================================================== */
 .acciones {
     display: flex;
     justify-content: center;     /* Centra los botones en la celda */
@@ -1718,11 +1318,6 @@ h1 {
     background-color: #FFF;
 }
 
-.btn-crear:hover {
-    background-color: #28a745;
-    color: white;
-}
-
 /*==================================================================================*/
 /* 11. BOTONES GENERALES: Estilos base para botones                               */
 /*==================================================================================*/
@@ -1737,92 +1332,15 @@ h1 {
     box-shadow: 0px 4px 0px #9da2a5, 0px 8px 10px rgba(0,0,0,0.3);
     background-color: rgba(245, 245, 245, 0.75);
     border: 2px solid #216c8f;
-    font-weight: bold;
-}
-
-.btn,
-.btn:visited,
-.btn:active,
-.btn:hover,
-.btn:focus {
-    text-decoration: none;
-    color: black;
 }
 
 
-/* ===== BOTÓN VOLVER: Botón para volver a página anterior ===== */
 .btn-volver {
     color: black;
     border: 2px solid #3498db;
-    margin-left: 20px;
-    transition: background-color 0.2s;
-    
+    margin-right: 20px;
 }
 
-.btn-volver:hover {
-    background-color: #3498db;
-    color: white;
-}
-/* ===== BOTÓN VOLVER: Estilos específicos para botón en el panel estudiantes_conductor ===== */
-.volver-container {
-  margin-top: 15px; /* espacio entre la tabla y el botón */
-  text-align: left; /* alineado a la izquierda */
-}
-
-.btn-volver-estcon {
-  display: inline-block;
-  padding: 8px 16px;
-  border: 2px solid #3498db;
-  color: black;
-  text-decoration: none;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
-}
-
-.btn-volver:hover {
-  background-color: #0056b3; /* azul más oscuro al pasar el mouse */
-}
-
-.vista-usuario .btn-crear,
-.vista-gestudiantes .btn-crear {/* Estilos específicos para botón crear en vistas de usuario y estudiantes */
-    margin-left: 0; /* anula el margin del botón general */
-    position: absolute; /* posiciona el botón de forma absoluta dentro del contenedor de la tabla */
-    top: 130px; /* ajusta la posición vertical del botón */
-    right: 170px; /* ajusta la posición horizontal del botón */
-}
-
-.vista-usuario .btn-volver,
-.vista-gestudiantes .btn-volver {/* Estilos específicos para botón volver en vistas de usuario y estudiantes */
-    margin-left: 0; /* anula el margin del botón general */
-    position: absolute; /* posiciona el botón de forma absoluta dentro del contenedor de la tabla */
-    top:130px; /* ajusta la posición vertical del botón */
-    right: 100px; /* ajusta la posición horizontal del botón */
-}
-
-.vista-estudiantes .btn-volver {
-    position: absolute;
-    top: 220px;
-    left: 20px;
-    margin-left: 0; /* anula el margin del botón general */
-}
-
-
-.vista-mi-ruta .btn-volver {
-    margin-left: 0; /* anula el margin del botón general */
-    gap: 15px; /* agrega espacio entre el ícono y el texto */
-    padding: 12px;  /* aumenta el padding para que el botón sea más grande */
-}
-
-.vista-alertas .btn-volver {
-    position: absolute;
-    top: 150px;
-    right: 150px;
-    margin-right: 0;
-
-}
-
-/* ===== BOTONES DE ACCIÓN: Botones para guardar, crear, editar, actualizar, rep inasistencia ===== */
 .btn-guardar,
 .btn-crear,
 .btn-editar,
@@ -1851,12 +1369,9 @@ h1 {
     transition: background-color 0.2s;
 }
 
-.btn-eliminar:hover,
-.btn-cancelar:hover {
-    background-color: #a72828;
-    color: white;
+.btn-editar {
+    margin-right: 10px;
 }
-
 
 /*==================================================================================*/
 /* 12. RESPONSIVE / ADAPTACIÓN MÓVILES: Media queries para pantallas pequeñas     */

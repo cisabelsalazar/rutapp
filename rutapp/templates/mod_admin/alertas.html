@@ -1,0 +1,186 @@
+<!---PANEL GESTION DE ALERTAS MOD ADMIN Y SUPADMIN-->
+
+<!DOCTYPE html><!---Tipo de documento HTML5 -->
+<html lang="es"><!---Lenguaje del documento-->
+
+<head><!---Encabezado del documento-->
+    <meta charset="UTF-8"><!---Codificación de caracteres-->
+    <title>Gestión de Alertas</title><!---Título de la página-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"><!---Enlace al archivo CSS -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+    <!---Icono de la página-->
+</head>
+
+<body class="bg-secundario vista-alertas"><!---Cuerpo del documento con clase para estilos-->
+    <!-- Importa la macro de botones (necesario para usar action_toolbar) -->
+    {% from 'components/buttons_macro.html' import action_toolbar %}
+
+    <header><!---Encabezado de la página-->
+        {% include 'layout/header.html' %}<!---Incluir el encabezado desde otro archivo HTML-->
+    </header>
+
+    <main><!---Contenido principal de la página-->
+        <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
+            class="Imagen" />
+        <script src="{{ url_for('static', filename='js/control_moda.js') }}"></script>
+
+        <div class="admin-layout">
+
+            <div class="admin-menu">
+
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+
+                <h2>Panel {{nombre_panel}}</h2> <!---Nombre de modulo segun usuario ingresado-->
+
+                <ul>
+                    <li>Dashboard</li>
+                    <li>
+                        <a href="{{ url_for('usuarios') }}">
+                            Usuarios
+                        </a>
+                    </li>
+                    <li>Rutas</li>
+                    <li>Ubicación en tiempo real</li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="btn-logout">
+                            Cerrar sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-content">
+
+                <div class="tabla-alertas-container">
+
+                    <h1>Centro de Gestión de Alertas</h1><!---Título principal-->
+
+
+                    <div class="toolbar-container">
+                        {{ action_toolbar(botones) }}
+                    </div>
+
+                    <div class="filtros-alertas"> <!---Filtro para alertas-->
+
+                        <a href="{{ url_for('gestion_alerta') }}"
+                            class="{% if not estado_actual %}filtro-activo{% endif %}">
+                            Todas
+                        </a>
+
+                        <a href="{{ url_for('gestion_alerta', estado='nueva') }}"
+                            class="{% if estado_actual == 'nueva' %}filtro-activo{% endif %}">
+                            Nuevas
+                        </a>
+
+                        <a href="{{ url_for('gestion_alerta', estado='leida') }}"
+                            class="{% if estado_actual == 'leida' %}filtro-activo{% endif %}">
+                            Leídas
+                        </a>
+
+                        <a href="{{ url_for('gestion_alerta', estado='en_proceso' ) }}"
+                            class="{% if estado_actual == 'en_proceso'%}filtro-activo{% endif %}">
+                            En proceso
+                        </a>
+
+                        <a href="{{ url_for('gestion_alerta', estado='resuelta') }}"
+                            class="{% if estado_actual == 'resuelta' %}filtro-activo{% endif %}">
+                            Resueltas
+                        </a>
+                    </div>
+
+
+                    <div class="tabla-scroll"> <!---Scroll para contenido de tabla-->
+
+                        <table><!---Tabla para mostrar las alertas-->
+
+                            <thead><!---Encabezado de la tabla-->
+
+                                <tr><!---Fila de encabezado-->
+                                    <th>Conductor</th><!---Columna para el nombre del conductor-->
+                                    <th>Estudiante </th><!---Columna para el nombre del estudiante-->
+                                    <th>Ruta</th><!---Columna para el nombre de la ruta-->
+                                    <th>Tipo</th><!---Columna para el tipo de alerta-->
+                                    <th>Mensaje</th><!---Columna para el mensaje de la alerta-->
+                                    <th>Hora</th><!---Columna para la hora de la alerta-->
+                                    <th>Estado</th><!---Columna para el estado de la alerta-->
+                                    <th>Acciones</th><!---Columna para las acciones disponibles-->
+                                </tr>
+                            </thead><!---Fin del encabezado de la tabla-->
+
+                            <tbody><!-- Filas de alertas generadas dinámicamente desde el backend -->
+                                {% for alerta in alertas %}<!---Bucle para iterar sobre las alertas-->
+
+                                <tr><!---Fila para cada alerta-->
+                                    <td>{{ alerta.conductor_nombre }}</td><!---Celda para el nombre del conductor-->
+                                    <td>{{ alerta.estudiante_nombre }}</td><!---Celda para el nombre del estudiante-->
+                                    <td>{{ alerta.nombre_ruta }}</td><!---Celda para el nombre de la ruta-->
+                                    <td>{{ alerta.tipo_alerta }}</td><!---Celda para el tipo de alerta-->
+                                    <td>{{ alerta.mensaje }}</td><!---Celda para el mensaje de la alerta-->
+                                    <td>{{ alerta.fecha_hora.strftime('%I:%M %p') }}</td>
+                                    <!---Celda para la hora de la alerta-->
+                                    <td>{{ alerta.estado }}</td><!---Celda para el estado de la alerta-->
+
+                                    <!---Boton editar alerta-->
+
+                                    <td style="width: 10%;"><!---ancho fijo para la columna de acciones-->
+
+                                        <div class="acciones">
+                                            <button class="btn-read" onclick="abrirModal(
+                                                    '{{ alerta.id_alerta }}',
+                                                    '{{ alerta.estado }}',
+                                                    `{{ alerta.observacion_admin|default('') }}`
+                                                )">
+                                                Gestionar
+                                            </button>
+                                    </td>
+                                </tr><!---Fin de la fila de la alerta-->
+                                {% endfor %}<!---Fin del bucle de alertas-->
+                            </tbody><!---Fin del cuerpo de la tabla-->
+                        </table><!---Fin de la tabla de alertas-->
+                    </div> <!---Fin del contenido con scroll-->
+                </div>
+            </div><!---Fin del contenido del administrador-->
+        </div><!---Fin del diseño del administrador-->
+    </main><!---Fin del contenido principal-->
+
+    <footer class="footer"><!---Pie de página con clase para estilos-->
+        {% include 'layout/footer.html' %}<!---Incluir el pie de página desde otro archivo HTML-->
+    </footer>
+
+</body><!---Fin del cuerpo del documento-->
+
+<!-- MODAL -->
+<div id="modalAlerta" class="modal">
+    <div class="modal-contenido">
+
+
+        <form id="formAlerta" method="POST">
+
+            <label>Estado</label>
+            <select id="estado" name="estado">
+                <option value="nueva">Nueva</option>
+                <option value="leida">Leída</option>
+                <option value="en_proceso">En proceso</option>
+                <option value="resuelta">Resuelta</option>
+            </select>
+
+            <label>Observación</label>
+            <textarea id="observacion" name="observacion_admin"></textarea>
+
+            <button type="submit" class="btn-guardar">Guardar</button>
+            <button type="button" class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+
+        </form>
+
+    </div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="toast" id="mensajeFlash">
+    {{ messages[0][1] }}
+</div>
+{% endif %}
+{% endwith %}
+
+</html><!---Fin del documento HTML-->

@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RUTAPP - Panel Padre de Familia</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
     <title>Información del Conductor</title>
 </head>
 
 <body class="conductor_body">
+
+    <header>
+        {# Incluye el encabezado (header) de la página #}
+        {% include 'layout/header.html' %}
+    </header>
     
+
     <div class="padre-layout">
 
         <div class="padre-menu">
-            <img
-             src="{{ url_for('static', filename='img/logo.png') }}"
-             alt="Logo RUTAPP"
-             class="logo"
-            >
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
             <h2>Panel Padre de Familia</h2>
 
@@ -26,44 +30,44 @@
                 <li><a href="{{ url_for('padres') }}">Dashboard</a></li>
                 <li><a href="{{ url_for('informacion_conductor') }}">Información del conductor</a></li>
                 <li><a href="{{ url_for('estudiantes_padre') }}">Estudiantes</a></li>
-                <li>Estado de la ruta</li>
-                <li>Reportar inasistencia</li>
-                <li>Cerrar sesión</li>
+                <li><a href="{{ url_for('ver_ruta') }}"> Estado de la ruta</a>
+                <li><a href="{{ url_for('reportar_inasistencia') }}">Reportar inasistencia</a></li>
+                <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar sesión</a></li>
             </ul>
-            
+
         </div>
         <div class="background-infocon">
-        <div class="card-infocon">
-            <div class="card-header-infocon">
-                <img src="{{ url_for('static', filename='img/conductor.png') }}">
-            </div>
-            
-            <div class="card-body-infocon">
-                <h3>Información del Conductor</h3>
-                
-                <div class="info-grid-infocon">
-                     <div class="info-grid-infocon">
-                      <p><strong>Nombre:</strong> {{ conductor.nombre }}</p>
-                      <p><strong>Teléfono:</strong> {{ conductor.telefono }}</p>
-                      <p><strong>Correo:</strong> {{ conductor.correo }}</p>
-                      <p><strong>Vehículo:</strong> {{ conductor.vehiculo }}</p>
-                      <p><strong>Placa:</strong> {{ conductor.placa }}</p>
-                      <p><strong>Ruta:</strong> {{ conductor.ruta }}</p>
-                     </div>
+            <div class="card-infocon">
+                <div class="card-header-infocon">
+                    <img src="{{ url_for('static', filename='img/conductor.png') }}">
                 </div>
-                      <div class="button-group-infocon">
+
+                <div class="card-body-infocon">
+                    <h3>Información del Conductor</h3>
+
+                    <div class="info-grid-infocon">
+                        <p><strong>Nombre:</strong> Luis Martinez</p>
+                        <p><strong>Teléfono:</strong> 55-5555-5555</p>
+                        <p><strong>Correo:</strong> lmartinez@email.com</p>
+                        <p><strong>vehiculo:</strong> BMW</p>
+                        <p><strong>Placa:</strong> MTY-205</p>
+                        <p><strong>Ruta</strong> 301</p>
+                    </div>
+                    <div class="button-group-infocon">
                         <div class="button-group-infocon">
-                           <button class="btn-info btn-social wa"><i class="fab fa-whatsapp"></i></button>
-                           <button class="btn-info btn-call"><i class="fas fa-phone"></i> Llamar</button>
-                           <button class="btn-info btn-msg"><i class="fas fa-comment-dots"></i> Enviar mensaje</button>
-                </div>
-                         </div>
+                            <button class="btn-info btn-social wa"><i class="fab fa-whatsapp"></i></button>
+                            <button class="btn-info btn-call"><i class="fas fa-phone"></i> Llamar</button>
+                            <button class="btn-info btn-msg"><i class="fas fa-comment-dots"></i> Enviar mensaje</button>
+                            <a href="{{ url_for('padres') }}" class="btn btn-volver">
+                                Volver
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
 </body>
+
 </html>
-
-

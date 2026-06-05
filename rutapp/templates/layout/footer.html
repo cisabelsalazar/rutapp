@@ -3,3 +3,24 @@
 <footer class="footer">
     <p>© 2026 RUTAPP - Proyecto ADSO SENA</p>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ url_for('static', filename='js/confirmaciones.js') }}"></script> 
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <script>
+            {% for category, message in messages %}
+                Swal.fire({
+                    icon: "{{ 'error' if category == 'error' else 'success' }}",
+                    title: "{{ message }}",
+                    confirmButtonText: "Aceptar",
+                    customClass: {
+                        popup: 'swal-popup',
+                        confirmButton: 'swal-confirm-btn'
+                    }
+                });
+            {% endfor %}
+        </script>
+    {% endif %}
+{% endwith %}

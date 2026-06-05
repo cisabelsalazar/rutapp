@@ -1,8 +1,13 @@
 <!--- ENCABEZADO DE LA PAGINA WEB --->
 
-<header class="header">
+<header class="navbar">
     <nav>
         <a href="{{ url_for('inicio') }}">Inicio</a>
-        <a href="{{ url_for('login') }}">Login</a>
     </nav>
+
+    {% if 'nombre_usuario' in session %}
+    <div class="usuario-nav">
+         {{ session['nombre_usuario'] }}
+    </div>
+    {% endif %}
 </header>

@@ -3,29 +3,38 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RUTAPP - Inicio de sesión</title>
+    <title>Inicio - RUTAPP</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
 </head>
 
-<body class="bg-home">
+<body class="bg-home"><!--- Agrega la clase "bg-home" para aplicar el fondo específico de la página de inicio -->
+
 
     <header>
         {# Incluye el encabezado (header) de la página #}
         {% include 'layout/header.html' %}
     </header>
 
-    <main>
+    <main><!--- Contenedor principal de la página de inicio -->
 
         <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
             class="Imagen" />
 
         <div class="login-container">
-            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" class="logo">
 
-            <p>Bienvenido al sistema de gestión de rutas escolares</p>
+            <h1>Bienvenido a RUTAPP</h1>
 
-            <h1>RUTAPP</h1>
+            <p class="slogan">
+                "Conectando rutas escolares de forma segura y eficiente"
+            </p>
+
+            <p>
+                Sistema de gestión de rutas escolares que permite a padres,
+                conductores y administradores interactuar de forma segura y eficiente.
+            </p>
+
 
             <form action="/validar_login" method="POST">
 
@@ -41,7 +50,9 @@
 
                 <div class="form-actions">
                     <button type="submit">Iniciar sesión</button>
-                    <a href="/recuperar-password" class="forgot-password">
+
+                    <a class="forgot-password-login" href="{{ url_for('recuperar_password') }}">
+                       
                         ¿Olvidaste tu contraseña?
                     </a>
                 </div>
@@ -49,12 +60,61 @@
             </form>
 
 
+
+
+            <!---     <a href="{{url_for('login')}}" class="btn-ingresar">Ingresar al Sistema</a>
         </div>
-        <footer class="footer">
-            {# ===== FOOTER ===== #}
-            {% include 'layout/footer.html' %}
-        </footer>
+
+      <h2 class="titulo-home">¿Cómo deseas ingresar?</h2>
+
+
+
+        <div class="cards">
+
+            <div class="card">
+                <a href="{{ url_for('login') }}">
+                    <h3>Soy Administrador</h3>
+                    <p>Gestiona usuarios, vehículos y rutas.</p>
+                </a>
+            </div>
+
+            <div class="card">
+                <a href="{{ url_for('login') }}">
+                    <h3>Soy Conductor</h3>
+                    <p>Consulta tu ruta y registra estudiantes.</p>
+                </a>
+            </div>
+
+            <div class="card">
+                <a href="{{ url_for('login') }}">
+                    <h3>Soy Padre de familia</h3>
+                    <p>Consulta rutas y reporta novedades.</p>
+                </a>
+            </div> --->
     </main>
+
+    <footer class="footer">
+        <p>© 2026 RUTAPP - Proyecto ADSO SENA</p>
+    </footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+
+        <script>
+            Swal.fire({
+                icon: "{{ category }}",
+                title: "{{ message }}",
+                confirmButtonText: "Aceptar"
+            });
+        </script>
+
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 
 </body>
 

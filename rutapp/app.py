@@ -25,7 +25,7 @@ app.secret_key = "rutapp_secreto"   # Clave secreta para manejar sesiones y flas
 conexion = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Cristina+-2026",
+    password="12345",
     database="rutapp_bd"
 )
 
@@ -979,9 +979,47 @@ def mi_ruta():
     #     return "Acceso no autorizado"
     return render_template('mod_conductor/mi_ruta.html')
 
+#======== Ruta para visualisar estudiantes en el panel conductor=========#
+
 @app.route('/conductor/estudiantes')
 def estudiantes_conductor():
-    return render_template('mod_conductor/estudiantes_conductor.html')
+    cursor = conexion.cursor(dictionary=True) # Importante: dictionary=True
+    # Consulta para traer alertas con datos de los estudiantes y rutas
+    consulta = """
+    SELECT 
+      nombre,
+      grado,
+      direccion,
+      telefono,
+      id_ruta,
+      estado
+      FROM estudiante
+    """
+    cursor.execute(consulta)
+    
+    # Obtenemos los datos
+    estudiantes_bd = cursor.fetchall()
+    
+
+    # Pasamos la variable al HTML
+    return render_template(
+        'mod_conductor/estudiantes_conductor.html', 
+        estudiantes_bd=estudiantes_bd)
+#======== Ruta para abordar estudiante=========#
+
+@app.route('/abordar_estudiante')
+def abordar_estudiante(id_estudiante):
+    cursor = conexion.cursor()
+    actualizar = """
+        UPDATE estudiante
+        SET estado = 'Abordo'
+        WHERE id_estudiante = %s
+    """
+    cursor.execute(actualizar, (id_estudiante,))
+    conexion.commit()
+    cursor.close()
+    # Redirigimos de nuevo a la lista
+    return redirect(url_for('estudiantes_conductor'))
 
 
 # ==========================================
@@ -1045,9 +1083,38 @@ def reportar_inasistencia():
 # ==========================================
 
 
+#======== Ruta para información conductor (padres)=========
 @app.route('/padres/informacion_conductor')
 def informacion_conductor():
-    return render_template('mod_padres/informacion_conductor.html')
+    cursor = conexion.cursor(dictionary=True)
+# Consulta SQL para obtener la información del conductor
+    consulta = """
+    SELECT u.nombres_y_apellidos AS nombre,
+       u.telefono,
+       u.correo,
+       v.id_vehiculo AS vehiculo,
+       v.placa,
+       r.nombre_ruta AS ruta
+     FROM ESTUDIANTE e
+     INNER JOIN RUTA r 
+      ON e.id_ruta = r.id_ruta
+     INNER JOIN USUARIO u 
+      ON r.id_conductor = u.id_usuario
+     INNER JOIN VEHICULO v 
+      ON u.id_usuario = v.id_conductor
+     WHERE e.id_ruta = 301;
+    """
+
+    cursor = conexion.cursor(dictionary=True, buffered=True)
+    cursor.execute(consulta)
+    conductor = cursor.fetchone()
+    cursor.close()
+        # Renderiza el HTML y pasa los datos
+    return render_template(
+        'mod_padres/informacion_conductor.html',
+        conductor=conductor
+    )
+
 
 # ==========================================
 # VER ESTUDIANTE

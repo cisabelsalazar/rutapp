@@ -1082,7 +1082,6 @@ def reportar_inasistencia():
 # VER INFORMACION CONDUCTOR
 # ==========================================
 
-
 #======== Ruta para información conductor (padres)=========
 @app.route('/padres/informacion_conductor')
 def informacion_conductor():
@@ -1104,6 +1103,17 @@ def informacion_conductor():
       ON u.id_usuario = v.id_conductor
      WHERE e.id_ruta = 301;
     """
+
+    cursor = conexion.cursor(dictionary=True, buffered=True)
+    cursor.execute(consulta)
+    conductor = cursor.fetchone()
+    cursor.close()
+        # Renderiza el HTML y pasa los datos
+    return render_template(
+        'mod_padres/informacion_conductor.html',
+        conductor=conductor
+    )
+
 
     cursor = conexion.cursor(dictionary=True, buffered=True)
     cursor.execute(consulta)

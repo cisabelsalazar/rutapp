@@ -17,18 +17,16 @@
         {# Incluye el encabezado (header) de la página #}
         {% include 'layout/header.html' %}
     </header>
-    
+
 
     <div class="padre-layout">
 
         <div class="padre-menu">
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-            <h2>Panel Padre de Familia</h2>
+            <h2>Panel {{ nombre_panel }}</h2>
 
             <ul>
-                <li><a href="{{ url_for('padres') }}">Dashboard</a></li>
-                <li><a href="{{ url_for('informacion_conductor') }}">Información del conductor</a></li>
                 <li><a href="{{ url_for('estudiantes_padre') }}">Estudiantes</a></li>
                 <li><a href="{{ url_for('ver_ruta') }}"> Estado de la ruta</a>
                 <li><a href="{{ url_for('reportar_inasistencia') }}">Reportar inasistencia</a></li>
@@ -46,13 +44,14 @@
                     <h3>Información del Conductor</h3>
 
                     <div class="info-grid-infocon">
-                        <p><strong>Nombre:</strong> Luis Martinez</p>
-                        <p><strong>Teléfono:</strong> 55-5555-5555</p>
-                        <p><strong>Correo:</strong> lmartinez@email.com</p>
-                        <p><strong>vehiculo:</strong> BMW</p>
-                        <p><strong>Placa:</strong> MTY-205</p>
-                        <p><strong>Ruta</strong> 301</p>
+                        <p><strong>Nombre:</strong> {{ conductor.nombre }}</p>
+                        <p><strong>Teléfono:</strong> {{ conductor.telefono }}</p>
+                        <p><strong>Correo:</strong> {{ conductor.correo }}</p>
+                        <p><strong>Vehículo:</strong> {{ conductor.vehiculo }}</p>
+                        <p><strong>Placa:</strong> {{ conductor.placa }}</p>
+                        <p><strong>Ruta:</strong> {{ conductor.ruta }}</p>
                     </div>
+                    
                     <div class="button-group-infocon">
                         <div class="button-group-infocon">
                             <button class="btn-info btn-social wa"><i class="fab fa-whatsapp"></i></button>

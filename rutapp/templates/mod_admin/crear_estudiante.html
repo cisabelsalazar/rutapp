@@ -29,7 +29,12 @@
                 <h2>Panel {{nombre_panel}}</h2>
 
                 <ul>
-                    <li>Dashboard</li>
+                    <li>
+                        <a href="{{ url_for('dashboard') }}">
+                            Dashboard
+                        </a>
+                    </li>
+                    
                     <li>
                         <a href="{{ url_for('usuarios') }}">
                             Usuarios
@@ -84,6 +89,22 @@
 
                         <option value="{{ ruta.id_ruta }}">
                             {{ ruta.id_ruta }} - {{ ruta.nombre_ruta }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <div class="form-group filtro-editar-estudiante">
+                    <label>Padre de familia:</label>
+                    <select name="id_padre" required>
+                        <option value="">Seleccione un padre</option>
+
+                        {% for padre in padres %}
+
+                        <option value="{{ padre.id_usuario }}">
+                            {{ padre.nombres_y_apellidos }} - {{ padre.id_usuario }}
                         </option>
 
                         {% endfor %}

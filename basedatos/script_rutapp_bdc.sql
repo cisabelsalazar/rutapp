@@ -76,6 +76,24 @@ CREATE TABLE ESTUDIANTE(
     FOREIGN KEY (id_ruta) REFERENCES RUTA(id_ruta) ON DELETE SET NULL
 );
 
+DROP TABLE IF EXISTS PADRE_ESTUDIANTE;
+
+CREATE TABLE PADRE_ESTUDIANTE(
+    id_padre VARCHAR(20) NOT NULL,
+    id_estudiante INT NOT NULL,
+
+    PRIMARY KEY (id_padre, id_estudiante),
+
+    FOREIGN KEY (id_padre)
+        REFERENCES USUARIO(id_usuario)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (id_estudiante)
+        REFERENCES ESTUDIANTE(id_estudiante)
+        ON DELETE CASCADE
+-- id_padre debe corresponder a un usuario con id_rol = 4
+);
+
 DROP TABLE IF EXISTS ALERTAS;
 
 CREATE TABLE ALERTAS(
@@ -111,6 +129,7 @@ SELECT * FROM usuario ORDER BY id_usuario;
 SELECT * FROM ruta ORDER BY id_ruta;
 SELECT * FROM estudiante ORDER BY id_estudiante;
 SELECT * FROM alertas ORDER BY id_alerta;
+SELECT * FROM vehiculo ORDER BY id_vehiculo;
 
 
 -- INFORMACION BASE DE DATOS - ROL

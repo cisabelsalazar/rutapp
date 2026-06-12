@@ -5,9 +5,4 @@
         <a href="{{ url_for('inicio') }}">Inicio</a>
     </nav>
 
-    {% if 'nombre_usuario' in session %}
-    <div class="usuario-nav">
-         {{ session['nombre_usuario'] }}
-    </div>
-    {% endif %}
 </header>

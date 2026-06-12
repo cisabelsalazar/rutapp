@@ -40,14 +40,15 @@ def inyectar_datos_globales(): # Función que devuelve un diccionario con datos 
         1: 'Superadministrador',
         2: 'Administrador',
         3: 'Conductor',
-        4: 'Padre de familia'           
+        4: 'Padre de Familia'           
     }
 
     rol = session.get('rol') # Obtiene el rol del usuario desde la sesión
 
     return {
-        'nombre_panel' : nombres_roles.get(rol, 'Usuario') # Devuelve el nombre del panel según el rol, o 'Usuario' si no se encuentra
-    }
+        'nombre_panel' : nombres_roles.get(rol, 'Usuario'), # Devuelve el nombre del panel según el rol, o 'Usuario' si no se encuentra
+        'nombre_completo' : session.get('nombre_completo') # Devuelve el nombre completo del usuario desde la sesión
+    }   
 
 #=============================================
 # FUNCION PARA BOTON VOLVER 
@@ -121,6 +122,7 @@ def valida_login():
 
     usuario = cursor.fetchone()
 
+
     if usuario:
         hash_guardado = usuario['hash_password']
 
@@ -137,7 +139,8 @@ def valida_login():
         if acceso:
             session['usuario'] = usuario['id_usuario']
             session['rol'] = usuario['id_rol']
-            session['nombre_usuario'] = usuario['nombre_usuario']
+            session['nombre_completo'] = usuario['nombres_y_apellidos']
+
 
             if usuario['id_rol'] == 1:
                 return redirect(url_for('superadministrador'))
@@ -166,7 +169,6 @@ def recuperar_password():
 def buscar_correo():
     
     correo = request.form['email']
-    print(correo)
 
     cursor = conexion.cursor(dictionary=True)
 
@@ -207,8 +209,6 @@ def actualizar_password():
     nueva_password = request.form['password']
     confirmar_password = request.form['confirmar_password']
 
-    print(nueva_password)
-    print(confirmar_password)
 
     if nueva_password == confirmar_password:
         hash_password = generate_password_hash(nueva_password)
@@ -258,13 +258,19 @@ def logout():
 @app.route('/supadmin')
 def superadministrador():
 
+    estadisticas = obtener_estadisticas_dashboard() # Llama a la función para obtener las estadísticas del dashboard
+    
+
     if 'usuario' not in session:
         return redirect(url_for('login'))
 
     if session['rol'] != 1:
         return 'Acceso no autorizado 1'
     
-    return render_template('mod_admin/supadmin.html')
+    return render_template(
+        'mod_admin/supadmin.html',
+        **estadisticas # Desempaqueta el diccionario de estadísticas para pasarlo a la plantilla
+    )
 
 
 # ==========================================
@@ -274,15 +280,115 @@ def superadministrador():
 @app.route('/admin')
 def administrador():
 
+    estadisticas = obtener_estadisticas_dashboard() # Llama a la función para obtener las estadísticas del dashboard
+
     if 'usuario' not in session:
         return redirect(url_for('login')) #Si no hay sesión iniciada regresa al login
     
     if session['rol'] != 2:
         return f"Acceso no autorizado 2 | {session['rol']} |"
     
-    return render_template('mod_admin/admin.html')
+    return render_template(
+        'mod_admin/admin.html',
+        **estadisticas # Desempaqueta el diccionario de estadísticas para pasarlo a la plantilla
+    )
 
+#===========================================
+# RUTA PARA VALIDACION ROL EN DASHBOARD
+#==========================================
 
+@app.route('/dashboard')
+def dashboard():
+
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    
+    if session['rol'] == 1:
+        return redirect(url_for('superadministrador'))
+    
+    if session['rol'] == 2:
+        return redirect(url_for('administrador'))
+    
+    return redirect(url_for('login'))
+
+# ==========================================
+# FUNCION PARA ESTADISTICAS DASHBOARD
+# ==========================================
+
+def obtener_estadisticas_dashboard():
+
+    cursor = conexion.cursor(dictionary=True)
+# ==========================
+# ESTADÍSTICAS GENERALES
+# ==========================
+
+    cursor.execute("""
+    SELECT  COUNT(*) AS total_usuarios
+    FROM usuario 
+    """)
+    total_usuarios = cursor.fetchone()['total_usuarios']
+
+    cursor.execute("""
+    SELECT COUNT(*) AS total_vehiculos
+    FROM vehiculo
+    """)
+    total_vehiculos = cursor.fetchone()['total_vehiculos']
+
+    cursor.execute("""
+    SELECT COUNT(*) AS total_rutas
+    FROM ruta
+    """)
+    total_rutas = cursor.fetchone()['total_rutas']
+
+    cursor.execute("""
+    SELECT COUNT(*) AS total_estudiantes
+    FROM estudiante
+    """)
+    total_estudiantes = cursor.fetchone()['total_estudiantes']
+# ==========================
+# VEHICULOS
+# ==========================
+
+    cursor.execute("""
+    SELECT COUNT(*) AS vehiculos_disponibles
+    FROM vehiculo
+    WHERE ESTADO = 'disponible'
+    """)
+    vehiculos_disponibles = cursor.fetchone()['vehiculos_disponibles']
+
+# ==========================
+# RUTAS
+# ==========================
+
+    cursor.execute("""
+    SELECT COUNT(*) AS rutas_activas
+    FROM ruta
+    WHERE ESTADO = 'activa'
+    """)
+    rutas_activas = cursor.fetchone()['rutas_activas']
+
+#=========================
+# ALERTAS
+#=========================
+
+    cursor.execute("""
+    SELECT COUNT(*) AS alertas_pendientes
+    FROM alertas
+    WHERE estado = 'nueva' OR estado = 'en proceso'
+    """)
+    alertas_pendientes = cursor.fetchone()['alertas_pendientes']
+
+    cursor.close()
+
+    return {
+        'total_usuarios': total_usuarios,
+        'total_vehiculos': total_vehiculos,
+        'total_rutas': total_rutas,
+        'total_estudiantes': total_estudiantes,
+        'vehiculos_disponibles': vehiculos_disponibles,
+        'rutas_activas': rutas_activas,
+        'alertas_pendientes': alertas_pendientes
+    }
 
 # ==========================================
 # MÓDULO USUARIOS
@@ -611,14 +717,23 @@ def crear_estudiante():
     cursor = conexion.cursor(dictionary=True)
 
     cursor.execute("SELECT * FROM ruta") # Selecciona ruta escolar para asignar
-
     rutas = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT id_usuario, nombres_y_apellidos
+        FROM usuario
+        WHERE id_rol = 4
+        ORDER BY nombres_y_apellidos
+    """) # Selecciona padres de familia para asignar
+
+    padres = cursor.fetchall()
 
     cursor.close()
     
     return render_template(
         'mod_admin/crear_estudiante.html',
-        rutas = rutas
+        rutas = rutas,
+        padres = padres
     )
 
 
@@ -636,6 +751,8 @@ def guardar_estudiante():
         direccion= request.form['direccion']
         telefono= request.form['telefono']
         id_ruta= request.form['id_ruta']
+        id_padre = request.form['id_padre']
+
 
         if len(id_estudiante) > 10:
             return "El número de identificación no puede superar 10 caracteres"
@@ -665,6 +782,15 @@ def guardar_estudiante():
         valores = (id_estudiante, nombre, grado, direccion, telefono, id_ruta)
 
         cursor.execute(sql, valores)
+
+        sql_padre= """
+        INSERT INTO padre_estudiante
+        (id_padre, id_estudiante)
+        VALUES (%s, %s)
+        """
+    
+        cursor.execute(sql_padre, (id_padre, id_estudiante))
+
         conexion.commit()
         cursor.close()
         flash('Estudiante guardado correctamente', 'success')
@@ -682,9 +808,18 @@ def editar_estudiante(id_estudiante):
 
 
     cursor = conexion.cursor(dictionary=True) # Crear cursor en formato diccionario para acceder por nombre de campo
+    
     cursor.execute("SELECT * FROM ruta") # Selecciona ruta escolar para asignar
     rutas = cursor.fetchall()
     
+    cursor.execute("""
+        SELECT id_usuario, nombres_y_apellidos
+        FROM usuario
+        WHERE id_rol = 4
+        ORDER BY nombres_y_apellidos
+    """) # Selecciona padres de familia para asignar
+
+    padres = cursor.fetchall()
 
     # POST guardar cambios
     if request.method == 'POST': # POST: cuando el usuario da clic en "Guardar cambios"
@@ -695,6 +830,7 @@ def editar_estudiante(id_estudiante):
         direccion = request.form['direccion']
         telefono = request.form['telefono']
         id_ruta = request.form['id_ruta']
+        id_padre = request.form['id_padre']
 
         #VALIDACION LONGITUD DE CAMPOS
         if len(nombre) > 30:
@@ -720,6 +856,39 @@ def editar_estudiante(id_estudiante):
         valores = (nombre, grado, direccion, telefono, id_ruta, id_estudiante)
 
         cursor.execute(sql, valores, rutas)
+
+        # Verificar si ya existe relación padre-estudiante
+        cursor.execute("""
+            SELECT *
+            FROM padre_estudiante
+            WHERE id_estudiante = %s
+        """, (id_estudiante,))
+
+        relacion = cursor.fetchone()
+
+        if relacion:
+
+            # Actualiza la relación existente
+            sql_padre = """
+            UPDATE padre_estudiante
+            SET id_padre = %s
+            WHERE id_estudiante = %s
+            """
+
+            cursor.execute(sql_padre, (id_padre, id_estudiante))
+
+        else:
+
+            # Crea la relación si no existe
+            sql_padre = """
+            INSERT INTO padre_estudiante
+            (id_padre, id_estudiante)
+            VALUES (%s, %s)
+            """
+
+
+        cursor.execute(sql_padre, (id_padre, id_estudiante))
+
         conexion.commit()
         cursor.close()
 
@@ -730,6 +899,19 @@ def editar_estudiante(id_estudiante):
     sql = "SELECT * FROM estudiante WHERE id_estudiante = %s" # Consulta para obtener los datos actuales del estudiante
     cursor.execute(sql, (id_estudiante,))
     estudiante = cursor.fetchone()
+
+    cursor.execute("""
+        SELECT id_padre
+        FROM padre_estudiante
+        WHERE id_estudiante = %s
+    """, (id_estudiante,))
+
+    relacion = cursor.fetchone()
+
+    padre_actual = None
+
+    if relacion:
+        padre_actual = relacion['id_padre']
 
     cursor.close() #Cierra el cursor
 
@@ -745,7 +927,9 @@ def editar_estudiante(id_estudiante):
         'mod_admin/editar_estudiante.html', # Renderiza el formulario de edición con los datos actuales del estudiante
         ruta_volver=ruta_volver, 
         estudiante=estudiante,
-        rutas = rutas  
+        rutas = rutas,
+        padres = padres,
+        padre_actual = padre_actual
     ) # Envía los datos al formulario editar_estudiante.html
 
 #===========================================
@@ -979,10 +1163,54 @@ def mi_ruta():
     #     return "Acceso no autorizado"
     return render_template('mod_conductor/mi_ruta.html')
 
+#============================================
+# Ruta para visualisar estudiantes en el panel conductor
+#=============================================
+
 @app.route('/conductor/estudiantes')
 def estudiantes_conductor():
-    return render_template('mod_conductor/estudiantes_conductor.html')
+    
+    cursor = conexion.cursor(dictionary=True) # Importante: dictionary=True
+    # Consulta para traer alertas con datos de los estudiantes y rutas
+    
+    consulta = """
+    SELECT 
+      nombre,
+      grado,
+      direccion,
+      telefono,
+      id_ruta,
+      estado
+      FROM estudiante
+    """
+    cursor.execute(consulta)
+    
+    # Obtenemos los datos
+    estudiantes_bd = cursor.fetchall()
+    
 
+    # Pasamos la variable al HTML
+    return render_template(
+        'mod_conductor/estudiantes_conductor.html', 
+        estudiantes_bd=estudiantes_bd)
+
+#==============================================
+#======== Ruta para abordar estudiante=========#
+#==============================================
+
+@app.route('/abordar_estudiante')
+def abordar_estudiante(id_estudiante):
+    cursor = conexion.cursor()
+    actualizar = """
+        UPDATE estudiante
+        SET estado = 'Abordo'
+        WHERE id_estudiante = %s
+    """
+    cursor.execute(actualizar, (id_estudiante,))
+    conexion.commit()
+    cursor.close()
+    # Redirige de nuevo a la lista
+    return redirect(url_for('estudiantes_conductor'))
 
 # ==========================================
 # MODULO PADRES DE FAMILIA
@@ -1044,10 +1272,46 @@ def reportar_inasistencia():
 # VER INFORMACION CONDUCTOR
 # ==========================================
 
+#=========================================
+#======== Ruta para información conductor (padres)=========
+#=========================================
 
 @app.route('/padres/informacion_conductor')
 def informacion_conductor():
-    return render_template('mod_padres/informacion_conductor.html')
+
+    cursor = conexion.cursor(dictionary=True, buffered=True)
+    
+# Consulta SQL para obtener la información del conductor
+    consulta = """
+    SELECT
+        u.nombres_y_apellidos AS nombre,
+        u.telefono,
+        u.correo,
+        v.id_vehiculo AS vehiculo,
+        v.placa,
+        r.nombre_ruta AS ruta
+    FROM ESTUDIANTE e
+    INNER JOIN RUTA r
+        ON e.id_ruta = r.id_ruta
+    INNER JOIN USUARIO u
+        ON r.id_conductor = u.id_usuario
+    INNER JOIN VEHICULO v
+        ON u.id_usuario = v.id_conductor
+    WHERE e.id_ruta = 7;
+    """
+
+    
+    cursor.execute(consulta)
+    conductor = cursor.fetchone()
+    cursor.close()
+
+        # Renderiza el HTML y pasa los datos
+    return render_template(
+        'mod_padres/informacion_conductor.html',
+        conductor=conductor
+    )
+
+
 
 # ==========================================
 # VER ESTUDIANTE

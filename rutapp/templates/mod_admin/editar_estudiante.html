@@ -28,7 +28,12 @@
                 <h2>Panel {{nombre_panel}}</h2>
 
                 <ul>
-                    <li>Dashboard</li>
+                    <li>
+                        <a href="{{ url_for('dashboard') }}">
+                            Dashboard
+                        </a>
+                    </li>
+
                     <li>
                         <a href="{{ url_for('usuarios') }}">
                             Usuarios
@@ -89,6 +94,25 @@
 
                         {% endfor %}
 
+                    </select>
+                </div>
+
+
+                <div class="form-group filtro-editar-estudiante">
+                    <label>Padre de Familia:</label>
+                    <select name="id_padre" required>
+                        <option value="">Seleccione un padre:</option>
+
+                        {% for padre in padres %}
+
+                        <option value="{{ padre.id_usuario }}" 
+                        {% if padre.id_usuario==padre_actual %} 
+                            selected 
+                        {% endif %}>
+                            {{ padre.nombres_y_apellidos }} - {{ padre.id_usuario }}
+                        </option>
+
+                        {% endfor %}
                     </select>
                 </div>
 

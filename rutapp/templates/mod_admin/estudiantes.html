@@ -32,7 +32,12 @@
                 <h2>Panel {{nombre_panel}}</h2>
 
                 <ul>
-                    <li>Dashboard</li>
+                    <li>
+                        <a href="{{ url_for('dashboard')}}">
+                        Dashboard
+                        </a>
+                    </li>
+                    
                     <li>
                         <a href="{{ url_for('usuarios') }}">
                             Usuarios

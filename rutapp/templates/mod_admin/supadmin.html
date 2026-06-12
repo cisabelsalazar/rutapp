@@ -31,13 +31,12 @@
                 <h2>Panel {{nombre_panel}}</h2>
 
                 <ul>
-                    <li>Dashboard</li>
                     <li>
                         <a href="{{ url_for('usuarios') }}">
                             Usuarios
                         </a>
                     </li>
-                    
+
                     <li>Rutas</li>
                     <li>Ubicación en tiempo real</li>
                     <li>
@@ -49,23 +48,105 @@
             </div>
 
             <div class="admin-content">
-                <h2>Bienvenido</h2>
+                <h2 class="titulo-bienvenida">
+                    Bienvenido {{ nombre_completo }}
+                </h2>
                 <p>Desde este panel podrá gestionar la información del sistema RUTAPP.</p>
 
                 <img src="{{ url_for('static', filename='img/mapa.png') }}" alt="Mapa de rutas en tiempo real"
                     class="mapa-admin">
 
                 <div class="admin-buttons">
-                    <a href="{{ url_for('usuarios') }}" class="btn">Gestionar usuarios</a>
-                    <a href="{{ url_for('gestion_estudiantes') }}" class="btn">Gestionar estudiantes</a>
-                    <a href="{{ url_for('gestion_vehiculos') }}" class="btn">Gestionar vehículos</a>
-                    <a href="{{ url_for('gestion_rutas') }}" class="btn">Gestionar rutas</a>
-                    <a href="{{ url_for('gestion_alerta') }}" class="btn">Gestionar alertas</a>
+                    <a href="{{ url_for('usuarios') }}" class="btn">
+                        Gestionar usuarios
+                    </a>
+
+                    <a href="{{ url_for('gestion_estudiantes') }}" class="btn">
+                         estudiantes
+                        </a>
+
+                    <a href="{{ url_for('gestion_vehiculos') }}" class="btn">
+                        Gestionar vehículos
+                    </a>
+
+                    <a href="{{ url_for('gestion_rutas') }}" class="btn">
+                        Gestionar rutas
+                    </a>
+                    
+                    <a href="{{ url_for('gestion_alerta') }}" class="btn">
+                        Gestionar alertas
+                    </a>
+                </div>
+
+                <div class="text-informativo">
+                    <h3 class="titulo-estadisticas">
+                        Estadísticas del sistema
+                    </h3>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="dashboard-card">
+                        <img src="{{ url_for('static', filename='img/usuarios.png') }}" alt="usuarios"
+                            class="icon-dashboard">
+                        <h1>{{ total_usuarios }}</h1>
+                        <h2>Total Usuarios</h2>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <img src="{{ url_for('static', filename='img/vehiculos.png') }}" alt="vehiculos"
+                            class="icon-dashboard">
+                        <h1>{{ total_vehiculos }}</h1>
+                        <h2>Total Vehículos</h2>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <img src="{{ url_for('static', filename='img/rutas.png') }}" alt="rutas" class="icon-dashboard">
+                        <h1>{{ total_rutas}}</h1>
+                        <h2>Total Rutas</h2>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <img src="{{ url_for('static', filename='img/estudiantes.png') }}" 
+                            alt="estudiantes"
+                            class="icon-dashboard">
+                        <h1>{{ total_estudiantes}}</h1>
+                        <h2>Total Estudiantes</h2>
+                    </div>
+                </div>
+
+                <div class="text-informativo">
+                    <h3 class="titulo-estadisticas">
+                        Actividad Actual
+                    </h3>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="dashboard-card-disp">
+                        <img src="{{ url_for('static', filename='img/vehiculo_disponible.png') }}"
+                            alt="vehiculo_disponible" 
+                            class="icon-dashboard-disp">
+                        <h1>{{ vehiculos_disponibles }}</h1>
+                        <h2>Vehiculos Disponibles</h2>
+                    </div>
+
+                    <div class="dashboard-card-disp">
+                        <img src="{{ url_for('static', filename='img/ruta_activa.png') }}" 
+                            alt="ruta_activa"
+                            class="icon-dashboard-disp">
+                        <h1>{{ rutas_activas }}</h1>
+                        <h2>Rutas Activas </h2>
+                    </div>
+
+                    <div class="dashboard-card-disp">
+                        <img src="{{ url_for('static', filename='img/alerta_pendiente.png') }}"
+                            alt="alerta_pendiente"
+                            class="icon-dashboard">
+                        <h1>{{ alertas_pendientes }}</h1>
+                        <h2>Alertas Pendientes</h2>
+                    </div>
                 </div>
 
             </div>
-
-        </div>
 
     </main>
 

@@ -2045,7 +2045,7 @@ tabla Usuarios módulos admin y superadmin===== */
     flex-direction: column;      /* Apila el h1 y la tabla */
     align-items: center;         /* Centra todo horizontalmente */
     margin: 30px auto;           /* Espacio superior e inferior */
-    width: 95%;                  /* Ocupa casi todo el ancho */
+    width: 100%;                  /* Ocupa casi todo el ancho */
     overflow-y: auto;
     max-height: 600px;
     box-sizing: border-box;
@@ -2100,16 +2100,16 @@ tabla Usuarios módulos admin y superadmin===== */
 tabla Usuarios módulos admin y superadmin===== */
 
 .tabla-estudiantes-container th:nth-child(1){
-    width: 70px;
+    width: 90px;
 }
 
 .tabla-estudiantes-container td:nth-child(2),
 .tabla-estudiantes-container th:nth-child(3){
-    width: 100px;
+    width: 90px;
 }
 
 .tabla-estudiantes-container td:nth-child(4){
-    width: 90px;
+    width: 100px;
 }
 
 .tabla-estudiantes-container td:nth-child(5) {
@@ -2122,7 +2122,10 @@ tabla Usuarios módulos admin y superadmin===== */
 }
 
 .tabla-estudiantes-container td:nth-child(7) {
-    width: 150px;
+    width: 100px;
+}
+.tabla-estudiantes-container td:nth-child(8) {
+    width: 100px;
 }
 
 

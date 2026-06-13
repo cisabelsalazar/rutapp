@@ -671,9 +671,17 @@ def gestion_estudiantes():
            e.direccion,
            e.telefono,
            e.id_ruta,
-           r.nombre_ruta
+           r.nombre_ruta,
+           p.nombres_y_apellidos AS padre_familia
     FROM estudiante e
-    LEFT JOIN ruta r ON e.id_ruta = r.id_ruta
+    LEFT JOIN ruta r 
+        ON e.id_ruta = r.id_ruta
+
+    LEFT JOIN padre_estudiante pe   
+        ON e.id_estudiante = pe.id_estudiante
+
+    LEFT JOIN usuario p
+        ON pe.id_padre = p.id_usuario
     WHERE 1=1
     """
 

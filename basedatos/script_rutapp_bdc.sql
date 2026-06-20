@@ -76,11 +76,11 @@ marca VARCHAR(50) NOT NULL,
 modelo VARCHAR(50) NOT NULL,
 capacidad INT NOT NULL,
 estado ENUM(
-	'activo',
+	'Activo',
     'Inactivo',
     'En mantenimiento'
 ) NOT NULL DEFAULT 'Activo',
-id_conductor VARCHAR(20) NOT NULL,
+id_conductor VARCHAR(20) NOT NULL UNIQUE,
 FOREIGN KEY (id_conductor) REFERENCES USUARIO(id_usuario)
 );
 

@@ -16,6 +16,22 @@ function confirmarEliminacion(id) {
     });
 }
 
+//Confirmación para eliminar usuario//
+
+function confirmarEliminacionUsuario(id) {
+    Swal.fire({
+        text: 'Esta acción eliminará al usuario permanentemente. ¿Deseas continuar?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('formEliminarUsuario' + id).submit();
+        }
+    });
+}
+
 //Confirmación guardar información editada de estudiante//
 
 function confirmarGuardadoEstudiante() {
@@ -59,6 +75,27 @@ function confirmarGuardadoUsuario() {
     });
 }
 
+//Confirmación guardar información editada de vehículo//
+function confirmarGuardadoVehiculo() {
+    Swal.fire({
+        title: '¿Guardar cambios?',
+        text: 'Se actualizará la información del vehículo',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'swal-popup',
+            confirmButton: 'swal-confirm-btn',
+            cancelButton: 'swal-cancel-btn'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('formEditarVehiculo').submit();
+        }
+    });
+}
+
 //Confirmación para la creación de un nuevo usuario en el sistema RUTAPP//
 
 function confirmarCreacionUsuario() {
@@ -89,6 +126,23 @@ function confirmarCreacionEstudiante() {
     }).then((result) => {
         if (result.isConfirmed) {
             document.getElementById('formCrearEstudiante').submit();
+        }
+    });
+}
+
+//Confirmación para la creación de un nuevo vehículo en el sistema RUTAPP//
+
+function confirmarCreacionVehiculo() {
+    Swal.fire({
+        title: '¿Crear nuevo vehículo?',
+        text: 'Se guardará un nuevo vehículo en el sistema. ¿Deseas continuar?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Revisar datos'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('formCrearVehiculo').submit();
         }
     });
 }

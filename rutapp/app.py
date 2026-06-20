@@ -894,7 +894,6 @@ def editar_estudiante(id_estudiante):
             VALUES (%s, %s)
             """
 
-
         cursor.execute(sql_padre, (id_padre, id_estudiante))
 
         conexion.commit()
@@ -1337,18 +1336,325 @@ def ver_ruta():
     return render_template('mod_padres/ver_ruta.html')
 
 
-
-
-
-
-
 # ==========================================
 # MODULO VEHÍCULOS Y RUTAS
-# RESPONSABLE: CAMILO OCAMPO
+# RESPONSABLE: Desarrollo CRISTINA SALAZAR
 # ==========================================
 @app.route('/gestion_vehiculos')
 def gestion_vehiculos():
-    return "<h2>Módulo de vehículos en construcción</h2>"
+
+    placa_actual = request.args.get("placa")
+    conductor_actual = request.args.get("conductor")
+    estado_actual = request.args.get("estado")
+
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    
+    if session['rol'] not in [1, 2]:
+        return "Acceso no autorizado"
+    
+    botones = [
+    {
+        "texto": "Volver",
+        "url": obtener_url_volver(),
+        "class": "btn-secondary"
+    },
+    {
+        "texto": "Crear vehículo",
+        "url": url_for("crear_vehiculo"),
+        "class": "btn-primary"
+    }
+]
+    
+    cursor = conexion.cursor(dictionary=True)
+
+    # ===== CONSULTA PARA OBTENER INFO VEHICULOS =====
+
+    consulta = """
+    SELECT v.id_vehiculo,
+           v.placa,
+           v.marca,
+           v.modelo,
+           v.capacidad,
+           v.id_conductor,
+           v.estado,
+           c.nombres_y_apellidos AS conductor_nombre,
+           r.nombre_ruta AS nombre_ruta
+    FROM vehiculo v
+    LEFT JOIN usuario c
+        ON v.id_conductor = c.id_usuario
+    LEFT JOIN ruta r
+        ON v.id_vehiculo = r.id_vehiculo
+
+    WHERE 1=1
+    """
+
+    parametros = []
+
+    if placa_actual:
+        consulta += " AND v.placa = %s"
+        parametros.append(placa_actual)
+
+    
+    if conductor_actual:
+        consulta += " AND c.nombres_y_apellidos = %s"
+        parametros.append(conductor_actual)
+
+    if estado_actual:
+        consulta += " AND v.estado = %s"
+        parametros.append(estado_actual)
+
+    consulta += " ORDER BY v.id_vehiculo DESC"
+
+    cursor.execute(consulta, parametros)
+    lista_vehiculos = cursor.fetchall()
+    cursor.close()
+
+
+    return render_template(
+        'mod_admin/vehiculos.html',
+        vehiculos = lista_vehiculos,
+        botones = botones,
+        placa_actual = placa_actual,
+        conductor_actual = conductor_actual,
+        estado_actual = estado_actual
+    )
+
+#===========================================
+# FORMULARIO CREAR VEHICULO
+#===========================================
+
+@app.route('/crear_vehiculo')
+def crear_vehiculo():
+
+    cursor = conexion.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT id_usuario, nombres_y_apellidos
+        FROM usuario
+        WHERE id_rol = 3
+        ORDER BY nombres_y_apellidos
+    """)  #Selecciona conductor para asignar
+
+    conductores = cursor.fetchall()
+    
+    cursor.execute("""
+        SELECT estado
+        FROM vehiculo
+    """)  #Selecciona estados para asignar
+
+    estados = cursor.fetchall()
+
+    cursor.close()
+
+    return render_template(
+        'mod_admin/crear_vehiculo.html',
+        conductores=conductores,
+        estados=estados
+    )
+
+
+#===========================================
+# GUARDAR VEHICULO
+#===========================================
+
+@app.route('/guardar_vehiculo', methods=['POST'])
+def guardar_vehiculo():
+
+        placa= request.form['placa']
+        marca= request.form['marca']
+        modelo= request.form['modelo']
+        capacidad= request.form['capacidad'] 
+        id_conductor= request.form['id_conductor']
+        estado= request.form['estado']
+
+
+
+        if len(placa) > 8:
+            return "La placa del vehículo no puede superar los 8 caracteres"
+        if len(marca) > 20:
+            return "La marca del vehículo no puede superar 20 caracteres"
+        if len(modelo) > 30:
+            return "El modelo del vehículo no puede superar los 30 caracteres"
+        if len(capacidad) > 10:
+            return "La capacidad del vehículo no puede superar los 10 caracteres"
+        if len(id_conductor) > 10:
+            return "El número de identificacion no puede superar los 10 caracteres"
+        if len(estado) > 20:
+            return "El estado del vehículo no puede superar los 20 caracteres"
+        
+
+        #CONEXION Y VALIDACION EN BASE DE DATOS
+        cursor =conexion.cursor()
+
+        # Valida placa dubplicado
+        cursor.execute ("SELECT * FROM vehiculo WHERE placa = %s", (placa,))
+        if cursor.fetchone():
+            return "Ya existe un vehículo con este número de placa"
+            
+        sql = """
+        INSERT INTO vehiculo
+        (placa, marca, modelo, capacidad, id_conductor, estado)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        valores = (placa, marca, modelo, capacidad, id_conductor, estado)
+
+        cursor.execute(sql, valores)
+
+        conexion.commit()
+        cursor.close()
+        flash('Vehículo guardado correctamente', 'success')
+
+        return redirect(url_for('gestion_vehiculos')) 
+
+#===========================================
+# EDITAR VEHICULO
+#===========================================
+
+# - GET  -> muestra el formulario con los datos actuales
+# - POST -> guarda los cambios realizados en la BD
+@app.route('/editar_vehiculo/<int:id_vehiculo>', methods=['GET', 'POST'])
+def editar_vehiculo(id_vehiculo):
+
+    cursor = conexion.cursor(dictionary=True) # Crear cursor en formato diccionario para acceder por nombre de campo
+    
+    # =========================
+    # GET: datos del vehículo
+    # =========================
+
+    #Buscar el vehículo a editar
+    cursor.execute("""
+        SELECT *
+        FROM vehiculo
+        WHERE id_vehiculo = %s
+    """, (id_vehiculo,))
+
+    vehiculo = cursor.fetchone()
+
+    if not vehiculo: #validacion por si no existe el vehículo
+        cursor.close()
+        return "Vehículo no encontrado", 404
+
+    # Buscar conductores para asignar
+    cursor.execute("""
+        SELECT id_usuario, nombres_y_apellidos
+        FROM usuario
+        WHERE id_rol = 3
+        ORDER BY nombres_y_apellidos
+    """)  #Selecciona conductor para asignar
+
+    conductores = cursor.fetchall()
+
+    # =========================
+    # POST: actualizar
+    # =========================
+
+    if request.method == 'POST': # POST: cuando el usuario da clic en "Guardar cambios"
+
+
+        placa = request.form['placa']
+        marca = request.form['marca']
+        modelo = request.form['modelo']
+        capacidad = request.form['capacidad']
+        id_conductor = request.form['id_conductor']
+        estado = request.form['estado']
+
+                #VALIDACION LONGITUD DE CAMPOS
+        if len(placa)>8:
+            return "La placa del vehículo no puede superar 8 caracteres"
+        if len(marca)>20:
+            return "La marca del vehículo no puede superar los 8 caracteres"
+        if len(modelo)>20:
+            return "El modelo del vehículo no puede superar los 20 caracteres"
+        if len(capacidad)>2:
+            return "La capacidad del vehículo no puede superar los 2 caracteres"
+        if len(id_conductor)>10:
+            return "El id del conductor no puede superar 10 caracteres"
+        if len(estado)>20:
+            return "El estado no puede superar 20 caracteres"
+            
+
+        # validar si el conductor ya está asignado a otro vehículo
+        cursor.execute("""
+            SELECT id_vehiculo
+            FROM vehiculo
+            WHERE id_conductor = %s
+            AND id_vehiculo != %s
+        """, (id_conductor, id_vehiculo))
+
+        vehiculo_existente = cursor.fetchone()
+
+        if vehiculo_existente:
+            flash("Este conductor ya está asignado a otro vehículo", "error")
+            return redirect(url_for('editar_vehiculo', id_vehiculo=id_vehiculo))
+            
+        #Consulta SQL para actualizar la información del vehículo.
+
+        sql = """
+        UPDATE vehiculo
+        SET placa = %s,
+            marca = %s,
+            modelo = %s,
+            capacidad = %s,
+            id_conductor = %s,
+            estado = %s
+        WHERE id_vehiculo = %s
+        """
+
+        valores = (placa, marca, modelo, capacidad, id_conductor, estado, id_vehiculo)
+
+        cursor.execute(sql, valores)
+
+        conexion.commit()
+
+        flash('Informacion actualizada correctamente', 'success')
+        return redirect(url_for('gestion_vehiculos'))
+
+
+    # =========================
+    # GET render
+    # =========================
+
+    ruta_volver = {
+        1: 'superadministrador',
+        2: 'administrador'
+    }.get(session['rol'])
+
+
+    cursor.close() #Cierra el cursor
+
+    return render_template(
+        'mod_admin/editar_vehiculo.html', # Renderiza el formulario de edición con los datos actuales del vehículo
+        vehiculo=vehiculo,
+        conductores = conductores,
+        ruta_volver=ruta_volver
+    ) # Envía los datos al formulario editar_vehiculo.html
+
+#===========================================
+# ELIMINAR VEHICULO
+#===========================================
+
+# - Elimina un estudiante de la base de datos
+# - Se ejecuta únicamente mediante método POST por seguridad
+@app.route('/eliminar_vehiculo/<id_vehiculo>', methods=['POST'])
+def eliminar_vehiculo(id_vehiculo):
+
+    cursor = conexion.cursor() # Crear cursor
+
+    if request.method == 'POST':
+
+        sql = "DELETE FROM vehiculo WHERE id_vehiculo = %s"# Consulta SQL para eliminar vehículo
+        cursor.execute(sql, (id_vehiculo,))# Ejecutar la consulta
+        conexion.commit() # Guardar cambios en la base de datos
+        cursor.close() # Cerrar cursor
+        flash('Vehículo eliminado correctamente', 'success')
+
+    return redirect(url_for('gestion_vehiculos')) # Redirigir a la lista de estudiantes
+
+
+#===========================================
+# MONITOREAR RUTA
+#===========================================
 
 @app.route('/monitorear_ruta')
 def monitorear_ruta():

@@ -1,3 +1,4 @@
+<!---PANEL GESTION DE VEHICULOS MOD ADMIN Y SUPADMIN-->
 <!DOCTYPE html><!-- Documento HTML5 -->
 <html lang="es"><!-- Idioma principal de la página -->
 
@@ -60,9 +61,7 @@
                             Cerrar sesión
                         </a>
                     </li>
-
                 </ul>
-
             </div>
 
             <!-- ===== CONTENIDO CENTRAL DEL PANEL ===== -->
@@ -204,7 +203,7 @@
                                         <div class="acciones">
 
                                             <!---Botón editar vehículos--->
-                                            <a href="{{url_for('editar_vehiculo', id_vehiculo = vehiculo.id_vehiculo) }}"
+                                            <a href="{{url_for('editar_vehiculo', id_vehiculo=vehiculo.id_vehiculo) }}"
                                                 class="btn btn-editar">
 
                                                 Editar

@@ -109,6 +109,7 @@ def login():
 
 @app.route('/validar_login', methods=['POST'])
 def valida_login():
+
     correo = request.form['correo'].strip()
     password = request.form['password'].strip()
 
@@ -1286,6 +1287,8 @@ def reportar_inasistencia():
 @app.route('/padres/informacion_conductor')
 def informacion_conductor():
 
+    id_ruta = request.args.get('id_ruta')  # Captura el id_ruta desde la URL
+
     cursor = conexion.cursor(dictionary=True, buffered=True)
     
 # Consulta SQL para obtener la información del conductor
@@ -1304,11 +1307,11 @@ def informacion_conductor():
         ON r.id_conductor = u.id_usuario
     INNER JOIN VEHICULO v
         ON u.id_usuario = v.id_conductor
-    WHERE e.id_ruta = 7;
+    WHERE e.id_ruta = %s;
     """
 
     
-    cursor.execute(consulta)
+    cursor.execute(consulta, (id_ruta,))
     conductor = cursor.fetchone()
     cursor.close()
 
@@ -1468,8 +1471,6 @@ def guardar_vehiculo():
         id_conductor= request.form['id_conductor']
         estado= request.form['estado']
 
-
-
         if len(placa) > 8:
             return "La placa del vehículo no puede superar los 8 caracteres"
         if len(marca) > 20:
@@ -1483,7 +1484,6 @@ def guardar_vehiculo():
         if len(estado) > 20:
             return "El estado del vehículo no puede superar los 20 caracteres"
         
-
         #CONEXION Y VALIDACION EN BASE DE DATOS
         cursor =conexion.cursor()
 
@@ -1610,7 +1610,6 @@ def editar_vehiculo(id_vehiculo):
         flash('Informacion actualizada correctamente', 'success')
         return redirect(url_for('gestion_vehiculos'))
 
-
     # =========================
     # GET render
     # =========================
@@ -1634,7 +1633,7 @@ def editar_vehiculo(id_vehiculo):
 # ELIMINAR VEHICULO
 #===========================================
 
-# - Elimina un estudiante de la base de datos
+# - Elimina un vehiculo de la base de datos
 # - Se ejecuta únicamente mediante método POST por seguridad
 @app.route('/eliminar_vehiculo/<id_vehiculo>', methods=['POST'])
 def eliminar_vehiculo(id_vehiculo):
@@ -1653,38 +1652,368 @@ def eliminar_vehiculo(id_vehiculo):
 
 
 #===========================================
-# MONITOREAR RUTA
+# GESTION DE RUTAS
+#===========================================
+@app.route('/gestion_rutas')
+def gestion_rutas():
+
+
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    
+    if session ['rol'] not in [1, 2]:
+        return "Acceso no autorizado", 403
+    
+    botones = [
+    {
+        "texto": "Volver",
+        "url": obtener_url_volver(),
+        "class": "btn-secondary"
+    },
+    {
+        "texto": "Crear ruta",
+        "url": url_for("crear_ruta"),
+        "class": "btn-primary"
+    }
+]
+    
+    cursor = conexion.cursor(dictionary=True) # Crear cursor para interactuar con la base de datos
+
+    cursor.execute("""
+    SELECT
+        r.id_ruta,
+        r.nombre_ruta,
+        r.descripcion_ruta,
+        DATE_FORMAT(hora_salida, '%H:%i') AS hora_salida,
+        DATE_FORMAT(hora_llegada, '%H:%i') AS hora_llegada,
+        r.estado,
+        c.nombres_y_apellidos AS nombre_conductor,
+        a.nombres_y_apellidos AS nombre_administrador,
+        v.id_vehiculo
+    FROM ruta r
+    LEFT JOIN usuario c
+        ON r.id_conductor = c.id_usuario
+    LEFT JOIN usuario a
+        ON r.id_administrador = a.id_usuario
+    LEFT JOIN vehiculo v
+        ON r.id_vehiculo = v.id_vehiculo
+""")
+    
+    rutas = cursor.fetchall()
+    cursor.close()
+    
+    return render_template(
+        'mod_admin/rutas.html',
+        rutas=rutas,
+        botones=botones # Envía la lista de rutas y los botones al HTML
+)
+
+#===========================================
+# FORMULARIO CREAR RUTA
+#===========================================
+@app.route('/crear_ruta')
+def crear_ruta():
+
+    cursor = conexion.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT id_usuario, nombres_y_apellidos
+        FROM usuario
+        WHERE id_rol = 3
+        ORDER BY nombres_y_apellidos  
+    """)  #seleciona conductor para asignar
+    
+    conductores = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT id_vehiculo, placa
+        FROM vehiculo
+        WHERE estado = 'Disponible'
+    """)  #Selecciona vehículo para asignar
+
+    vehiculos = cursor.fetchall()
+
+    cursor.execute(""" 
+        SELECT estado
+        FROM ruta
+    """)
+
+    estados = cursor.fetchall()
+
+    cursor.close()
+
+    return render_template(
+        'mod_admin/crear_ruta.html',
+        conductores=conductores,
+        vehiculos=vehiculos,
+        estados=estados
+    )
+
+#===========================================
+# GUARDAR RUTA
+#===========================================
+@app.route('/guardar_ruta', methods=['POST'])
+def guardar_ruta():
+
+    nombre_ruta = request.form['nombre_ruta']
+    descripcion_ruta = request.form['descripcion_ruta']
+    hora_salida = request.form['hora_salida']
+    hora_llegada = request.form['hora_llegada']
+    id_conductor = request.form['id_conductor']
+    id_vehiculo = request.form['id_vehiculo']
+    estado = request.form['estado']
+
+    #Obtiene automaticamente administrador
+    id_administrador = session['usuario']
+
+    #VALIDACION LONGITUD DE CAMPOS
+
+    if len(nombre_ruta) > 50:
+        return "El nombre de la ruta no puede superar los 50 caracteres"
+    if len(descripcion_ruta) > 100:
+        return "La descripcion de la ruta no puede superar los 100 caracteres"
+    
+    #Regla de negocio
+    if hora_llegada <= hora_salida:
+        return "La hora de llegada debe ser posterior a la hora de salida "
+
+    if len(hora_salida) > 6:
+        return "La hora de salida no puede superar los 6 caracteres"
+    if len(hora_llegada) > 6:
+        return "La hora de llegada no puede superar los 6 caracteres"
+    if len(id_conductor) > 20:
+        return "El id conductor no puede superar los 20 caracteres" #revisar si afecta la extencion con el nombre
+    if len(id_vehiculo) > 20:
+        return "El id vehículo no puede superar los 20 caracteres"
+    if len(estado) > 20:
+        return "El estado no puede superar los 20 caracteres"
+    
+    #CONEXION Y VALIDACION EN BASE DE DATOS
+    cursor = conexion.cursor()
+
+    #Validar nombre de ruta duplicado
+    cursor.execute("""
+        SELECT * 
+        FROM ruta
+        WHERE nombre_ruta = %s
+        """, (nombre_ruta,))
+    
+    if cursor.fetchone():
+        return "Ya existe una ruta con este nombre"
+    
+    #Validar que el vehículo no esté asignado a otra ruta
+    cursor.execute("""
+        SELECT * 
+        FROM ruta 
+        WHERE id_vehiculo = %s
+            AND estado = 'Activa'
+    """, (id_vehiculo,))
+
+    if cursor.fetchone():
+        return "Este vehículo ya está asignado a otra ruta"
+    
+    #Validar que el conductor no esté asignado a otra ruta
+    cursor.execute("""
+        SELECT * 
+        FROM ruta 
+        WHERE id_conductor = %s
+            AND estado = 'Activa'
+    """, (id_conductor,))
+
+    if cursor.fetchone():
+        return "Este conductor ya está asignado a otra ruta"
+    
+
+    sql = """
+    INSERT INTO ruta
+    (nombre_ruta, descripcion_ruta, hora_salida, hora_llegada, id_conductor, id_vehiculo,  id_administrador, estado)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    """
+
+    valores = (nombre_ruta, descripcion_ruta, hora_salida, hora_llegada, id_conductor, id_vehiculo, id_administrador, estado)
+
+    cursor.execute(sql, valores)
+
+    conexion.commit()
+    cursor.close()
+    flash('Ruta guardada correctamente', 'success')
+
+    return redirect(url_for('gestion_rutas'))
+
+#============================
+# EDITAR RUTA
+#============================
+
+# - GET  -> muestra el formulario con los datos actuales
+# - POST -> guarda los cambios realizados en la BD
+
+@app.route('/editar_ruta/<int:id_ruta>', methods=['GET', 'POST'])
+def editar_ruta(id_ruta):
+
+    cursor = conexion.cursor(dictionary=True) # Crear cursor en formato diccionario para acceder por nombre de campo
+
+    #GET : datos de la ruta
+    cursor.execute("""
+        SELECT *
+        FROM ruta
+        WHERE id_ruta = %s
+    """, (id_ruta,))
+
+    ruta = cursor.fetchone()
+
+    ruta['hora_salida_formato'] = f"{ruta['hora_salida'].seconds // 3600:02}:{(ruta['hora_salida'].seconds % 3600) // 60:02}"
+    ruta['hora_llegada_formato'] = f"{ruta['hora_llegada'].seconds // 3600:02}:{(ruta['hora_llegada'].seconds % 3600) // 60:02}"
+
+    if not ruta: #validacion por si no existe la ruta
+        cursor.close()
+        return "Ruta no encontrada", 404
+    
+
+    # Buscar conductores para asignar
+    cursor.execute(""" 
+        SELECT id_usuario, nombres_y_apellidos
+        FROM usuario
+        WHERE id_rol = 3
+        ORDER BY nombres_y_apellidos
+    """) #Selecciona conductor para asignar
+
+    conductores = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT id_vehiculo, placa
+        FROM vehiculo
+        WHERE estado = 'Disponible'
+    """)  #Selecciona vehículo para asignar
+
+    vehiculos = cursor.fetchall()
+
+    cursor.execute(""" 
+        SELECT estado
+        FROM ruta
+    """)
+
+    estados = cursor.fetchall()
+
+    #========================
+    # POST: Actualizar
+    #========================
+
+    if request.method == 'POST': #Cuando el usuario da clic en guardar
+
+        nombre_ruta = request.form['nombre_ruta']
+        descripcion_ruta = request.form['descripcion_ruta']
+        hora_salida = request.form['hora_salida']
+        hora_llegada = request.form['hora_llegada']
+        id_conductor = request.form['id_conductor']
+        id_vehiculo = request.form['id_vehiculo']
+        estado = request.form['estado']
+
+        #Obtiene automaticamente administrador
+        id_administrador = session['usuario']
+
+            #VALIDACION LONGITUD DE CAMPOS
+
+        if len(nombre_ruta) > 50:
+            return "El nombre de la ruta no puede superar los 50 caracteres"
+        if len(descripcion_ruta) > 100:
+            return "La descripcion de la ruta no puede superar los 100 caracteres"
+        
+        #Regla de negocio
+        if hora_llegada <= hora_salida:
+            return "La hora de llegada debe ser posterior a la hora de salida "
+
+        if len(hora_salida) > 15:
+            return "La hora de salida no puede superar los 15 caracteres"
+        if len(hora_llegada) > 15:
+            return "La hora de llegada no puede superar los 15 caracteres"
+        if len(id_conductor) > 20:
+            return "El id conductor no puede superar los 20 caracteres" #revisar si afecta la extencion con el nombre
+        if len(id_vehiculo) > 20:
+            return "El id vehículo no puede superar los 20 caracteres"
+        if len(estado) > 20:
+            return "El estado no puede superar los 20 caracteres"
+               
+
+        sql = """
+        UPDATE ruta
+        SET nombre_ruta = %s,
+            descripcion_ruta = %s,
+            hora_salida = %s,
+            hora_llegada = %s, 
+            id_conductor = %s,
+            id_vehiculo = %s,
+            id_administrador = %s, 
+            estado = %s 
+        WHERE id_ruta = %s        
+        """
+
+        valores = (nombre_ruta, descripcion_ruta, hora_salida, hora_llegada, 
+        id_conductor, id_vehiculo, id_administrador, estado, id_ruta)
+
+        cursor.execute(sql, valores)
+
+        conexion.commit()
+        
+        flash('Información actualizada correctamente', 'success')
+        return redirect(url_for('gestion_rutas'))
+    
+    #====================
+    # GET RENDER
+    #====================
+
+    ruta_volver ={
+        1: 'superadministrador',
+        2: 'administrador'
+    }.get(session['rol'])
+
+    cursor.close() #Cierra el cursor
+
+    return render_template(
+        'mod_admin/editar_ruta.html',
+        ruta=ruta,
+        conductores=conductores,
+        vehiculos=vehiculos,
+        estados=estados,
+        ruta_volver=ruta_volver
+    )
+
+#===========================================
+# ELIMINAR RUTA
 #===========================================
 
-@app.route('/monitorear_ruta')
-def monitorear_ruta():
-    return "<h2>Módulo de alertas en construcción</h2>"
+# - Elimina una ruta de la base de datos
+# - Se ejecuta únicamente mediante método POST por seguridad
+@app.route('/eliminar_ruta/<id_ruta>', methods=['POST'])
+def eliminar_ruta(id_ruta):
 
+    cursor = conexion.cursor() # Crear cursor
+
+    if request.method == 'POST':
+
+        sql = "DELETE FROM ruta WHERE id_ruta = %s"# Consulta SQL para eliminar ruta
+        cursor.execute(sql, (id_ruta,))# Ejecutar la consulta
+        conexion.commit() # Guardar cambios en la base de datos
+        cursor.close() # Cerrar cursor
+        flash('Ruta eliminada correctamente', 'success')
+
+    return redirect(url_for('gestion_rutas')) # Redirigir a la lista de estudiantes
+
+# Check list Verificacion desarrollo gestion Rutas (Cristina Salazar)
 # Aquí se desarrollarán las rutas relacionadas con:
-# - gestionar_rutas
-# - crear_ruta
-# - editar_ruta
-# - eliminar_ruta
-
-# - gestionar_vehiculos
-# - crear_vehiculo
-# - editar_vehiculo
-# - eliminar_vehiculo
-
-# - asignar conductor
-# - asignar estudiantes
-# - asignar vehículo
-
+# - gestionar_rutas OK
+# - crear_ruta OK
+# - editar_ruta OK
+# - eliminar_rutaOK
+# - asignar vehículo OK vehiculo asignado con ruta
+# - asignar estudiantes en gestion estudiantes ya se asigna ruta al estudiante
 
 #==========================================
 #GESTIÓN DE ESTUDIANTES Y ASIGNACIÓN A RUTA
-#RESPONSABLE: VICTOR VELANDIA
+#RESPONSABLE: 
 #==========================================
-
-@app.route('/gestion_rutas')
-def gestion_rutas():
-    return "<h2>Módulo de rutas en construcción</h2>"
-
+@app.route('/monitorear_ruta')
+def monitorear_ruta():
+    return "<h2>Módulo de alertas en construcción</h2>"
 
 #Aquí se desarrollarán las rutas relacionadas con:
 # - ver su ruta

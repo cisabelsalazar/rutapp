@@ -1,0 +1,173 @@
+<!---PANEL GESTION DE RUTAS MOD ADMIN Y SUPADMIN-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Gestión de Rutas</title><!-- Título mostrado en la pestaña del navegador -->
+    <!-- Hoja de estilos principal del proyecto -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+    <!-- Librería Font Awesome para uso de íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<!-- Clases utilizadas para estilos generales de la vista -->
+
+<body class="bg-secundario vista-usuario">
+
+    <!-- Importa la macro reutilizable de botones -->
+    {% from 'components/buttons_macro.html' import action_toolbar %}
+
+    <!-- ===== HEADER ===== -->
+    <header>
+
+        <!-- Incluye el encabezado reutilizable -->
+        {% include 'layout/header.html' %}
+
+    </header>
+
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
+    <main>
+
+        <!-- Imagen decorativa de fondo -->
+        <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
+            class="Imagen" />
+
+        <!-- Contenedor principal del panel administrativo -->
+        <div class="admin-layout">
+
+            <!-- ===== MENÚ LATERAL ADMINISTRATIVO ===== -->
+            <div class="admin-menu">
+
+                <!-- Logo principal del proyecto -->
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+
+                <!-- Nombre dinámico del panel según el rol -->
+                <h2>Panel {{nombre_panel}}</h2>
+
+                <!-- Opciones del menú lateral -->
+                <ul>
+
+                    <li>
+                        <a href="{{ url_for('dashboard') }}">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>Rutas</li>
+                    <li>Ubicación en tiempo real</li>
+
+                    <!-- Botón cerrar sesión -->
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="btn-logout">
+                            Cerrar sesión
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <!-- ===== CONTENIDO CENTRAL DEL PANEL ===== -->
+
+            <div class="admin-content">
+                <!-- Contenedor general de la tabla -->
+                <div class="tabla-rutas-container">
+
+                    <!-- Título principal -->
+                    <h1>Gestión de Rutas</h1>
+
+                    <!-- Barra superior con botones y filtros -->
+                    <div class="top-bar top-bar-usuarios">
+
+                        <!-- Toolbar reutilizable -->
+                        <div class="toolbar-container">
+                            {{ action_toolbar(botones) }}
+                        </div>
+
+                        <!-- ===== FILTRO *----NO SE HA APLICADO----* ===== -->
+
+                    </div>
+                    <!-- Contenedor con scroll para la tabla -->
+                    <div class="tabla-scroll">
+
+                        <!-- ===== TABLA RUTAS ===== -->
+                        <table>
+
+                            <!-- Encabezado de la tabla -->
+                            <thead>
+                                <tr>
+                                    <th>Id Ruta</th>
+                                    <th>Nombre Ruta</th>
+                                    <th>Descripción</th>
+                                    <th>Hora salida</th>
+                                    <th>Hora llegada</th>
+                                    <th>Vehículo</th>
+                                    <th>Conductor</th>
+                                    <th>Administrador</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+
+                            <!-- ===== CUERPO DE LA TABLA ===== -->
+                            <tbody>
+                                {% for ruta in rutas %}
+                                <tr>
+                                    <td>{{ ruta.id_ruta }}</td>
+                                    <td>{{ ruta.nombre_ruta }}</td>
+                                    <td>{{ ruta.descripcion_ruta }}</td>
+                                    <td>{{ ruta.hora_salida }}</td>
+                                    <td>{{ ruta.hora_llegada }}</td>
+                                    <td>{{ ruta.id_vehiculo }}</td>
+                                    <td>{{ ruta.nombre_conductor }}</td>
+                                    <td>{{ ruta.nombre_administrador}}</td>
+                                    <td>{{ ruta.estado }}</td>
+
+                                    <!-- ===== BOTONES DE ACCIÓN ===== -->
+                                    <td style="width: 17%;">
+
+                                        <div class="acciones">
+
+                                            <!---Botón editar rutas--->
+                                            <a href="{{url_for('editar_ruta', id_ruta=ruta.id_ruta) }}"
+                                                class="btn btn-editar">
+
+                                                Editar
+
+                                            </a>
+                                            <!--- Formulario para eliminar --->
+                                            <form id="formEliminarRuta{{ruta.id_ruta}}"
+                                                action="{{ url_for('eliminar_ruta', id_ruta=ruta.id_ruta) }}"
+                                                method="POST">
+
+                                                <!--- Botón eliminar con confirmación--->
+                                                <button type="button" class="btn btn-eliminar"
+                                                    onclick="confirmarEliminacionRuta('{{ruta.id_ruta}}')">
+
+                                                    Eliminar
+
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </thead>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+
+        <!-- Incluye el footer reutilizable -->
+        {% include 'layout/footer.html' %}
+
+    </footer>
+
+</body>
+
+</html>

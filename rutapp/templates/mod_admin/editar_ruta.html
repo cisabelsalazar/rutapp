@@ -1,0 +1,146 @@
+<!-- ===== FORMULARIO EDITAR RUTA ===== -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Editar Ruta</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+</head>
+
+<body class="bg-secundario">
+
+    <header>
+        {# Incluye el encabezado (header) de la página #}
+        {% include 'layout/header.html' %}
+    </header>
+
+    <main>
+        <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
+            class="Imagen" />
+
+        <div class="admin-layout">
+
+            <!---MENU LATERAL -->
+            <div class="admin-menu">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+
+                <h2>Panel {{nombre_panel}}</h2>
+
+                <ul>
+                    <li>
+                        <a href="{{ url_for('dashboard') }}">
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('usuarios') }}">
+                            Usuarios
+                        </a>
+                    </li>
+                    <li>Rutas</li>
+                    <li>Ubicación en tiempo real</li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="btn-logout">
+                            Cerrar sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!---FORMULARIO PARA EDITAR INFORMACION DE RUTA ESCOLAR-->
+            <form id="formEditarRuta" class="form-editar_estudiante"
+                action="{{ url_for('editar_ruta', id_ruta=ruta.id_ruta) }}" method="POST">
+
+                <h1>Editar Ruta</h1>
+
+                <div class="form-group">
+                    <label>Nombre Ruta:</label>
+                    <input type="text" name="nombre_ruta" value="{{ ruta.nombre_ruta }}" maxlength="50" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción:</label>
+                    <input type="text" name="descripcion_ruta" value="{{ ruta.descripcion_ruta }}" maxlength="100"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label>Hora Salida:</label>
+                    <input type="time" name="hora_salida" value="{{ ruta.hora_salida_formato }}" maxlength="15" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Hora llegada:</label>
+                    <input type="time" name="hora_llegada" value="{{ ruta.hora_llegada_formato }}" maxlength="15" required>
+                </div>
+
+                <div class="form-group filtro-editar-estudiante">
+                    <label>Id Conductor:</label>
+                    <select name="id_conductor" required>
+                        <option value="">Seleccione un conductor</option>
+
+                        {% for conductor in conductores %}
+
+                        <option value="{{ conductor.id_usuario }}" 
+                            {% if conductor.id_usuario==ruta.id_conductor
+                            %}selected{% endif %}>
+
+                            {{ conductor.id_usuario }} - {{ conductor.nombres_y_apellidos }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <div class="form-group filtro-editar-estudiante">
+                    <label>Id Vehículo:</label>
+                    <select name="id_vehiculo" required>
+                        <option value="">Seleccione un vehículo</option>
+
+                        {% for vehiculo in vehiculos %}
+
+                        <option value="{{ vehiculo.id_vehiculo }}" 
+                            {% if vehiculo.id_vehiculo==ruta.id_vehiculo
+                            %}selected{% endif %}>
+
+                            {{ vehiculo.id_vehiculo }} - {{ ruta.nombre_ruta }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <div class="form-group filtro-editar-estudiante">
+                    <label>Estado:</label>
+                    <select name="estado" required>
+                        <option value="Activa" {% if ruta.estado=='Disponible' %}selected{% endif %}>
+                            Activa
+                        </option>
+                    </select>
+                </div>
+
+                <button type="button" class="btn btn-guardar" onclick="confirmarGuardadoRuta()">
+                    Guardar cambios
+                </button>
+
+                <a href="{{ url_for('gestion_rutas') }}" class="btn btn-cancelar">
+                    Cancelar
+                </a>
+
+
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        {% include 'layout/footer.html' %}
+    </footer>
+
+</body>
+
+</html>

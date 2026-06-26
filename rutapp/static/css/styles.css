@@ -381,9 +381,6 @@ main {
     background-color: #caa140;
 }
 
-
-
-
 /*==================================================================================*/
 /* 7. PANEL ADMINISTRADOR Y SUPERADMINISTRADOR: Estilos para panel admin           */
 /*==================================================================================*/
@@ -1647,7 +1644,7 @@ h1 {
     border-radius: 12px;/* Bordes redondeados */
     box-shadow: 0px 0px 20px rgba(0,0,0,0.2);/* Sombra para profundidad */
     background-color: rgba(255, 255, 255, 0.779);/* Fondo semitransparente */
-    height: 350px;/* Altura fija para mantener consistencia */
+    height: 380px;/* Altura fija para mantener consistencia */
 }
 
 .form-crear_usuarios .form-group,
@@ -2316,37 +2313,6 @@ tabla Usuarios módulos admin y superadmin===== */
 }
 
 
- /*seccion en revision para unificar estilos de tablas en adminy superadmin TABLA ALERTAS*/
-/*.tabla-alertas-container th {
-    background-color: #295a6b;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    font-weight: bold;
-}
-
-
-.tabla-alertas-container td {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
-    color: #333;
-}*/
-
-/*=========================================================================================*/
-/*Estilos para contenedor de tabla alertas modulo admin-supadmin*/
-
-/*.tabla-alertas-container {        /*estilos tabal alertas admin y superadmin*/
-   /* width: 80%;                  /* Ancho de la tabla */
-   /* max-width: 1400px;           /* Ancho máximo */
-   /* border-collapse: collapse;   /* Elimina espacio entre celdas */
-   /* background-color: rgba(255, 255, 255, 0.7);*/
-   /* box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}*/
-
-
- /*seccion en revision para unificar estilos de tablas en adminy superadmin TABLA ALERTAS*/
-
 /* ===== CELDAS ACCIONES: Botones de acción en tabla ===== */
 .acciones {
     display: flex;
@@ -2392,8 +2358,105 @@ tabla Usuarios módulos admin y superadmin===== */
     color: white;
 }
 
+/*=======================================================*/
+/*ESTILO PARA TABLA DE GESTION DE RUTAS*/
+/*======================================================*/
+
+.tabla-rutas-container{ /*tabla rutas modulo administrador y supadmin*/
+
+    display: flex;
+    flex-direction: column;      /* Apila el h1 y la tabla */
+    align-items: center;         /* Centra todo horizontalmente */
+    margin: 30px auto;           /* Espacio superior e inferior */
+    width: 100%;                  /* Ocupa casi todo el ancho */
+    overflow-y: auto;
+    max-height: 600px;
+    box-sizing: border-box;
+}
+
+.tabla-rutas-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c4b62;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 10px 0;
+}
+
+.tabla-rutas-container table { /*Estilo tabla vista gestion de usuarios*/
+    width: 100%;                  /* Ancho de la tabla */
+    max-width: 1400px;           /* Ancho máximo */
+    border-collapse: collapse;   /* Elimina espacio entre celdas */
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.tabla-rutas-container th {
+    background-color: #295a6b;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+    position: sticky; /*El encabezado queda fijo al hacer scroll*/
+    top: 0;
+    z-index: 10; /*Evita que otras filas pasen por encima del encabezado.*/
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+    
+}
 
 
+.tabla-rutas-container td {
+    border: 1px solid #ccc;
+    padding: 12px;   /*Define tamaño alto de celda*/
+    font-size: 13px; /*Define tamaño de texto*/
+    text-align: center;
+    color: #333;
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+}
+
+.tabla-rutas-container tr:hover { /*Sombreado al pasar el cursor sobre la fila de la tabla*/
+    background-color: #eaf4f8;
+}
+
+/*===== Estilos para ajuste tamaño columnas 
+tabla Gestion de Rutas módulos admin y superadmin===== */
+
+.tabla-rutas-container th:nth-child(1){
+    width: 65px;
+}
+
+.tabla-rutas-container td:nth-child(2){
+    width: 100px;
+}
+
+.tabla-rutas-container th:nth-child(3){
+    width: 150px;
+}
+
+.tabla-rutas-container td:nth-child(4){
+    width: 70px;
+}
+
+.tabla-rutas-container td:nth-child(5) {
+    width: 80px;
+    
+}
+
+.tabla-rutas-container td:nth-child(6){
+    width: 90px;
+}
+
+.tabla-rutas-container td:nth-child(7){
+    width: 120px;
+}
+
+.tabla-rutas-container td:nth-child(8) {
+    width: 150px;
+}
+.tabla-rutas-container td:nth-child(9) {
+    width: 80px;
+}
 
 
 

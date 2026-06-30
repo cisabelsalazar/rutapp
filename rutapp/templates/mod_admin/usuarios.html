@@ -55,11 +55,33 @@
 
                     <li>
                         <a href="{{ url_for('dashboard') }}">
-                        Dashboard
+                            Dashboard
                         </a>
                     </li>
-                    <li>Rutas</li>
-                    <li>Ubicación en tiempo real</li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_estudiantes') }}">
+                            Estudiantes
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_vehiculos') }}">
+                            Vehículos
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_rutas') }}">
+                            Rutas
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_alerta') }}">
+                            Alertas
+                        </a>
+                    </li>
 
                     <!-- Botón cerrar sesión -->
                     <li>

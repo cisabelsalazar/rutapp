@@ -47,13 +47,35 @@
                 <!-- Opciones del menú lateral -->
                 <ul>
 
-                    <li>
+                     <li>
                         <a href="{{ url_for('dashboard') }}">
                             Dashboard
                         </a>
                     </li>
-                    <li>Rutas</li>
-                    <li>Ubicación en tiempo real</li>
+
+                    <li>
+                        <a href="{{ url_for('usuarios') }}">
+                            Usuarios
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_estudiantes') }}">
+                            Estudiantes
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_rutas') }}">
+                            Rutas
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_alerta') }}">
+                            Alertas
+                        </a>
+                    </li>
 
                     <!-- Botón cerrar sesión -->
                     <li>
@@ -68,7 +90,7 @@
             <div class="admin-content">
 
                 <!-- Contenedor general de la tabla -->
-                <div class="tabla-usuarios-container">
+                <div class="tabla-vehiculos-container">
 
                     <!-- Título principal -->
                     <h1>Gestión de Vehículos</h1>
@@ -198,7 +220,7 @@
                                     <td>{{ vehiculo.estado }}</td>
 
                                     <!-- ===== BOTONES DE ACCIÓN ===== -->
-                                    <td style="width: 18%;">
+                                    <td style="width: 17%;">
 
                                         <div class="acciones">
 

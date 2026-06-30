@@ -2458,6 +2458,103 @@ tabla Gestion de Rutas módulos admin y superadmin===== */
     width: 80px;
 }
 
+/*=======================================================*/
+/*ESTILO PARA TABLA DE GESTION DE VEHICULOS*/
+/*======================================================*/
+
+.tabla-vehiculos-container{ /*tabla rutas modulo administrador y supadmin*/
+
+    display: flex;
+    flex-direction: column;      /* Apila el h1 y la tabla */
+    align-items: center;         /* Centra todo horizontalmente */
+    margin: 30px auto;           /* Espacio superior e inferior */
+    width: 100%;                  /* Ocupa casi todo el ancho */
+    overflow-y: auto;
+    max-height: 600px;
+    box-sizing: border-box;
+}
+
+.tabla-vehiculos-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c4b62;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 10px 0;
+}
+
+.tabla-vehiculos-container table { /*Estilo tabla vista gestion de usuarios*/
+    width: 100%;                  /* Ancho de la tabla */
+    max-width: 1400px;           /* Ancho máximo */
+    border-collapse: collapse;   /* Elimina espacio entre celdas */
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.tabla-vehiculos-container th {
+    background-color: #295a6b;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+    position: sticky; /*El encabezado queda fijo al hacer scroll*/
+    top: 0;
+    z-index: 10; /*Evita que otras filas pasen por encima del encabezado.*/
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+    
+}
+
+
+.tabla-vehiculos-container td {
+    border: 1px solid #ccc;
+    padding: 12px;   /*Define tamaño alto de celda*/
+    font-size: 13px; /*Define tamaño de texto*/
+    text-align: center;
+    color: #333;
+    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+}
+
+.tabla-vehiculos-container tr:hover { /*Sombreado al pasar el cursor sobre la fila de la tabla*/
+    background-color: #eaf4f8;
+}
+
+/*===== Estilos para ajuste tamaño columnas 
+tabla Gestion de Rutas módulos admin y superadmin===== */
+
+.tabla-vehiculos-container th:nth-child(1),
+.tabla-vehiculos-container td:nth-child(2){
+    width: 100px;
+}
+
+.tabla-vehiculos-container th:nth-child(3){
+    width: 120px;
+}
+
+.tabla-vehiculos-container td:nth-child(4){
+    width: 90px;
+}
+
+.tabla-vehiculos-container td:nth-child(5) {
+    width: 120px;
+    
+}
+
+.tabla-vehiculos-container td:nth-child(6){
+    width: 120px;
+}
+
+.tabla-vehiculos-container td:nth-child(7){
+    width: 120px;
+}
+
+.tabla-vehiculos-container td:nth-child(8) {
+    width: 150px;
+}
+.tabla-vehiculos-container td:nth-child(9) {
+    width: 100px;
+}
+
 
 
 /*==================================================================================*/

@@ -31,13 +31,7 @@
                 <h2>Panel {{nombre_panel}}</h2>
 
                 <ul>
-                    <li>
-                        <a href="{{ url_for('usuarios') }}">
-                            Usuarios
-                        </a>
-                    </li>
 
-                    <li>Rutas</li>
                     <li>Ubicación en tiempo real</li>
                     <li>
                         <a href="{{ url_for('logout') }}" class="btn-logout">
@@ -63,7 +57,7 @@
 
                     <a href="{{ url_for('gestion_estudiantes') }}" class="btn">
                         Gestionar estudiantes
-                        </a>
+                    </a>
 
                     <a href="{{ url_for('gestion_vehiculos') }}" class="btn">
                         Gestionar vehículos
@@ -72,7 +66,7 @@
                     <a href="{{ url_for('gestion_rutas') }}" class="btn">
                         Gestionar rutas
                     </a>
-                    
+
                     <a href="{{ url_for('gestion_alerta') }}" class="btn">
                         Gestionar alertas
                     </a>
@@ -106,8 +100,7 @@
                     </div>
 
                     <div class="dashboard-card">
-                        <img src="{{ url_for('static', filename='img/estudiantes.png') }}" 
-                            alt="estudiantes"
+                        <img src="{{ url_for('static', filename='img/estudiantes.png') }}" alt="estudiantes"
                             class="icon-dashboard">
                         <h1>{{ total_estudiantes}}</h1>
                         <h2>Total Estudiantes</h2>
@@ -123,23 +116,20 @@
                 <div class="dashboard-stats">
                     <div class="dashboard-card-disp">
                         <img src="{{ url_for('static', filename='img/vehiculo_disponible.png') }}"
-                            alt="vehiculo_disponible" 
-                            class="icon-dashboard-disp">
+                            alt="vehiculo_disponible" class="icon-dashboard-disp">
                         <h1>{{ vehiculos_disponibles }}</h1>
                         <h2>Vehiculos Disponibles</h2>
                     </div>
 
                     <div class="dashboard-card-disp">
-                        <img src="{{ url_for('static', filename='img/ruta_activa.png') }}" 
-                            alt="ruta_activa"
+                        <img src="{{ url_for('static', filename='img/ruta_activa.png') }}" alt="ruta_activa"
                             class="icon-dashboard-disp">
                         <h1>{{ rutas_activas }}</h1>
                         <h2>Rutas Activas </h2>
                     </div>
 
                     <div class="dashboard-card-disp">
-                        <img src="{{ url_for('static', filename='img/alerta_pendiente.png') }}"
-                            alt="alerta_pendiente"
+                        <img src="{{ url_for('static', filename='img/alerta_pendiente.png') }}" alt="alerta_pendiente"
                             class="icon-dashboard">
                         <h1>{{ alertas_pendientes }}</h1>
                         <h2>Alertas Pendientes</h2>

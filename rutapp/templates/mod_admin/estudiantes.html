@@ -33,19 +33,36 @@
                 <h2>Panel {{nombre_panel}}</h2>
 
                 <ul>
-                    <li>
-                        <a href="{{ url_for('dashboard')}}">
-                        Dashboard
+                     <li>
+                        <a href="{{ url_for('dashboard') }}">
+                            Dashboard
                         </a>
                     </li>
-                    
+
                     <li>
                         <a href="{{ url_for('usuarios') }}">
                             Usuarios
                         </a>
                     </li>
-                    <li>Rutas</li>
-                    <li>Ubicación en tiempo real</li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_vehiculos') }}">
+                            Vehículos
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_rutas') }}">
+                            Rutas
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_alerta') }}">
+                            Alertas
+                        </a>
+                    </li>
+                    
                     <li>
                         <a href="{{ url_for('logout') }}" class="btn-logout">
                             Cerrar sesión

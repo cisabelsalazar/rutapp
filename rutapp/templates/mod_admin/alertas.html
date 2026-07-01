@@ -33,14 +33,37 @@
                 <h2>Panel {{nombre_panel}}</h2> <!---Nombre de modulo segun usuario ingresado-->
 
                 <ul>
-                    <li>Dashboard</li>
+                    <li>
+                    <li>
+                        <a href="{{ url_for('dashboard') }}">
+                            Dashboard
+                        </a>
+                    </li>
+
                     <li>
                         <a href="{{ url_for('usuarios') }}">
                             Usuarios
                         </a>
                     </li>
-                    <li>Rutas</li>
-                    <li>Ubicación en tiempo real</li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_estudiantes') }}">
+                            Estudiantes
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_vehiculos') }}">
+                            Vehiculos
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_rutas') }}">
+                            Rutas
+                        </a>
+                    </li>
+
                     <li>
                         <a href="{{ url_for('logout') }}" class="btn-logout">
                             Cerrar sesión

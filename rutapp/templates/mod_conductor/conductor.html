@@ -18,13 +18,17 @@
     </header>
 
     <main>
+                <!-- Imagen decorativa de fondo -->
+        <img src="{{ url_for('static', filename='img/fondocon.png') }}" alt="Imagen de fondo Login"
+            class="Imagen" />
+
         <div class="conductor-layout">
 
             <!-- Menú lateral -->
             <aside class="conductor-menu">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-                <h2>Panel Conductor</h2>
+                <h2>Panel {{ nombre_panel }}</h2>
 
                 <ul>
                     <li><a href="{{ url_for('conductor') }}">Dashboard</a></li>
@@ -39,7 +43,7 @@
 
             <!-- Contenido principal del panel -->
             <section class="conductor-content">
-                <h2>Bienvenido</h2>
+                <h2>Bienvenido  {{ nombre_completo }} </h2>
                 <p>Visualice el recorrido y gestione las alertas para los padres de familia.</p>
 
                 <img src="{{ url_for('static', filename='img/mapa.png') }}" alt="Mapa de rutas en tiempo real"

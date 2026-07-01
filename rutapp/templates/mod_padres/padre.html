@@ -24,10 +24,9 @@
         <div class="padre-menu">
             <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-            <h2>Panel Padre de Familia</h2>
+            <h2>Panel {{ nombre_panel }}</h2>
 
             <ul>
-                <li><a href="{{ url_for('padres') }}">Dashboard</a></li>
                 <li><a href="{{ url_for('informacion_conductor') }}">Información conductor</a></li>
                 <!-- <li><a href="{{ url_for('estudiantes_padre') }}">Estudiantes</a></li> -->
                 <li>
@@ -40,7 +39,7 @@
 
         <!-- Contenido principal -->
         <div class="padre-content">
-            <h2>Bienvenido</h2>
+            <h2>Bienvenido {{ nombre_completo }} </h2>
             <p>Consulte la información del conductor y el estado de la ruta escolar.</p>
 
             <img src="{{ url_for('static', filename='img/mapa.png') }}" alt="Mapa de la ruta" class="mapa-admin">

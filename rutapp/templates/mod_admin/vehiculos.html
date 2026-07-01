@@ -1,21 +1,15 @@
-<!---PANEL GESTION DE USUSARIOS MOD ADMIN Y SUPADMIN-->
+<!---PANEL GESTION DE VEHICULOS MOD ADMIN Y SUPADMIN-->
 <!DOCTYPE html><!-- Documento HTML5 -->
 <html lang="es"><!-- Idioma principal de la página -->
 
 <head>
-
-    <title>Gestión de Usuarios</title><!-- Título mostrado en la pestaña del navegador -->
-
+    <title>Gestión de Vehículos</title><!-- Título mostrado en la pestaña del navegador -->
     <!-- Hoja de estilos principal del proyecto -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
-
     <!-- Librería Font Awesome para uso de íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 </head>
-
 <!-- Clases utilizadas para estilos generales de la vista -->
 
 <body class="bg-secundario vista-usuario">
@@ -53,21 +47,21 @@
                 <!-- Opciones del menú lateral -->
                 <ul>
 
-                    <li>
+                     <li>
                         <a href="{{ url_for('dashboard') }}">
                             Dashboard
                         </a>
                     </li>
 
                     <li>
-                        <a href="{{ url_for('gestion_estudiantes') }}">
-                            Estudiantes
+                        <a href="{{ url_for('usuarios') }}">
+                            Usuarios
                         </a>
                     </li>
 
                     <li>
-                        <a href="{{ url_for('gestion_vehiculos') }}">
-                            Vehículos
+                        <a href="{{ url_for('gestion_estudiantes') }}">
+                            Estudiantes
                         </a>
                     </li>
 
@@ -89,64 +83,86 @@
                             Cerrar sesión
                         </a>
                     </li>
-
                 </ul>
-
             </div>
 
             <!-- ===== CONTENIDO CENTRAL DEL PANEL ===== -->
             <div class="admin-content">
 
                 <!-- Contenedor general de la tabla -->
-                <div class="tabla-usuarios-container">
+                <div class="tabla-vehiculos-container">
 
                     <!-- Título principal -->
-                    <h1>Gestión de Usuarios</h1>
+                    <h1>Gestión de Vehículos</h1>
 
                     <!-- Barra superior con botones y filtros -->
                     <div class="top-bar top-bar-usuarios">
 
                         <!-- Toolbar reutilizable -->
                         <div class="toolbar-container">
-
                             {{ action_toolbar(botones) }}
-
                         </div>
 
-                        <!-- ===== FILTRO POR ROL ===== -->
+                        <!-- ===== FILTRO ===== -->
                         <div class="filtros-usuarios">
 
-                            <!-- Ícono visual del filtro -->
-                            <i class="fa-solid fa-filter"></i>
-
-                            <!-- Formulario GET para filtrar usuarios -->
+                            <!-- Formulario GET para filtrar vehiculos -->
                             <form method="GET">
 
-                                <!-- Select que envía automáticamente el filtro -->
-                                <select name="rol" onchange="this.form.submit()">
+                                <select name="placa" onchange="this.form.submit()">
+                                    <!---Filtro Placa--->
+                                    <option value="" {% if not placa_actual=='Placa' %}selected{% endif %}>
+                                        Todas
+                                    </option>
+                                    <!-- Recorre dinámicamente las placas obtenidas desde la BD -->
+                                    {% for vehiculo in vehiculos %}
 
-                                    <!-- Opción para mostrar todos los usuarios -->
-                                    <option value="" {% if not rol_actual %}selected{% endif%}>
+                                    <option value="{{ vehiculo.placa }}" {% if placa_actual==vehiculo.placa
+                                        %}selected{% endif %}>
+
+                                        {{ vehiculo.placa }}
+
+                                    </option>
+
+                                    {% endfor %}
+                                </select>
+
+                                <select name="conductor" onchange="this.form.submit()">
+                                    <!---Filtro Placa--->
+                                    <option value="" {% if not conductor_actual=='conductor_nombre' 
+                                        %}selected{% endif %}>
                                         Todos
                                     </option>
+                                    <!-- Recorre dinámicamente las placas obtenidas desde la BD -->
+                                    {% for vehiculo in vehiculos %}
 
-                                    <!-- Filtro Administradores -->
-                                    <option value="Administrador" {% if rol_actual=='Administrador' %}selected{% endif
-                                        %}>
-                                        Administradores
+                                    <option value="{{ vehiculo.conductor_nombre }}" {% if conductor_actual==vehiculo.conductor_nombre
+                                        %}selected{% endif %}>
+
+                                        {{ vehiculo.conductor_nombre }}
+
                                     </option>
 
-                                    <!-- Filtro Conductores -->
-                                    <option value="Conductor" {% if rol_actual=='Conductor' %}selected{% endif %}>
-                                        Conductores
+                                    {% endfor %}
+                                </select>
+
+                                <select name="estado" onchange="this.form.submit()">
+                                    <!---Filtro Placa--->
+                                    <option value="" {% if not estado_actual=='estado' 
+                                        %}selected{% endif %}>
+                                        Todos
+                                    </option>
+                                    <!-- Recorre dinámicamente las placas obtenidas desde la BD -->
+                                    {% for vehiculo in vehiculos %}
+
+                                    <option value="{{ vehiculo.estado }}" {% if estado_actual==vehiculo.estado
+                                        %}selected{% endif %}>
+
+                                        {{ vehiculo.estado }}
+
                                     </option>
 
-                                    <!-- Filtro Padres -->
-                                    <option value="Padre de familia" {% if rol_actual=='Padre de familia' %}selected{%
-                                        endif %}>
-                                        Padres
-                                    </option>
-
+                                    {% endfor %}
                                 </select>
 
                             </form>
@@ -158,7 +174,7 @@
                     <!-- Contenedor con scroll para la tabla -->
                     <div class="tabla-scroll">
 
-                        <!-- ===== TABLA DE USUARIOS ===== -->
+                        <!-- ===== TABLA DE VEHICULOS ===== -->
                         <table>
 
                             <!-- Encabezado de la tabla -->
@@ -166,12 +182,15 @@
 
                                 <tr>
 
-                                    <th>id</th>
-                                    <th>Usuario</th>
-                                    <th>Nombre completo</th>
-                                    <th>Correo</th>
-                                    <th>Teléfono</th>
-                                    <th>Rol</th>
+                                    <th>id vehículo</th>
+                                    <th>Placa</th>
+                                    <th>Marca</th>
+                                    <th>Modelo</th>
+                                    <th>Capacidad</th>
+                                    <th>Conductor</th>
+                                    <th>Id Conductor</th>
+                                    <th>Ruta</th>
+                                    <th>Estado</th>
                                     <th>Acciones</th>
 
                                 </tr>
@@ -181,43 +200,46 @@
                             <!-- ===== CUERPO DE LA TABLA ===== -->
                             <tbody>
 
-                                <!-- Verifica si existen usuarios -->
-                                {% if usuarios %}
+                                <!-- Verifica si existen vehículos -->
+                                {% if vehiculos %}
 
-                                <!-- Recorre la lista de usuarios -->
-                                {% for usuario in usuarios %}
+                                <!-- Recorre la lista de vehiculos -->
+                                {% for vehiculo in vehiculos %}
 
                                 <tr>
 
-                                    <!-- Datos dinámicos del usuario -->
-                                    <td>{{ usuario.id_usuario }}</td>
-                                    <td>{{ usuario.nombre_rol }}</td>
-                                    <td>{{ usuario.nombres_y_apellidos }}</td>
-                                    <td>{{ usuario.correo }}</td>
-                                    <td>{{ usuario.telefono }}</td>
-                                    <td>{{ usuario.nombre_rol }}</td>
+                                    <!-- Datos dinámicos de vehículos-->
+                                    <td>{{ vehiculo.id_vehiculo }}</td>
+                                    <td>{{ vehiculo.placa }}</td>
+                                    <td>{{ vehiculo.marca }}</td>
+                                    <td>{{ vehiculo.modelo }}</td>
+                                    <td>{{ vehiculo.capacidad }}</td>
+                                    <td>{{ vehiculo.conductor_nombre }}</td>
+                                    <td>{{ vehiculo.id_conductor }}</td>
+                                    <td>{{ vehiculo.nombre_ruta }}</td>
+                                    <td>{{ vehiculo.estado }}</td>
 
                                     <!-- ===== BOTONES DE ACCIÓN ===== -->
-                                    <td style="width: 18%;">
+                                    <td style="width: 17%;">
 
                                         <div class="acciones">
 
-                                            <!-- Botón editar usuario -->
-                                            <a href="{{url_for('editar_usuario', id_usuario = usuario.id_usuario) }}"
+                                            <!---Botón editar vehículos--->
+                                            <a href="{{url_for('editar_vehiculo', id_vehiculo=vehiculo.id_vehiculo) }}"
                                                 class="btn btn-editar">
 
                                                 Editar
 
                                             </a>
 
-                                            <!-- Formulario para eliminar usuario -->
-                                            <form id="formEliminarUsuario{{usuario.id_usuario}}"
-                                                action="{{ url_for('eliminar_usuario', id_usuario=usuario.id_usuario) }}"
+                                            <!--- Formulario para eliminar --->
+                                            <form id="formEliminar{{vehiculo.id_vehiculo}}"
+                                                action="{{ url_for('eliminar_vehiculo', id_vehiculo=vehiculo.id_vehiculo) }}"
                                                 method="POST">
 
-                                                <!-- Botón eliminar con confirmación -->
+                                                <!--- Botón eliminar con confirmación--->
                                                 <button type="button" class="btn btn-eliminar"
-                                                    onclick="confirmarEliminacionUsuario('{{usuario.id_usuario}}')">
+                                                    onclick="confirmarEliminacion('{{vehiculo.id_vehiculo}}')">
 
                                                     Eliminar
 

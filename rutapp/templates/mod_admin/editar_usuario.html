@@ -28,7 +28,11 @@
                 <h2>Panel {{nombre_panel}}</h2>
 
                 <ul>
-                    <li>Dashboard</li>
+                    <li>
+                        <a href="{{ url_for('dashboard')}}">
+                            Dashboard
+                        </a>
+                    </li>
                     <li>
                         <a href="{{ url_for('usuarios') }}">
                             Usuarios
@@ -77,21 +81,32 @@
                     <input type="text" name="telefono" value="{{ usuario.telefono }}" maxlength="10" required>
                 </div>
 
-                <div class="form-group filtro-editar-usuario">
 
+                {% if usuario.id_rol == 1 %}
+
+                <div class="form-group filtro-editar-usuario">
                     <label>Rol:</label>
-                    <select name="rol" required>
-                        <option value="2" {% if usuario.rol==2 %}selected{% endif %}>
+                    <input type="text" value="Superadministrador" readonly>
+                </div>
+
+                {% else %}
+
+                <div class="form-group filtro-editar-usuario">
+                    <label>Rol:</label>
+                    <select name="id_rol" required>
+                        <option value="2" {% if usuario.id_rol==2 %}selected{% endif %}>
                             Administrador
                         </option>
-                        <option value="3" {% if usuario.rol==3 %}selected{% endif %}>
+                        <option value="3" {% if usuario.id_rol==3 %}selected{% endif %}>
                             Conductor
                         </option>
-                        <option value="4" {% if usuario.rol==4 %}selected{% endif %}>
+                        <option value="4" {% if usuario.id_rol==4 %}selected{% endif %}>
                             Padre de familia
                         </option>
                     </select>
                 </div>
+
+                {% endif %}
 
 
                 <button type="button" class="btn btn-guardar" onclick="confirmarGuardadoUsuario()">

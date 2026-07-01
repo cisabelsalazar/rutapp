@@ -1,5 +1,8 @@
 //Archivo global para confirmar acciones en el sistema//
 
+
+//CONTROLES PARA ELIMINACION//
+
 //Confirmación para eliminar estudiante//
 
 function confirmarEliminacion(id) {
@@ -15,6 +18,40 @@ function confirmarEliminacion(id) {
         }
     });
 }
+
+//Confirmación para eliminar usuario//
+
+function confirmarEliminacionUsuario(id) {
+    Swal.fire({
+        text: 'Esta acción eliminará al usuario permanentemente. ¿Deseas continuar?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('formEliminarUsuario' + id).submit();
+        }
+    });
+}
+
+//Confirmación para eliminar ruta//
+
+function confirmarEliminacionRuta(id) {
+    Swal.fire({
+        text: 'Esta acción eliminará la ruta permanentemente. ¿Deseas continuar?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('formEliminarRuta' + id).submit();
+        }
+    });
+}
+
+//CONTROLES PARA GUARDADO DE INFORMACION//
 
 //Confirmación guardar información editada de estudiante//
 
@@ -59,7 +96,51 @@ function confirmarGuardadoUsuario() {
     });
 }
 
-//Confirmación para la creación de un nuevo usuario en el sistema RUTAPP//
+//Confirmación guardar información editada de vehículo//
+function confirmarGuardadoVehiculo() {
+    Swal.fire({
+        title: '¿Guardar cambios?',
+        text: 'Se actualizará la información del vehículo',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'swal-popup',
+            confirmButton: 'swal-confirm-btn',
+            cancelButton: 'swal-cancel-btn'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('formEditarVehiculo').submit();
+        }
+    });
+}
+
+//Confirmación guardar información editada de ruta//
+function confirmarGuardadoRuta() {
+    Swal.fire({
+        title: '¿Guardar cambios?',
+        text: 'Se actualizará la información de la ruta',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'swal-popup',
+            confirmButton: 'swal-confirm-btn',
+            cancelButton: 'swal-cancel-btn'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('formEditarRuta').submit();
+        }
+    });
+}
+
+//CONTROLES PARA CONFIRMACION DE CREACIONES//
+
+//Confirmación para la creación de un NUEVO USUARIO en el sistema RUTAPP//
 
 function confirmarCreacionUsuario() {
     Swal.fire({
@@ -76,7 +157,7 @@ function confirmarCreacionUsuario() {
     });
 }
 
-//Confirmación para la creación de un nuevo estudiante en el sistema RUTAPP//
+//Confirmación para la creación de un NUEVO ESTUDIANTE en el sistema RUTAPP//
 
 function confirmarCreacionEstudiante() {
     Swal.fire({
@@ -89,6 +170,40 @@ function confirmarCreacionEstudiante() {
     }).then((result) => {
         if (result.isConfirmed) {
             document.getElementById('formCrearEstudiante').submit();
+        }
+    });
+}
+
+//Confirmación para la creación de un NUEVO VEHÍCULO en el sistema RUTAPP//
+
+function confirmarCreacionVehiculo() {
+    Swal.fire({
+        title: '¿Crear nuevo vehículo?',
+        text: 'Se guardará un nuevo vehículo en el sistema. ¿Deseas continuar?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Revisar datos'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('formCrearVehiculo').submit();
+        }
+    });
+}
+
+//Confirmación para la creación de una NUEVA RUTA en el sistema RUTAPP//
+
+function confirmarCreacionRuta() {
+    Swal.fire({
+        title: '¿Crear nueva ruta?',
+        text: 'Se guardará una nueva ruta en el sistema. ¿Deseas continuar?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Revisar datos'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('formCrearRuta').submit();
         }
     });
 }

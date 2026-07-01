@@ -1,0 +1,130 @@
+<!-- ===== FORMULARIO EDITAR VEHICULO ===== -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Editar vehículo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+</head>
+
+<body class="bg-secundario">
+
+    <header>
+        {# Incluye el encabezado (header) de la página #}
+        {% include 'layout/header.html' %}
+    </header>
+
+    <main>
+        <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login"
+            class="Imagen" />
+
+        <div class="admin-layout">
+
+            <div class="admin-menu">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+
+                <h2>Panel {{nombre_panel}}</h2>
+
+                <ul>
+                    <li>
+                        <a href="{{ url_for('dashboard') }}">
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('usuarios') }}">
+                            Usuarios
+                        </a>
+                    </li>
+                    <li>Rutas</li>
+                    <li>Ubicación en tiempo real</li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="btn-logout">
+                            Cerrar sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+            <form id="formEditarVehiculo" class="form-editar_estudiante"
+                action="{{ url_for('editar_vehiculo', id_vehiculo=vehiculo.id_vehiculo) }}" method="POST">
+
+                <h1>Editar Vehículo</h1>
+
+                <div class="form-group">
+                    <label>Placa:</label>
+                    <input type="text" name="placa" value="{{ vehiculo.placa }}" maxlength="8" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Marca:</label>
+                    <input type="text" name="marca" value="{{ vehiculo.marca }}" maxlength="20" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Modelo:</label>
+                    <input type="text" name="modelo" value="{{ vehiculo.modelo }}" maxlength="20" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Capacidad:</label>
+                    <input type="number" name="capacidad" value="{{ vehiculo.capacidad }}" maxlength="2" required>
+                </div>
+
+                <div class="form-group filtro-editar-estudiante">
+                    <label>Id Conductor:</label>
+                    <select name="id_conductor">
+                        <option value="">Seleccione un conductor</option>
+
+                        {% for conductor in conductores %}
+
+                        <option value="{{ conductor.id_usuario }}" 
+                            {% if conductor.id_usuario==vehiculo.id_conductor
+                            %}selected{% endif %}>
+
+                            {{ conductor.id_usuario }} - {{ conductor.nombres_y_apellidos }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                    <div class="form-group filtro-editar-estudiante">
+                        <label>Estado:</label>
+                        <select name="estado" required>
+                            <option value="Disponible" {% if vehiculo.estado=='Disponible' %}selected{% endif %}>
+                                Disponible
+                            </option>
+
+                            <option value="En mantenimiento" {% if vehiculo.estado=='En mantenimiento' %}selected{%
+                                endif %}>
+                                En mantenimiento
+                            </option>
+                        </select>
+                    </div>
+
+                <button type="button" class="btn btn-guardar" onclick="confirmarGuardadoVehiculo()">
+                    Guardar cambios
+                </button>
+
+                <a href="{{ url_for('gestion_vehiculos') }}" class="btn btn-cancelar">
+                    Cancelar
+                </a>
+
+
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        {% include 'layout/footer.html' %}
+    </footer>
+
+</body>
+
+</html>

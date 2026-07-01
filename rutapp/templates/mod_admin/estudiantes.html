@@ -1,3 +1,4 @@
+<!---PANEL GESTION DE ESTUDIANTES MOD ADMIN Y SUPADMIN-->
 <!DOCTYPE html>
 <html>
 
@@ -15,7 +16,7 @@
 
 
     <header>
-        {# Incluye el encabezado (header) de la página #}
+        <!-- Incluye el encabezado reutilizable -->
         {% include 'layout/header.html' %}
     </header>
 
@@ -32,14 +33,36 @@
                 <h2>Panel {{nombre_panel}}</h2>
 
                 <ul>
-                    <li>Dashboard</li>
+                     <li>
+                        <a href="{{ url_for('dashboard') }}">
+                            Dashboard
+                        </a>
+                    </li>
+
                     <li>
                         <a href="{{ url_for('usuarios') }}">
                             Usuarios
                         </a>
                     </li>
-                    <li>Rutas</li>
-                    <li>Ubicación en tiempo real</li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_vehiculos') }}">
+                            Vehículos
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_rutas') }}">
+                            Rutas
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('gestion_alerta') }}">
+                            Alertas
+                        </a>
+                    </li>
+                    
                     <li>
                         <a href="{{ url_for('logout') }}" class="btn-logout">
                             Cerrar sesión
@@ -107,12 +130,13 @@
                             <thead>
                                 <tr>
                                     <th>id</th>
-                                    <th>Estudiante</th>
-                                    <th>Teléfono</th>
+                                    <th>Estudiante</th>                                    
+                                    <th>Teléfono</th>                                    
                                     <th>Dirección</th>
                                     <th>Grado</th>
                                     <th>id Ruta</th>
                                     <th>Nombre Ruta</th>
+                                    <th>Padre de Familia</th>
                                     <th>Acciones</th>
 
                                 </tr>
@@ -127,11 +151,12 @@
 
                                     <td>{{ estudiante.id_estudiante }}</td>
                                     <td>{{ estudiante.nombre}}</td>
-                                    <td>{{ estudiante.telefono }}</td>
+                                    <td>{{ estudiante.telefono }}</td>                                    
                                     <td>{{ estudiante.direccion }}</td>
                                     <td>{{ estudiante.grado }}</td>
                                     <td>{{ estudiante.id_ruta }}</td>
                                     <td>{{ estudiante.nombre_ruta }}</td>
+                                    <td>{{ estudiante.padre_familia }}</td>
 
                                     <!--  Boton de editar estudiante -->
 

@@ -1,21 +1,46 @@
+/*=========================================================
+    PROYECTO RUTAPP
+    Sistema de Gestión de Rutas Escolares
+    Script de creación de la base de datos
+=========================================================*/
 CREATE DATABASE rutapp_bd;
 USE rutapp_bd;
 
+/*=========================================================
+    ELIMINACIÓN DE TABLAS
+=========================================================*/
+
+DROP TABLE IF EXISTS PADRE_ESTUDIANTE;
+DROP TABLE IF EXISTS ALERTAS;
+DROP TABLE IF EXISTS ESTUDIANTE;
+DROP TABLE IF EXISTS RUTA;
+DROP TABLE IF EXISTS VEHICULO;
+DROP TABLE IF EXISTS USUARIO;
+DROP TABLE IF EXISTS ROL_PERMISO;
+DROP TABLE IF EXISTS PERMISO;
 DROP TABLE IF EXISTS ROL;
+
+/*=========================================================
+    TABLA ROL
+=========================================================*/
 
 CREATE TABLE ROL(
 	id_rol INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nombre_rol VARCHAR(50) NOT NULL UNIQUE
 );
 
-DROP TABLE IF EXISTS PERMISO;
+/*=========================================================
+    TABLA PERMISO
+=========================================================*/
 
 CREATE TABLE PERMISO(
 	id_permiso INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nombre_permiso VARCHAR(50) NOT NULL UNIQUE
 );
 
-DROP TABLE IF EXISTS ROL_PERMISO;
+/*=========================================================
+    TABLA ROL_PERMISO
+=========================================================*/
 
 CREATE TABLE ROL_PERMISO(
 	id_rol INT NOT NULL,
@@ -25,7 +50,9 @@ CREATE TABLE ROL_PERMISO(
     FOREIGN KEY (id_permiso) REFERENCES PERMISO(id_permiso) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS USUARIO;
+/*=========================================================
+    TABLA USUARIO
+=========================================================*/
 
 CREATE TABLE USUARIO(
 	id_usuario VARCHAR(20) NOT NULL PRIMARY KEY,
@@ -38,7 +65,9 @@ CREATE TABLE USUARIO(
     FOREIGN KEY (id_rol) REFERENCES ROL(id_rol)
 );
 
-DROP TABLE IF EXISTS VEHICULO;
+/*=========================================================
+    TABLA VEHICULO
+=========================================================*/
 
 CREATE TABLE VEHICULO(
 id_vehiculo INT AUTO_INCREMENT PRIMARY KEY,
@@ -46,25 +75,53 @@ placa VARCHAR(10) NOT NULL UNIQUE,
 marca VARCHAR(50) NOT NULL,
 modelo VARCHAR(50) NOT NULL,
 capacidad INT NOT NULL,
-id_conductor VARCHAR(20) NOT NULL,
+estado ENUM(
+	'Activo',
+    'Inactivo',
+    'En mantenimiento'
+) NOT NULL DEFAULT 'Activo',
+id_conductor VARCHAR(20) NOT NULL UNIQUE,
 FOREIGN KEY (id_conductor) REFERENCES USUARIO(id_usuario)
 );
 
-DROP TABLE IF EXISTS RUTA;
+/*=========================================================
+    TABLA RUTA
+
+    Almacena la información de las rutas escolares
+    registradas en el sistema.
+=========================================================*/
 
 CREATE TABLE RUTA(
-	id_ruta INT AUTO_INCREMENT PRIMARY KEY,
+    id_ruta INT AUTO_INCREMENT PRIMARY KEY,
     nombre_ruta VARCHAR(50) NOT NULL UNIQUE,
     descripcion_ruta VARCHAR(100) NOT NULL,
     hora_salida TIME NOT NULL,
     hora_llegada TIME NOT NULL,
+
     id_conductor VARCHAR(20) NOT NULL,
     id_administrador VARCHAR(20) NOT NULL,
-    FOREIGN KEY (id_conductor) REFERENCES USUARIO(id_usuario),
-    FOREIGN KEY (id_administrador) REFERENCES USUARIO(id_usuario)
+
+    estado VARCHAR(20) NOT NULL DEFAULT 'Activa',
+
+    id_vehiculo INT DEFAULT NULL,
+
+    FOREIGN KEY (id_conductor)
+        REFERENCES USUARIO(id_usuario),
+
+    FOREIGN KEY (id_administrador)
+        REFERENCES USUARIO(id_usuario),
+
+    FOREIGN KEY (id_vehiculo)
+        REFERENCES VEHICULO(id_vehiculo)
 );
 
-DROP TABLE IF EXISTS ESTUDIANTE;
+
+/*=================================================
+TABLA ESTUDIANTE
+   Almacena la información básica de los
+   estudiantes registrados en el sistema.
+===================================================*/
+
 
 CREATE TABLE ESTUDIANTE(
 	id_estudiante INT PRIMARY KEY NOT NULL,
@@ -72,11 +129,44 @@ CREATE TABLE ESTUDIANTE(
     grado VARCHAR(20) NOT NULL,
     direccion VARCHAR(100) NOT NULL,
     telefono VARCHAR(20),
+    estado ENUM(
+		'Pendiente',
+        'Recogido',
+        'En ruta',
+        'Entregado',
+        'Inasistente'
+    )NOT NULL DEFAULT 'Pendiente',
     id_ruta INT NULL,
     FOREIGN KEY (id_ruta) REFERENCES RUTA(id_ruta) ON DELETE SET NULL
 );
 
-DROP TABLE IF EXISTS ALERTAS;
+/*=========================================================
+    TABLA PADRE_ESTUDIANTE
+   Descripción:
+   Se crea la relación entre padre de familia y estudiante
+   para permitir que un padre visualice únicamente la
+   información de sus hijos.
+=========================================================*/
+
+CREATE TABLE PADRE_ESTUDIANTE(
+    id_padre VARCHAR(20) NOT NULL,
+    id_estudiante INT NOT NULL,
+
+    PRIMARY KEY (id_padre, id_estudiante),
+
+    FOREIGN KEY (id_padre)
+        REFERENCES USUARIO(id_usuario)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (id_estudiante)
+        REFERENCES ESTUDIANTE(id_estudiante)
+        ON DELETE CASCADE
+-- id_padre debe corresponder a un usuario con id_rol = 4
+);
+
+/*=========================================================
+    TABLA ALERTAS
+=========================================================*/
 
 CREATE TABLE ALERTAS(
     id_alerta INT AUTO_INCREMENT PRIMARY KEY,
@@ -103,14 +193,20 @@ CREATE TABLE ALERTAS(
     FOREIGN KEY (id_ruta) REFERENCES RUTA(id_ruta)
 );
 
---- QUERY 
+/*=========================================================
+    QUERY_CONSULTAS DE APOYO
+=========================================================*/
+
 SELECT * FROM rol ORDER BY id_rol;
 SELECT * FROM permiso ORDER BY id_permiso;
 SELECT * FROM rol_permiso ORDER BY id_rol;
 SELECT * FROM usuario ORDER BY id_usuario;
+SELECT * FROM vehiculo ORDER BY id_vehiculo;
 SELECT * FROM ruta ORDER BY id_ruta;
 SELECT * FROM estudiante ORDER BY id_estudiante;
+SELECT * FROM padre_estudiante;
 SELECT * FROM alertas ORDER BY id_alerta;
+SELECT * FROM padre_estudiante;
 
 
 -- INFORMACION BASE DE DATOS - ROL

@@ -11,6 +11,9 @@ import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
 import hashlib
 
+from flask import render_template
+from flask_login import login_required, current_user
+from flask import Flask, render_template, request, jsonify
 #==========================================
 # CONFIGURACIÓN DE LA APLICACIÓN FLASK
 #==========================================
@@ -1092,32 +1095,113 @@ def alertas_conductor():
             id_ruta,
             tipo_alerta,
             mensaje
+            
         ))
-
+       
         conexion.commit()
         cursor.close()
         flash('Alerta creada correctamente', 'success')
         return redirect(url_for('alertas_conductor'))
     
-    #Mostrar alertas enviadas por el conductor
-    consulta="""
-    SELECT *
-    FROM ALERTAS
-    WHERE id_usuario_emisor = %s
-    ORDER BY fecha_hora DESC
+    # --- LÓGICA DE FILTRADO (Para los botones/pestañas) ---
+    # Capturamos el filtro actual desde la URL (por defecto 'sin_leer')
+    filtro = request.args.get('filtro', 'sin_leer')
+
+    consulta_base = """
+    SELECT 
+        id_alerta, 
+        id_estudiante, 
+        tipo_alerta, 
+        mensaje, 
+        estado 
+    FROM 
+        ALERTAS 
+    WHERE 
+        id_usuario_emisor = %s
     """
 
-    cursor.execute(consulta, (id_conductor,))
+    # Base de la consulta
+    consulta_base = "SELECT * FROM ALERTAS WHERE id_usuario_emisor = %s"
+    
+    # Modificamos el SQL según la pestaña seleccionada (asumiendo que tienes una columna 'estado')
+    if filtro == 'sin_leer':
+        consulta_base += " AND (estado IS NULL OR estado = '' OR estado = 'nueva')"
+    elif filtro == 'leidas':
+        consulta_base += " AND estado = 'leida'"
+    elif filtro == 'resueltas':
+        consulta_base += " AND estado = 'resuelta'"
+    consulta_base += " ORDER BY fecha_hora DESC" # Suponiendo que tienes columna 'hora'
+    
+    
+    cursor.execute(consulta_base, (id_conductor,))
     alertas = cursor.fetchall()
+    
 
+    
+
+
+    return render_template('mod_conductor/alertas_conductor.html', alertas=alertas,filtro_activo=filtro)
+
+# --- NUEVA RUTA PARA LIMPIAR SELECCIONADAS ---
+@app.route('/conductor/alertas/limpiar', methods=['POST'])
+def limpiar_alertas():
+    cursor = conexion.cursor()
+    # Obtenemos la lista de IDs de alertas que se marcaron en los checkboxes
+    ids_a_eliminar = request.form.getlist('alertas_seleccionadas')
+
+    if ids_a_eliminar:
+        # Genera marcadores dinámicos (%s, %s, ...) según la cantidad de IDs
+        format_strings = ','.join(['%s'] * len(ids_a_eliminar))
+        consulta_delete = f"DELETE FROM ALERTAS WHERE id_alerta IN ({format_strings})"
+        
+        cursor.execute(consulta_delete, tuple(ids_a_eliminar))
+        conexion.commit()
+        flash('Alertas eliminadas correctamente', 'success')
+    else:
+        flash('No seleccionaste ninguna alerta', 'warning')
+        
     cursor.close()
-
-    return render_template('mod_conductor/alertas_conductor.html', alertas=alertas)
+    return redirect(url_for('alertas_conductor'))
 
 
 @app.route('/conductor/compartir_ubicacion')
 def compartir_ubicacion():  
     return "<h2>Módulo en construcción</h2>"
+
+# RUTA PARA PROCESAR LAS ACCIONES
+
+@app.route('/alerta/<accion>/<int:alerta_id>', methods=['POST'])
+def procesar_alerta(accion, alerta_id):
+    try:
+        nuevo_estado = None
+        if accion == 'leer':
+            nuevo_estado = 'leida'
+        elif accion == 'resolver':
+            nuevo_estado = 'resuelta'
+        else:
+            return jsonify({"status": "error", "message": "Acción no válida"}), 400
+
+        # Declaramos que use la variable 'conexion' que definiste globalmente en tu app.py
+        global conexion 
+        
+        # Abrimos el cursor
+        cursor = conexion.cursor()
+        
+        # Ejecutamos la consulta usando el nombre exacto de tu tabla (¿es 'alertas' o 'ALERTAS'?)
+        # Nota: MySQL en Windows no distingue mayúsculas, pero en Linux/Base de datos sí. 
+        # En tu consulta INSERT usaste 'ALERTAS' en mayúsculas. Asegurémonos de usar el mismo nombre:
+        cursor.execute("UPDATE ALERTAS SET estado = %s WHERE id_alerta = %s", (nuevo_estado, alerta_id))
+        
+        # Guardamos los cambios
+        conexion.commit()
+        cursor.close()
+
+        print(f"¡Éxito! Alerta {alerta_id} guardada en MySQL como {nuevo_estado}")
+        return jsonify({"status": "success", "message": "Estado actualizado correctamente"})
+
+    except Exception as e:
+        print("❌ ERROR REAL EN FLASK:", str(e)) # <-- Esto nos dirá exactamente qué falla
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 
@@ -1163,13 +1247,36 @@ def conductor():
         
     return render_template('mod_conductor/conductor.html')
 
-@app.route('/conductor/mi_ruta')#Revisado por Cristina OK#
+#============================================
+# Ruta para ver la ruta en el panel conductor
+#=============================================
+
+@app.route('/conductor/mi_ruta')
 def mi_ruta():
-    # if 'usuario' not in session:
-    #     return redirect(url_for('login'))
-    # if session['rol'] != 3:
-    #     return "Acceso no autorizado"
-    return render_template('mod_conductor/mi_ruta.html')
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    
+    id_usuario = session['usuario']
+
+    cursor = conexion.cursor(dictionary=True)
+    
+
+    cursor.execute("SELECT * FROM RUTA WHERE id_conductor = %s", (id_usuario,))
+    ruta = cursor.fetchone()
+
+    if not ruta:
+        return "No tienes ruta asignada"
+
+    cursor.execute("""
+    SELECT p.nombre_parada, rp.orden
+    FROM PARADA p
+    JOIN RUTA_PARADA rp ON p.id_parada = rp.id_parada
+    WHERE rp.id_ruta = %s
+    ORDER BY rp.orden
+""", (ruta['id_ruta'],))
+    paradas = cursor.fetchall()
+
+    return render_template('mod_conductor/mi_ruta.html', ruta=ruta, paradas=paradas)
 
 #============================================
 # Ruta para visualisar estudiantes en el panel conductor
@@ -1336,6 +1443,7 @@ def estudiantes_padre():
 
 @app.route('/padres/ver_ruta')
 def ver_ruta():
+
     return render_template('mod_padres/ver_ruta.html')
 
 

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -35,11 +34,6 @@
             </div>
 
             <main class="main-content">
-
-                <!-- Imagen decorativa de fondo -->
-                <img src="{{ url_for('static', filename='img/fondocon.png') }}" alt="Imagen de fondo Login"
-                    class="Imagen" />
-
                 <section class="cardr">
                     <header class="card-header">
                         <h1>Mi Ruta</h1>
@@ -49,17 +43,24 @@
                         <div class="route-info">
                             <label>Ruta</label>
                             <div class="input-group">
-                                <input type="text" value="Ruta 301" readonly>
+                                <input type="text" value="{{ruta.nombre_ruta if ruta else'sin ruta asignada'}}"
+                                readonly>
 
                             </div>
 
                             <div class="stops-section">
                                 <label>Paradas</label>
                                 <ul class="stops-list">
-                                    <li>Calle Del Pilar</li>
-                                    <li>Park Centro</li>
-                                    <li>Centro Insurgentes</li>
-                                    <li class="selected">Escuela Primaria San Juan</li>
+                                    {% if paradas %}
+                                    {% for parada in paradas %}
+                                    
+                                    <li{% if loop.last %}class="selected" {% endif %}>
+                                        {{ parada.nombre_parada }}
+                                    </li>
+                                    {% endfor %}
+                                    {% else %}
+                                    <li>No hay paradas registradas para esta ruta.</li>
+                                    {% endif %}
                                 </ul>
                                 <footer class="card-footer">
                                     <button class="btn-start">Iniciar Ruta</button>

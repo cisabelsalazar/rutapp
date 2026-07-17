@@ -274,7 +274,7 @@ def superadministrador():
     return render_template(
         'mod_admin/supadmin.html',
         **estadisticas # Desempaqueta el diccionario de estadísticas para pasarlo a la plantilla
-    )
+)
 
 
 # ==========================================
@@ -1136,10 +1136,6 @@ def alertas_conductor():
     cursor.execute(consulta_base, (id_conductor,))
     alertas = cursor.fetchall()
     
-
-    
-
-
     return render_template('mod_conductor/alertas_conductor.html', alertas=alertas,filtro_activo=filtro)
 
 # --- NUEVA RUTA PARA LIMPIAR SELECCIONADAS ---
@@ -1434,19 +1430,64 @@ def informacion_conductor():
 # VER ESTUDIANTE
 # ==========================================
 
-@app.route('/estudiantes_padre')
-def estudiantes_padre():
-    return "<h2>Módulo de rutas en construcción</h2>"
-# ==========================================
-# VER RECORRIDO RUTA ESCOLAR
-# ==========================================
-
 @app.route('/padres/ver_ruta')
 def ver_ruta():
+    # Cambiado a 'usuario' que es como lo guardas al iniciar sesión
+    id_padre = session['usuario'] 
+    
+    cursor = conexion.cursor(dictionary=True)
+    
+    query = """
+        SELECT 
+            e.estado AS estado_estudiante,
+            r.nombre_ruta,
+            r.id_vehiculo,
+            u.nombres_y_apellidos AS nombre_conductor,
+            u.telefono AS telefono_conductor
+        FROM padre_estudiante pe
+        JOIN estudiante e ON pe.id_estudiante = e.id_estudiante
+        JOIN ruta r ON e.id_ruta = r.id_ruta
+        LEFT JOIN usuario u ON r.id_conductor = u.id_usuario
+        WHERE pe.id_padre = %s
+        LIMIT 1
+    """
+    cursor.execute(query, (id_padre,))
+    datos = cursor.fetchone()
+    cursor.close()
+    
+    return render_template('mod_padres/ver_ruta.html', datos=datos)
+#===========================================
+# FORMULARIO CREAR VEHICULO
+#===========================================
 
-    return render_template('mod_padres/ver_ruta.html')
+@app.route('/crear_vehiculo')
+def crear_vehiculo():
 
+    cursor = conexion.cursor(dictionary=True)
 
+    cursor.execute("""
+        SELECT id_usuario, nombres_y_apellidos
+        FROM usuario
+        WHERE id_rol = 3
+        ORDER BY nombres_y_apellidos
+    """)  #Selecciona conductor para asignar
+
+    conductores = cursor.fetchall()
+    
+    cursor.execute("""
+        SELECT estado
+        FROM vehiculo
+    """)  #Selecciona estados para asignar
+
+    estados = cursor.fetchall()
+
+    cursor.close()
+
+    return render_template(
+        'mod_admin/crear_vehiculo.html',
+        conductores=conductores,
+        estados=estados
+    )
 # ==========================================
 # MODULO VEHÍCULOS Y RUTAS
 # RESPONSABLE: Desarrollo CRISTINA SALAZAR
@@ -1529,39 +1570,6 @@ def gestion_vehiculos():
         placa_actual = placa_actual,
         conductor_actual = conductor_actual,
         estado_actual = estado_actual
-    )
-
-#===========================================
-# FORMULARIO CREAR VEHICULO
-#===========================================
-
-@app.route('/crear_vehiculo')
-def crear_vehiculo():
-
-    cursor = conexion.cursor(dictionary=True)
-
-    cursor.execute("""
-        SELECT id_usuario, nombres_y_apellidos
-        FROM usuario
-        WHERE id_rol = 3
-        ORDER BY nombres_y_apellidos
-    """)  #Selecciona conductor para asignar
-
-    conductores = cursor.fetchall()
-    
-    cursor.execute("""
-        SELECT estado
-        FROM vehiculo
-    """)  #Selecciona estados para asignar
-
-    estados = cursor.fetchall()
-
-    cursor.close()
-
-    return render_template(
-        'mod_admin/crear_vehiculo.html',
-        conductores=conductores,
-        estados=estados
     )
 
 

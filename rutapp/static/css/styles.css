@@ -1470,14 +1470,17 @@ td {
 /* 8.5 PANEL "ESTUDIANTES_PADRE": Información de estudiantes para padre          */
 /*==================================================================================*/
 /* ===== CONTENEDOR PRINCIPAL: Layout del panel padre ===== */
-.main-container-estp {
+/* Asegura que el contenedor alinee el menú y el contenido de la tabla de lado a lado */
+.padre-layout {
     display: flex;
     width: 100%;
+    min-height: 100vh;
 }
 
-/* ===== SIDEBAR PADRE: Barra lateral del panel padre ===== */
-.sidebar-estp {
+/* Forzar que el menú mantenga un ancho fijo y no se encoja */
+.padre-menu {
     width: 250px;
+    min-width: 250px;
     background-color: rgba(45, 59, 92, 0.95);
     color: white;
     padding: 20px;
@@ -1485,129 +1488,34 @@ td {
     flex-direction: column;
 }
 
-.logo-section-estp {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.bus-icon-estp {
-    background-color: #0088cc;
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 10px;
-    font-size: 30px;
-}
-
-.sidebar-estp ul {
-    list-style: none;
-}
-
-.sidebar-estp li {
-    padding: 15px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: 0.3s;
-    font-size: 0.9rem;
-}
-
-.sidebar-estp li i {
-    margin-right: 10px;
-}
-
-.sidebar-estp li:hover, 
-.sidebar-estp li.active {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #a2d2ff;
-}
-
-/* ===== CONTENIDO PADRE: Área principal de contenido ===== */
+/* Área de contenido para la tabla ocupando el espacio restante */
 .content-estp {
     flex: 1;
     padding: 40px;
-    align-items: center;
-}
-
-h1 {
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-    color: #333;
-}
-
-/* ===== TARJETA TABLA: Contenedor de tabla con estilo card ===== */
-.table-card-estp {
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.table-header-estp {
+    box-sizing: border-box;
+}/* Asegura que el contenedor alinee el menú y el contenido de la tabla de lado a lado */
+.padre-layout {
     display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
+    width: 100%;
+    min-height: 100vh;
 }
 
-/* ===== BÚSQUEDA TABLA: Caja de búsqueda en tabla ===== */
-.search-container-estp {
-    display: flex;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    overflow: hidden;
-    background: white;
-}
-
-.search-container-estp input {
-    border: none;
-    padding: 8px 12px;
-    outline: none;
-    flex: 1;
-}
-
-.search-container-estp button {
-    background: #e9ecef;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    color: #666;
-}
-
-.avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.bold-text-estp {
-    font-weight: bold;
-    color: #222;
-}
-
-.sub-text-estp {
-    color: #777;
-    font-size: 0.9rem;
-}
-
-/* ===== BADGE ESTADO: Indicador de estado ===== */
-.status-badge-estp {
-    background-color: #7cc576;
+/* Forzar que el menú mantenga un ancho fijo y no se encoja */
+.padre-menu {
+    width: 250px;
+    min-width: 250px;
+    background-color: rgba(45, 59, 92, 0.95);
     color: white;
-    padding: 5px 12px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    display: inline-block;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
-/* ===== ENLACE UBICACIÓN: Link de ubicación ===== */
-.link-location-estp {
-    color: #4da3ff;
-    text-decoration: underline;
-    font-size: 0.9rem;
-    cursor: pointer;
+/* Área de contenido para la tabla ocupando el espacio restante */
+.content-estp {
+    flex: 1;
+    padding: 40px;
+    box-sizing: border-box;
 }
 
 /*==================================================================================*/
@@ -2125,7 +2033,84 @@ tabla Usuarios módulos admin y superadmin===== */
     width: 100px;
 }
 
+/* ==========================================
+ALERTAS PADRE DE FAMILIA
+   
 
+/* Contenedor principal de la sección */
+.padre-content-alertas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px; /* Sube el contenido lo más alto posible */
+    box-sizing: border-box;
+}
+
+/* Título de alertas exclusivo */
+.titulo-alertas-padre {
+    font-size: 24px;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #2c4b62;
+    font-weight: bold;
+}
+
+/* Contenedor específico para la tabla en la vista de padres */
+.tabla-padre-alertas-container {
+    width: 95%;
+    max-width: 1400px;
+    margin: 0 auto 30px auto; /* 0 arriba para pegarse al tope */
+    overflow-y: auto;
+    max-height: 500px;
+    box-sizing: border-box;
+}
+
+/* Estructura interna de la tabla basada en tus estilos */
+.tabla-padre-alertas-container table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.tabla-padre-alertas-container th {
+    background-color: #295a6b;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+
+.tabla-padre-alertas-container td {
+    border: 1px solid #ccc;
+    padding: 12px;
+    font-size: 13px;
+    text-align: center;
+    color: #333;
+    word-break: break-word;
+}
+
+.tabla-padre-alertas-container tr:hover {
+    background-color: #eaf4f8;
+}
+
+/* Distribución y espaciado de los botones inferiores */
+.botones-alertas-padre {
+    display: flex;
+    gap: 20px; /* Espacio entre el botón de reporte y volver */
+    justify-content: center;
+    margin-bottom: 30px;
+    width: 100%;
+}
 /*=============================================================*/
 /*Estilos para tabla CENTRO DE GESTION DE ALERTAS en modulo Admin y Superadmin*/
 /*============================================================*/

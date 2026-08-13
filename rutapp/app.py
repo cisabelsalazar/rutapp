@@ -4,8 +4,7 @@
 #==================================================
 # IMPORTACIÓN DE LIBRERÍAS 
 #==================================================
-
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 import mysql.connector
 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -562,7 +561,7 @@ def editar_usuario(id_usuario):
         nombres = request.form['nombres_y_apellidos']
         correo = request.form['correo']
         telefono = request.form['telefono']
-        rol = request.form['rol'] #para actualizar el rol cuando se edita usuario
+        rol = request.form['id_rol'] #para actualizar el rol cuando se edita usuario
 
 
          # VALIDACIÓN LONGITUD DE CAMPOS
@@ -2027,6 +2026,186 @@ def monitorear_ruta():
 #- Listar estudiantes por conductor o ruta
 
 
+
+
+#==========================================
+# API REST 
+#===========================================
+
+#===============================
+#API MODULO USUARIOS
+#===============================
+
+# ==========================================
+# API REST - LISTAR USUARIOS
+# ==========================================
+
+@app.route('/api/usuarios', methods=['GET'])
+def api_usuarios():
+
+    cursor = conexion.cursor(dictionary=True)
+
+    consulta = """
+        SELECT 
+            id_usuario,
+            nombre_usuario,
+            nombres_y_apellidos,
+            correo,
+            telefono,
+            id_rol
+        FROM usuario
+    """
+
+    cursor.execute(consulta)
+    usuarios = cursor.fetchall()
+    cursor.close()
+
+    return jsonify(usuarios)
+
+#=========================================
+#GET PARA CONSULTAR UN USUARIO
+#========================================
+
+@app.route('/api/usuario/<int:id_usuario>', methods=['GET'])
+def api_usuario(id_usuario):
+
+    cursor = conexion.cursor(dictionary=True)
+
+    consulta = """
+        SELECT 
+            id_usuario,
+            nombre_usuario,
+            nombres_y_apellidos,
+            correo,
+            telefono,
+            id_rol
+        FROM usuario
+        WHERE id_usuario = %s
+    """
+
+    cursor.execute(consulta, (id_usuario,))
+    usuario = cursor.fetchone()
+    cursor.close()
+
+    if usuario:
+        return jsonify(usuario)
+    else:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+#=========================================
+#POST PARA CREAR UN USUARIO
+#========================================
+
+@app.route('/api/usuario', methods=['POST'])
+def api_crear_usuarios():
+    data = request.get_json()
+
+    id_usuario = data.get('id_usuario')
+    nombre_usuario = data.get('nombre_usuario')
+    nombres_y_apellidos = data.get('nombres_y_apellidos')
+    correo = data.get('correo')
+    telefono = data.get('telefono')
+    password = data.get('password')
+    id_rol = data.get('id_rol')
+
+    #Validación de datos obligatorios
+    if not all([id_usuario, nombre_usuario, nombres_y_apellidos, correo, telefono, password]):
+        return jsonify({"error": "Todos los campos son obligatorios"}), 400
+
+    #Encriptar contraseña
+    hash_password = generate_password_hash(password)
+
+    cursor = conexion.cursor()
+
+    #Verificar si ya existe el usuario
+    cursor.execute("SELECT * FROM usuario WHERE id_usuario = %s",
+                   (id_usuario,)
+    )
+
+    if cursor.fetchone():
+        cursor.close()
+        return jsonify({"error": "El usuario ya existe"}), 400
+
+    #Insertar nuevo usuario en la base de datos
+
+    consulta_insert = """
+        INSERT INTO usuario 
+        (id_usuario, nombre_usuario, nombres_y_apellidos, correo,
+        telefono, hash_password, id_rol)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+    """
+    valores = (id_usuario, nombre_usuario, nombres_y_apellidos, correo, telefono, hash_password, id_rol)
+
+    cursor.execute(consulta_insert, valores)
+    conexion.commit()
+    cursor.close()
+
+    return jsonify({"message": "Usuario creado exitosamente"}), 201
+
+#=========================================
+# PUT PARA ACTUALIZAR/MODIFICAR UN USUARIO
+#========================================
+@app.route('/api/usuario/<int:id_usuario>', methods=['PUT'])
+def api_modificar_usuario(id_usuario):
+    data = request.get_json()
+
+    
+    id_usuario = data.get('id_usuario')
+    nombre_usuario = data.get('nombre_usuario')
+    nombres_y_apellidos = data.get('nombres_y_apellidos')
+    correo = data.get('correo')
+    telefono = data.get('telefono')
+    id_rol = data.get('id_rol')
+
+    cursor = conexion.cursor()
+
+    consulta_update = """
+        UPDATE usuario
+        SET nombre_usuario = %s,
+            nombres_y_apellidos = %s,
+            correo = %s,
+            telefono = %s,
+            id_rol = %s
+        WHERE id_usuario = %s
+    """
+
+    cursor.execute(consulta_update, (nombre_usuario, nombres_y_apellidos, correo, telefono, id_rol, id_usuario))
+    conexion.commit()
+    cursor.close()
+
+    return jsonify({"message": "Usuario modificado exitosamente"}), 200
+
+#=========================================
+# DELETE PARA ELIMINAR UN USUARIO
+#========================================
+@app.route('/api/usuario/<int:id_usuario>', methods=['DELETE'])
+def api_eliminar_usuario(id_usuario):
+
+    cursor = conexion.cursor()
+
+    # Verificar si el usuario existe
+    cursor.execute(
+        "SELECT id_usuario FROM usuario WHERE id_usuario = %s",
+        (id_usuario,)
+    )
+
+    usuario = cursor.fetchone()
+
+    if not usuario:
+        cursor.close()
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    # Eliminar usuario
+    consulta_delete = "DELETE FROM usuario WHERE id_usuario = %s"
+
+    cursor.execute(consulta_delete, (id_usuario,))
+    conexion.commit()
+
+    cursor.close()
+
+    return jsonify({
+        "message": "Usuario eliminado exitosamente"
+    }), 200
 
 # ==========================================
 # EJECUCIÓN DE LA APLICACIÓN

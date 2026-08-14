@@ -866,6 +866,7 @@ input[type="text"]:focus {
     cursor: pointer;
     transition: 0.2s;
     margin-right: 10px;
+    text-decoration: none;
 }
 
 .btn-env:hover {

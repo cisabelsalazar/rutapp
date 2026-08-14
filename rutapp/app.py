@@ -1290,30 +1290,39 @@ def mi_ruta():
 
 @app.route('/conductor/estudiantes')
 def estudiantes_conductor():
-    
-    cursor = conexion.cursor(dictionary=True) # Importante: dictionary=True
-    # Consulta para traer alertas con datos de los estudiantes y rutas
-    
-    consulta = """
-    SELECT 
-      nombre,
-      grado,
-      direccion,
-      telefono,
-      id_ruta,
-      estado
-      FROM estudiante
-    """
-    cursor.execute(consulta)
-    
-    # Obtenemos los datos
-    estudiantes_bd = cursor.fetchall()
-    
+    # 1. Validar que el usuario esté en sesión
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
 
-    # Pasamos la variable al HTML
+    id_usuario = session['usuario']
+
+    cursor = conexion.cursor(dictionary=True)
+
+    # 2. Consulta filtrando por el conductor en sesión
+    # (Asegúrate de ajustar los nombres de tablas y columnas según tu modelo de BD)
+    consulta = """
+        SELECT 
+            e.nombre,
+            e.grado,
+            e.direccion,
+            e.telefono,
+            e.id_ruta,
+            e.estado
+        FROM estudiante e
+        INNER JOIN ruta r ON e.id_ruta = r.id_ruta
+        WHERE r.id_conductor = %s
+    """
+
+    # 3. Ejecutar la consulta pasando el ID del usuario en una tupla
+    cursor.execute(consulta, (id_usuario,))
+
+    # 4. Obtener los resultados
+    estudiantes_bd = cursor.fetchall()
+
     return render_template(
-        'mod_conductor/estudiantes_conductor.html', 
-        estudiantes_bd=estudiantes_bd)
+        'mod_conductor/estudiantes_conductor.html',
+        estudiantes_bd=estudiantes_bd
+    )
 
 #==============================================
 #======== Ruta para abordar estudiante=========#

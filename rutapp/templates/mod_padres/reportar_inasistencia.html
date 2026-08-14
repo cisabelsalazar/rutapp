@@ -28,7 +28,6 @@
 
             <ul>
                 <li><a href="{{ url_for('ver_ruta') }}">Ver Ruta</a></li>
-                <li><a href="{{ url_for('informacion_conductor') }}">Conductor</a></li>
                 <li><a href="{{ url_for('reportar_inasistencia') }}">Inasistencia</a></li>
                 <li>
                     <a href="{{ url_for('logout') }}" class="btn-logout">
@@ -51,8 +50,13 @@
                         <label for="estudiante">Estudiante</label>
                         <select id="estudiante" name="estudiante" required>
                             <option value="">Seleccione</option>
-                            <option value="Juan Pérez">Juan Pérez</option>
-                            <option value="Ana Torres">Ana Torres</option>
+                            {% if estudiantes %}
+                               {% for est in estudiantes %}
+                                   <option value="{{ est.id_estudiante }}">{{ est.nombre }}</option>
+                               {% endfor %}
+                            {% else %}
+                                <option value="" disabled>No tiene estudiantes asignados</option>
+                            {% endif %}
                         </select>
                     </div>
 

@@ -44,6 +44,7 @@
             <img src="{{ url_for('static', filename='img/mapa.png') }}" alt="Mapa de la ruta" class="mapa-admin">
 
             <div class="admin-buttons">
+                <a href="{{ url_for('estudiantes_padre') }}" class="btn">estudiantes</a>
                 <a href="{{ url_for('reportar_inasistencia') }}" class="btn">reportar inasistencia</a>
                 <a href="{{ url_for('ver_ruta') }}" class="btn">Ver ruta</a>
                 <a href="{{ url_for('alertas_padres') }}" class="btn">Alertas</a>

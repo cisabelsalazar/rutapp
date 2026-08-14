@@ -1065,37 +1065,46 @@ def editar_alerta(id_alerta):
 # GESTIONAR ALERTAS (Panel conductor)
 #===========================================
 
-@app.route('/conductor/alertas', methods=['GET', 'POST'])#Revisado por Cristina OK#
+@app.route('/conductor/alertas', methods=['GET', 'POST'])
 def alertas_conductor():
-    cursor = conexion.cursor(dictionary=True)# Crear cursor para interactuar con la base de datos
+    cursor = conexion.cursor(dictionary=True)
+    id_conductor = session.get('usuario') # ID del conductor logueado
 
-    id_conductor = session.get('usuario') # Obtener el ID del conductor desde la sesión
+    # --- 1. OBTENER LA RUTA ASIGNADA AL CONDUCTOR ---
+    cursor.execute("SELECT id_ruta FROM RUTA WHERE id_conductor = %s", (id_conductor,))
+    ruta_asiganada = cursor.fetchone()
 
-    #Crear alerta
+    # Si el conductor no tiene ruta asignada, evitamos errores devolviendo una lista vacía
+    if not ruta_asiganada:
+        cursor.close()
+        flash('No tienes ninguna ruta asignada actualmente.', 'warning')
+        return render_template('mod_conductor/alertas_conductor.html', alertas=[], filtro_activo='sin_leer')
+
+    id_ruta = ruta_asiganada['id_ruta']
+
+    # --- 2. CREAR ALERTA (POST) ---
     if request.method == 'POST':
         id_estudiante = request.form.get('id_estudiante')
-        id_ruta = request.form.get('id_ruta')
         tipo_alerta = request.form.get('tipo_alerta')
         mensaje = request.form.get('mensaje')
 
         consulta_insert = """
-        INSERT INTO ALERTAS(
-        id_usuario_emisor,
-        id_estudiante,
-        id_ruta,
-        tipo_alerta,
-        mensaje
-        )
-        VALUES (%s, %s, %s, %s, %s)
+            INSERT INTO ALERTAS (
+                id_usuario_emisor,
+                id_estudiante,
+                id_ruta,
+                tipo_alerta,
+                mensaje
+            )
+            VALUES (%s, %s, %s, %s, %s)
         """
 
-        cursor.execute(consulta_insert,(
+        cursor.execute(consulta_insert, (
             id_conductor,
             id_estudiante,
-            id_ruta,
+            id_ruta, # Usamos la ruta asignada automáticamente
             tipo_alerta,
             mensaje
-            
         ))
        
         conexion.commit()
@@ -1103,41 +1112,26 @@ def alertas_conductor():
         flash('Alerta creada correctamente', 'success')
         return redirect(url_for('alertas_conductor'))
     
-    # --- LÓGICA DE FILTRADO (Para los botones/pestañas) ---
-    # Capturamos el filtro actual desde la URL (por defecto 'sin_leer')
+    # --- 3. CONSULTAR Y FILTRAR ALERTAS DE LA RUTA (GET) ---
     filtro = request.args.get('filtro', 'sin_leer')
 
-    consulta_base = """
-    SELECT 
-        id_alerta, 
-        id_estudiante, 
-        tipo_alerta, 
-        mensaje, 
-        estado 
-    FROM 
-        ALERTAS 
-    WHERE 
-        id_usuario_emisor = %s
-    """
-
-    # Base de la consulta
-    consulta_base = "SELECT * FROM ALERTAS WHERE id_usuario_emisor = %s"
+    consulta_base = "SELECT * FROM ALERTAS WHERE id_ruta = %s"
     
-    # Modificamos el SQL según la pestaña seleccionada (asumiendo que tienes una columna 'estado')
+    # Filtro según el estado seleccionado
     if filtro == 'sin_leer':
         consulta_base += " AND (estado IS NULL OR estado = '' OR estado = 'nueva')"
     elif filtro == 'leidas':
         consulta_base += " AND estado = 'leida'"
     elif filtro == 'resueltas':
         consulta_base += " AND estado = 'resuelta'"
-    consulta_base += " ORDER BY fecha_hora DESC" # Suponiendo que tienes columna 'hora'
+        
+    consulta_base += " ORDER BY fecha_hora DESC"
     
-    
-    cursor.execute(consulta_base, (id_conductor,))
+    cursor.execute(consulta_base, (id_ruta,))
     alertas = cursor.fetchall()
+    cursor.close() # Siempre cerrar el cursor al terminar
     
-    return render_template('mod_conductor/alertas_conductor.html', alertas=alertas,filtro_activo=filtro)
-
+    return render_template('mod_conductor/alertas_conductor.html', alertas=alertas, filtro_activo=filtro, id_ruta=id_ruta)
 # --- NUEVA RUTA PARA LIMPIAR SELECCIONADAS ---
 @app.route('/conductor/alertas/limpiar', methods=['POST'])
 def limpiar_alertas():
@@ -1207,26 +1201,42 @@ def procesar_alerta(accion, alerta_id):
 
 @app.route('/padres/alertas')
 def alertas_padres():
+    # 1. Validar inicio de sesión
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    id_padre = session['usuario']
+    filtro = request.args.get('filtro', 'todas')  # Captura el filtro (por defecto 'todas')
+
     cursor = conexion.cursor(dictionary=True)
 
-     #Temporal: para luego conectamos con sesión del padre
-    id_estudiante = 7895462
-
+    # 2. Construir la consulta dinámica
     consulta = """
-    SELECT *
-    FROM ALERTAS
-    WHERE id_estudiante = %s
-    ORDER BY fecha_hora DESC
+        SELECT DISTINCT a.*
+        FROM ALERTAS a
+        LEFT JOIN padre_estudiante pe ON a.id_estudiante = pe.id_estudiante
+        WHERE (a.id_usuario_emisor = %s OR pe.id_padre = %s)
     """
-    cursor.execute(consulta, (id_estudiante,))
+
+    # Aplicar filtros según la selección del usuario
+    if filtro == 'sin_leer':
+        consulta += " AND (a.estado IS NULL OR a.estado = '' OR a.estado = 'nueva')"
+    elif filtro == 'leidas':
+        consulta += " AND a.estado = 'leida'"
+    elif filtro == 'resueltas':
+        consulta += " AND a.estado = 'resuelta'"
+
+    consulta += " ORDER BY a.fecha_hora DESC"
+
+    cursor.execute(consulta, (id_padre, id_padre))
     alertas = cursor.fetchall()
     cursor.close()
 
     return render_template(
-        'mod_padres/alertas_padres.html', 
-        alertas=alertas
+        'mod_padres/alertas_padres.html',
+        alertas=alertas,
+        filtro_activo=filtro
     )
-
 
 # ==========================================
 # MODULO CONDUCTOR
@@ -1345,40 +1355,66 @@ def padres():
 @app.route('/reportar_inasistencia', methods=['GET', 'POST'])
 def reportar_inasistencia():
     cursor = conexion.cursor(dictionary=True)
-
-    #Temporal: luego conectamos con sesión del padre
     id_padre = session.get('usuario')
 
     if request.method == 'POST':
-        estudiante = request.form.get('estudiante')
+        id_estudiante = request.form.get('estudiante')
         fecha = request.form.get('fecha')
         motivo = request.form.get('motivo')
         observacion = request.form.get('observacion')
 
-        mensaje = f"Inasistencia reportada para{estudiante} el día {fecha}. Motivo: {motivo}. Observación{observacion}"
+        # 1. Buscar la ruta asignada al estudiante seleccionado (Tabla: estudiante)
+        consulta_ruta = "SELECT id_ruta FROM estudiante WHERE id_estudiante = %s"
+        cursor.execute(consulta_ruta, (id_estudiante,))
+        resultado_estudiante = cursor.fetchone()
+        
+        # Extraemos la id_ruta si el estudiante tiene una asignada
+        id_ruta = resultado_estudiante['id_ruta'] if resultado_estudiante else None
 
+        # 2. Mensaje de la alerta
+        mensaje = f"Inasistencia reportada el día {fecha}. Motivo: {motivo}. Observación: {observacion}"
+
+        # 3. Guardar la alerta con id_estudiante e id_ruta
         consulta_insert = """
-        INSERT INTO ALERTAS(
-            id_usuario_emisor,
-            tipo_alerta,
-             mensaje
-        )
-        VALUES (%s, %s, %s)
+            INSERT INTO ALERTAS (id_usuario_emisor, tipo_alerta, mensaje, id_estudiante, id_ruta)
+            VALUES (%s, %s, %s, %s, %s)
         """
-        cursor.execute(consulta_insert, (
-            id_padre,
-            'inasistencia',
-            mensaje
-        ))
 
+        cursor.execute(consulta_insert, (id_padre, 'inasistencia', mensaje, id_estudiante, id_ruta))
         conexion.commit()
         cursor.close()
 
         flash('Inasistencia reportada correctamente', 'success')
         return redirect(url_for('alertas_padres'))
-    cursor.close()
-    return render_template('mod_padres/reportar_inasistencia.html')
 
+    # Petición GET: Traer estudiantes usando la tabla 'estudiante'
+    consulta_estudiantes = """
+        SELECT e.* 
+        FROM estudiante e
+        INNER JOIN padre_estudiante pe ON e.id_estudiante = pe.id_estudiante
+        WHERE pe.id_padre = %s
+    """
+    
+    cursor.execute(consulta_estudiantes, (id_padre,))
+    estudiantes = cursor.fetchall()
+    cursor.close()
+
+    return render_template('mod_padres/reportar_inasistencia.html', estudiantes=estudiantes)
+    # ==============================================================
+    # --- CONSULTA GET CON JOIN A LA TABLA INTERMEDIA ---
+    # ==============================================================
+    consulta_estudiantes = """
+        SELECT e.* 
+        FROM ESTUDIANTE e
+        INNER JOIN padre_estudiante pe ON e.id_estudiante = pe.id_estudiante
+        WHERE pe.id_padre = %s
+    """
+    
+    cursor.execute(consulta_estudiantes, (id_padre,))
+    estudiantes = cursor.fetchall()
+    cursor.close()
+
+    return render_template('mod_padres/reportar_inasistencia.html', estudiantes=estudiantes)
 # ==========================================
 # VER INFORMACION CONDUCTOR
 # ==========================================
@@ -1428,6 +1464,29 @@ def informacion_conductor():
 
 # ==========================================
 # VER ESTUDIANTE
+# ==========================================
+@app.route('/padres/estudiantes_padre')
+def estudiantes_padre():
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    id_padre = session['usuario']
+
+    cursor = conexion.cursor(dictionary=True)
+    
+    consulta = """
+    SELECT e.nombre, e.grado, e.id_ruta, e.estado 
+    FROM estudiante e
+    INNER JOIN padre_estudiante pe ON e.id_estudiante = pe.id_estudiante
+    WHERE pe.id_padre = %s
+"""
+    cursor.execute(consulta, (id_padre,))
+    estudiantes = cursor.fetchall()
+
+    return render_template('mod_padres/estudiantes_padre.html', estudiantes=estudiantes)
+    
+# ==========================================
+# VER RUTA
 # ==========================================
 
 @app.route('/padres/ver_ruta')

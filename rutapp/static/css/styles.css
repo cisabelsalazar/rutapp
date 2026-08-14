@@ -556,10 +556,12 @@ main {
 
 /* ===== MAPA ADMIN: Estilos para mapa en panel admin ===== */
 .mapa-admin {
-    max-width: 450px;
-    width: 100%;
-    margin-top: 20px;
-    border-radius: 8px;
+    width: 100%;           
+    max-width: 600px;
+    height: 400px;         
+    margin: 0 auto;        
+    border-radius: 15px;   
+    display: block;
 }
 
 
@@ -629,9 +631,9 @@ main {
 
 .mapa-conductor {
     width: 100%;
-    height: auto;
-    display: block;
-    object-fit: cover;
+    height: 100%;        
+    min-height: 350px;   
+    border-radius: 12px;
 }
 
 /* ===== CONTROLES DEL MAPA: Botones de zoom y controles ===== */
@@ -953,6 +955,9 @@ input[type="text"]:focus {
     border-radius: 10px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     overflow-x: auto;
+    margin: 30px auto 0 auto;    /* 30px de margen arriba, centrado horizontalmente */
+    max-width: 900px;           /* Define un ancho máximo si deseas que no se estire demasiado */
+    width: 100%;
 }
 
 table {
@@ -2599,10 +2604,8 @@ tabla Gestion de Rutas módulos admin y superadmin===== */
 }
 
 .vista-estudiantes .btn-volver {
-    position: absolute;
-    top: 220px;
-    left: 20px;
-    margin-left: 0; /* anula el margin del botón general */
+    position: static; 
+    margin-left: 0;
 }
 
 

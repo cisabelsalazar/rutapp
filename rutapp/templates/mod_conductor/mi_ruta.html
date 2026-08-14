@@ -44,7 +44,7 @@
                         <div class="route-info">
                             <label>Ruta</label>
                             <div class="input-group">
-                                <input type="text" value="{{ruta.nombre_ruta if ruta else'sin ruta asignada'}}"
+                                <input type="text" value="{{ruta.nombre_ruta if ruta else 'sin ruta asignada'}}"
                                 readonly>
 
                             </div>
@@ -55,7 +55,7 @@
                                     {% if paradas %}
                                     {% for parada in paradas %}
                                     
-                                    <li{% if loop.last %}class="selected" {% endif %}>
+                                    <li{% if loop.last %} class="selected" {% endif %}>
                                         {{ parada.nombre_parada }}
                                     </li>
                                     {% endfor %}
@@ -76,8 +76,8 @@
                                     <span><i class="fas fa-search"></i></span>
                                     <span><i class="fas fa-layer-group"></i></span>
                                 </div>
-                                <img src="{{ url_for('static', filename='img/mapa.png') }}"
-                                    alt="Mapa de rutas en tiempo real" class="mapa-conductor">
+                                <!-- Div del mapa reemplazando a la imagen -->
+                                <div id="map" class="mapa-conductor"></div>
                             </div>
                         </div>
                     </div>
@@ -95,6 +95,28 @@
             {# ===== FOOTER ===== #}
             {% include 'layout/footer.html' %}
         </footer>
+
+    <!-- API de Google Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap" async defer></script>
+
+    <!-- Script de inicialización del mapa -->
+    <script>
+      function initMap() {
+        const centroUbicacion = { lat: 5.6139, lng: -73.3150 };
+
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 14,
+          center: centroUbicacion,
+          disableDefaultUI: false,
+        });
+
+        new google.maps.Marker({
+          position: centroUbicacion,
+          map: map,
+          title: "Ubicación de la Ruta",
+        });
+      }
+    </script>
 </body>
 
 </html>

@@ -9,16 +9,14 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
 </head>
 
-<body class="conductor_body vista-alertas form-alerta-conductor">
+<body class="bg-secundario vista-alertas">
     <form id="form-limpiar" action="{{ url_for('limpiar_alertas') }}" method="POST"></form>
 
     <header>
-        {# Incluye el encabezado (header) de la página #}
         {% include 'layout/header.html' %}
     </header>
 
     <main>
-
         <div class="conductor-layout">
 
             <div class="conductor-menu">
@@ -38,126 +36,98 @@
                     </li>
                 </ul>
             </div>
-            <button type="submit" form="form-limpiar" class="btn-clear-aler">Limpiar seleccionadas</button>
-             
-            <div class="container-aler">
-                <header class="main-header-aler">
-                    <h1>Alertas</h1>
-                    <button type="submit" form="form-limpiar" class="btn-clear-aler">Limpiar seleccionadas</button>
-                </header>
-        
-                <form method="POST" class="form-alerta-conductor">
-                    <select name="tipo_alerta" required>
-                        <option value="">Seleccione tipo</option>
-                        <option value="cerca_punto">Vehículo cerca</option>
-                        <option value="llegada">Llegó al punto</option>
-                        <option value="retraso">Retraso</option>
-                        <option value="incidente">Incidente</option>
-                    </select>
-                     <input type="number" name="id_estudiante" placeholder="ID estudiante">
-                     <input type="number" name="id_ruta" placeholder="ID ruta">
-                     <textarea name="mensaje" placeholder="Escribe el mensaje" required></textarea>
-                     <button type="submit" class="btn-read">Enviar alerta</button>
-                </form>
-                <nav class="filter-tabs-aler">
-                    <a href="{{ url_for('alertas_conductor', filtro='todas') }}" class="tab-aler {% if filtro_activo == 'todas' %}tab-active{% endif %}">Todas</a>
-                    <a href="{{ url_for('alertas_conductor', filtro='sin_leer') }}" class="tab-aler {% if filtro_activo == 'sin_leer' %}tab-active{% endif %}">Sin Leer</a>
-                    <a href="{{ url_for('alertas_conductor', filtro='leidas') }}" class="tab-aler {% if filtro_activo == 'leidas' %}tab-active{% endif %}">Leídas</a>
-                    <a href="{{ url_for('alertas_conductor', filtro='resueltas') }}" class="tab-aler {% if filtro_activo == 'resueltas' %}tab-active{% endif %}">Resueltas</a>
-                </nav>
-                
-                <form id="form-limpiar-alertas" action="{{ url_for('limpiar_alertas') }}" method="POST">
-                    <table class="tabla-alertas">
-                        <tbody>
-                            {% for alerta in alertas %}
-                            {% else %}
-                            <tr>
-                                <td colspan="5" style="text-align: center;">No hay alertas registradas</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </form>
 
-                <div class="table-container-aler">
-                    <a href="{{ url_for('conductor') }}" class="btn btn-volver">
-                        Volver
-                    </a>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th width="40"><input type="checkbox" id="select-all"></th>
-                                <th>Estudiante</th>
-                                <th>Tipo</th>
-                                <th>Hora</th>
-                                <th>Mensaje</th>
-                                <th class="actions-header">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if alertas %}
-                            {% for alerta in alertas %}
-                            <tr>
-                                <td>
-                                    <input type="checkbox" class="check-alerta" form="form-limpiar" name="alertas_seleccionadas" value="{{ alerta.id_alerta if alerta.id_alerta is defined else alerta[0] }}">
-                                </td>
+            <div class="admin-content">
+                <div class="tabla-alertas-container">
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h1>Centro de Gestión de Alertas</h1>
+                        <a href="{{ url_for('conductor') }}" class="btn btn-volver">Volver</a>
+                    </div>
 
-                                <td>
-                                    <div class="user-info-aler">
-                                        <img src="{{ url_for('static', filename='img/avatar h.png') }}">
-                                        {{ alerta.id_estudiante if alerta.id_estudiante else 'General' }}
-                                    </div>
-                                </td>
+                    <!-- Formulario de envío de alertas -->
+                    <form method="POST" class="form-alerta-conductor" style="margin-bottom: 20px;">
+                        <select name="tipo_alerta" required>
+                            <option value="">Seleccione tipo</option>
+                            <option value="cerca_punto">Vehículo cerca</option>
+                            <option value="llegada">Llegó al punto</option>
+                            <option value="retraso">Retraso</option>
+                            <option value="incidente">Incidente</option>
+                        </select>
+                        <input type="number" name="id_estudiante" placeholder="ID estudiante">
+                        <input type="number" name="id_ruta" placeholder="ID ruta">
+                        <textarea name="mensaje" placeholder="Escribe el mensaje" required></textarea>
+                        <button type="submit" class="btn-read">Enviar alerta</button>
+                    </form>
 
-                                <td>
-                                    <span class="badge">
-                                        ⚠️ {{ alerta.tipo_alerta }}
-                                    </span>
-                                </td>
+                    <!-- Filtros estilo Admin -->
+                    <div class="filtros-alertas">
+                        <a href="{{ url_for('alertas_conductor', filtro='todas') }}" class="{% if filtro_activo == 'todas' or not filtro_activo %}filtro-activo{% endif %}">Todas</a>
+                        <a href="{{ url_for('alertas_conductor', filtro='sin_leer') }}" class="{% if filtro_activo == 'sin_leer' %}filtro-activo{% endif %}">Nuevas</a>
+                        <a href="{{ url_for('alertas_conductor', filtro='leidas') }}" class="{% if filtro_activo == 'leidas' %}filtro-activo{% endif %}">Leídas</a>
+                        <a href="{{ url_for('alertas_conductor', filtro='resueltas') }}" class="{% if filtro_activo == 'resueltas' %}filtro-activo{% endif %}">Resueltas</a>
+                    </div>
 
-                                <td>{{ alerta.fecha_hora.strftime('%I:%M %p') if alerta.fecha_hora else '' }}</td>
+                    <!-- Tabla estilo Admin -->
+                    <div class="tabla-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th width="40"><input type="checkbox" id="select-all"></th>
+                                    <th>Estudiante</th>
+                                    <th>Tipo</th>
+                                    <th>Mensaje</th>
+                                    <th>Hora</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if alertas %}
+                                {% for alerta in alertas %}
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="check-alerta" form="form-limpiar" name="alertas_seleccionadas" value="{{ alerta.id_alerta if alerta.id_alerta is defined else alerta[0] }}">
+                                    </td>
+                                    <td>{{ alerta.id_estudiante if alerta.id_estudiante else 'General' }}</td>
+                                    <td>{{ alerta.tipo_alerta }}</td>
+                                    <td>{{ alerta.mensaje }}</td>
+                                    <td>{{ alerta.fecha_hora.strftime('%I:%M %p') if alerta.fecha_hora else '' }}</td>
+                                    <td>{{ alerta.estado if alerta.estado else 'Nueva' }}</td>
+                                    <td style="width: 15%;">
+                                        <div class="acciones">
+                                            {% if alerta.estado == 'leida' or alerta.estado == 'resuelta' %}
+                                                <button type="button" class="btn-read" style="opacity: 0.6;" disabled>
+                                                    Leída ✔
+                                                </button>
+                                            {% else %}
+                                                <button type="button" class="btn-read" data-id="{{ alerta.id_alerta }}" onclick="procesarAlerta(this, 'leer')">
+                                                    Marcar leída
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="7" style="text-align: center;">No hay alertas registradas</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
 
-                                <td>{{ alerta.mensaje }}</td>
+                    <div style="margin-top: 15px;">
+                        <button type="submit" form="form-limpiar" class="btn-clear-aler">Limpiar seleccionadas</button>
+                    </div>
 
-                                <td>
-                                  <div class="actions-aler">
-                                      {% if alerta.estado == 'leida' or alerta.estado == 'resuelta' %}
-                                          <button type="button" class="btn-read" style="opacity: 0.6;" disabled>
-                                              Leída ✔
-                                          </button>
-                                      {% else %}
-                                          <button type="button" class="btn-read" data-id="{{ alerta.id_alerta }}" onclick="procesarAlerta(this, 'leer')">
-                                              Marcar leída
-                                          </button>
-                                     {% endif %}
-
-                                     {% if alerta.estado == 'resuelta' %}
-                                         <button type="button" class="btn-resolve" style="opacity: 0.6;" disabled>
-                                             Resuelto ✔
-                                         </button>
-                                     {% else %}
-                                         <button type="button" class="btn-resolve" data-id="{{ alerta.id_alerta }}" onclick="procesarAlerta(this, 'resolver')">
-                                             Resolver
-                                         </button>
-                                     {% endif %}
-                                  </div>
-
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            {% else %}
-                            <tr>
-                                <td colspan="6">No hay alertas registradas</td>
-                            </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
     </main>
+
     <footer class="footer">
-        {# ===== FOOTER ===== #}
         {% include 'layout/footer.html' %}
     </footer>
 
@@ -166,89 +136,25 @@
             const checkboxes = document.querySelectorAll('.check-alerta');
             checkboxes.forEach(cb => cb.checked = e.target.checked);
         });
+
+        function procesarAlerta(boton, accion) {
+            const alertaId = boton.getAttribute('data-id');
+            if (!alertaId || alertaId === "None" || alertaId === "") return;
+
+            fetch(`/alerta/${accion}/${alertaId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    boton.disabled = true;
+                    boton.innerText = accion === 'leer' ? 'Leída ✔' : 'Resuelto ✔';
+                    boton.style.opacity = '0.6';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
     </script>
-    <script>
-    function procesarAlerta(boton, accion) {
-    const alertaId = boton.getAttribute('data-id');
-
-    // Validación de seguridad para que no intente enviar si el ID está vacío
-    if (!alertaId || alertaId === "None" || alertaId === "") {
-        console.error("Error: El atributo data-id está vacío o no se definió en el HTML.");
-        alert("Error interno: No se pudo obtener el ID de la alerta.");
-        return;
-    }
-
-    // Enviamos la petición POST con el ID válido
-    fetch(`/alerta/${accion}/${alertaId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === 'success') {
-            boton.disabled = true;
-            boton.innerText = accion === 'leer' ? 'Leída ✔' : 'Resuelto ✔';
-            boton.style.opacity = '0.6';
-        } else {
-            alert('Hubo un error al procesar la acción: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error de conexión con el servidor o ruta no encontrada.');
-    });
-}
-</script>
-<script>
-    function filtrarAlertas(filtro, botonActivo) {
-    // 1. Selecciona todas las filas que tengan la clase 'alerta-fila'
-    const filas = document.querySelectorAll('.alerta-fila');
-
-    filas.forEach(fila => {
-        const estadoFila = fila.getAttribute('data-estado');
-
-        // 2. Compara el estado de la fila con el botón de filtro presionado
-        if (filtro === 'todas') {
-            fila.style.display = ''; // Muestra la fila
-        } 
-        else if (filtro === 'sin_leer') {
-            // 'nueva' representa las alertas que aún no han sido leídas
-            if (estadoFila === 'nueva' || estadoFila === '' || estadoFila === 'None') {
-                fila.style.display = '';
-            } else {
-                fila.style.display = 'none'; // Oculta la fila
-            }
-        } 
-        else if (filtro === 'leidas') {
-            if (estadoFila === 'leida') {
-                fila.style.display = '';
-            } else {
-                fila.style.display = 'none';
-            }
-        } 
-        else if (filtro === 'resueltas') {
-            if (estadoFila === 'resuelta') {
-                fila.style.display = '';
-            } else {
-                fila.style.display = 'none';
-            }
-        }
-    });
-
-    // 3. Cambia la clase 'active' visualmente en los botones de filtro
-    document.querySelectorAll('.option-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    botonActivo.classList.add('active');
-}
-</script>
 </body>
-
 </html>

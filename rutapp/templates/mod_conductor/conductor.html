@@ -18,7 +18,7 @@
     </header>
 
     <main>
-                <!-- Imagen decorativa de fondo -->
+        <!-- Imagen decorativa de fondo -->
         <img src="{{ url_for('static', filename='img/fondocon.png') }}" alt="Imagen de fondo Login"
             class="Imagen" />
 
@@ -43,14 +43,14 @@
 
             <!-- Contenido principal del panel -->
             <section class="conductor-content">
-                <h2>Bienvenido  {{ nombre_completo }} </h2>
+                <h2>Bienvenido {{ nombre_completo }} </h2>
                 <p>Visualice el recorrido y gestione las alertas para los padres de familia.</p>
 
-                <img src="{{ url_for('static', filename='img/mapa.png') }}" alt="Mapa de rutas en tiempo real"
-                    class="mapa-admin">
+                <!-- Div interactivo de Google Maps que conserva la clase mapa-admin -->
+                <div id="map" class="mapa-admin"></div>
 
                 <div class="admin-buttons">
-                    <a href="{{ url_for('compartir_ubicacion') }}" class="btn">Compartir ubicación</a>
+                    <a href="{{ url_for('estudiantes_conductor') }}" class="btn">estudiantes</a>
                     <a href="{{ url_for('mi_ruta') }}" class="btn">Mis Rutas</a>
                     <a href="{{ url_for('alertas_conductor') }}" class="btn">Alertas</a>
                 </div>
@@ -62,6 +62,30 @@
         {# Pie de página reutilizable #}
         {% include 'layout/footer.html' %}
     </footer>
+
+    <!-- Carga de la API de Google Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap" async defer></script>
+
+    <!-- Inicialización del mapa -->
+    <script>
+      function initMap() {
+        // Coordenadas por defecto (puedes cambiarlas por la ubicación inicial de tu ruta)
+        const centroUbicacion = { lat: 5.6139, lng: -73.3150 };
+
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 14,
+          center: centroUbicacion,
+          disableDefaultUI: false,
+        });
+
+        // Marcador del vehículo / ruta
+        new google.maps.Marker({
+          position: centroUbicacion,
+          map: map,
+          title: "Ubicación de la Ruta",
+        });
+      }
+    </script>
 
 </body>
 

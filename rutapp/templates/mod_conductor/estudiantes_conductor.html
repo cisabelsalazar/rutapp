@@ -7,36 +7,32 @@
     <title>RUTAPP - Panel Conductor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+    <!-- Librería Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<!-- Clases utilizadas para estilos generales de la vista -->
-
-<body class="conductor-body vista-estudiantes">
+<body class="bg-secundario vista-gestudiantes">
 
     <!-- Importa la macro reutilizable de botones -->
     {% from 'components/buttons_macro.html' import action_toolbar %}
 
     <!-- ===== HEADER ===== -->
     <header>
-        {# Incluye el encabezado (header) de la página #}
         {% include 'layout/header.html' %}
     </header>
 
     <!-- ===== CONTENIDO PRINCIPAL ===== -->
-    <main class="main-content">
+    <main>
 
         <!-- Imagen decorativa de fondo -->
-        <img src="{{ url_for('static', filename='img/fondocon.png') }}" alt="Imagen de fondo Login" class="Imagen" />
+        <img src="{{ url_for('static', filename='img/imagen_login.png') }}" alt="Imagen de fondo Login" class="Imagen" />
 
+        <div class="admin-layout">
 
-        <div class="conductor-layout">
-
-            <!-- ===== MENÚ LATERAL  ===== -->
-            <div class="conductor-menu">
-
+            <!-- ===== MENÚ LATERAL ===== -->
+            <div class="admin-menu">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-                <!-- Nombre dinámico del panel según el rol -->
                 <h2>Panel {{ nombre_panel }}</h2>
 
                 <ul>
@@ -49,77 +45,81 @@
                         </a>
                     </li>
                 </ul>
-
             </div>
 
-            <!-- Contenedor con scroll para la tabla -->
-            <div class="tabla-scroll">
+            <!-- ===== CONTENIDO CENTRAL ===== -->
+            <div class="admin-content">
 
-                <div class="table-container">
-                    <header class="table-header">
-                        <h1>Estudiantes</h1>
-                        <div class="search-box">
-                            <i class="fa fa-search"></i>
-                            <input type="text" placeholder="Search">
-                        </div>
-                    </header>
+                <div class="tabla-estudiantes-container">
 
-                    <table class="students-table">
-                        <thead>
-                            <tr>
-                                <th>Nombre ⇅</th>
-                                <th>grado</th>
-                                <th>Direccion ⇅</th>
-                                <th>telefono</th>
-                                <th>Ruta </th>
-                                <th>Estado ⇅</th>
-                                <th>Accion</th>
+                    <h1>Estudiantes</h1>
 
-                            </tr>
-                        </thead>
+                    <!-- Contenedor con scroll para la tabla -->
+                    <div class="tabla-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Grado</th>
+                                    <th>Dirección</th>
+                                    <th>Teléfono</th>
+                                    <th>Ruta</th>
+                                    <th>Estado</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
 
-                        <tbody>
-                            {% for estudiante in estudiantes_bd %}
-                            <tr>
+                            <tbody>
+                                {% if estudiantes_bd %}
+                                {% for estudiante in estudiantes_bd %}
+                                <tr>
+                                    <td>{{ estudiante.nombre }}</td>
+                                    <td>{{ estudiante.grado }}</td>
+                                    <td>{{ estudiante.direccion }}</td>
+                                    <td>{{ estudiante.telefono }}</td>
+                                    <td>{{ estudiante.id_ruta }}</td>
+                                    <td>
+                                        <span class="badge {{ 'bg-success' if estudiante.estado == 'Abordo' else 'bg-warning' }}">
+                                            {{ estudiante.estado }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if estudiante.estado != 'Abordo' %}
+                                        <a href="{{ url_for('abordar_estudiante', id_estudiante=estudiante.id_estudiante) }}"
+                                            class="btn btn-editar">
+                                            Subir
+                                        </a>
+                                        {% else %}
+                                        <span class="texto-listo">✔ Listo</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="7">No hay estudiantes asignados</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
 
-                                <td>{{ estudiante.nombre }}</td>
-                                <td>{{ estudiante.grado}}</td>
-                                <td>{{ estudiante.direccion }}</td>
-                                <td>{{ estudiante.telefono}}</td>
-                                <td>{{ estudiante.id_ruta}}</td>
-                                <td>
-                                    <span
-                                        class="badge {{ 'bg-success' if estudiante.estado == 'Abordo' else 'bg-warning' }}">
-                                        {{ estudiante.estado }}
-                                    </span>
-                                </td>
+                    <!-- Botón Volver -->
+                    <div class="contenedor volver">
+                        <a href="{{ url_for('conductor') }}" class="btn btn-volver">
+                            Volver
+                        </a>
+                    </div>
 
-                                <td>
-                                    {% if estudiante.estado != 'Abordo' %}
-                                    <a href="{{ url_for('abordar_estudiante', id_estudiante=estudiante.id_estudiante) }}"
-                                        class="btn-subir">
-                                        Subir
-                                    </a>
-                                    {% else %}
-                                    <span style="color: green;">✔ Listo</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                        
-                        <div class="contenedor volver">
-                            <a href="{{ url_for('conductor') }}" class="btn btn-volver">
-                                Volver
-                            </a>
-                        </div>
-                    </table>
                 </div>
+
             </div>
+
         </div>
+
     </main>
+
     <footer class="footer">
-        {# ===== FOOTER ===== #}
         {% include 'layout/footer.html' %}
     </footer>
 </body>

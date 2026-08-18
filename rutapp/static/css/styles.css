@@ -259,7 +259,79 @@ main {
     opacity: 0.2;/* Imagen más tenue en páginas secundarias */
 }
 
+.vista-gestudiantes .Imagen,
+.vista-alertas .Imagen {
+    opacity: 0.9; /* O 1 si prefieres sin ninguna transparencia */
+}
+/* ===== ESTILOS DEL PANEL PADRE / ESTUDIANTES ===== */
 
+.admin-content {
+    padding: 20px;
+    overflow: hidden;
+}
+
+.tabla-estudiantes-container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.tabla-scroll {
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 450px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tabla-scroll table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+.tabla-scroll th, 
+.tabla-scroll td {
+    padding: 12px 10px;
+    vertical-align: middle;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Anchos y alineaciones de columnas */
+.tabla-scroll th:nth-child(1), .tabla-scroll td:nth-child(1) { width: 60px; }
+.tabla-scroll th:nth-child(2), .tabla-scroll td:nth-child(2) { width: 25%; text-align: left; }
+.tabla-scroll th:nth-child(3), .tabla-scroll td:nth-child(3) { width: 15%; }
+.tabla-scroll th:nth-child(4), .tabla-scroll td:nth-child(4) { width: 15%; }
+.tabla-scroll th:nth-child(5), .tabla-scroll td:nth-child(5) { width: 20%; }
+.tabla-scroll th:nth-child(6), .tabla-scroll td:nth-child(6) { width: 20%; }
+
+.tabla-scroll td .avatar,
+.tabla-scroll td img {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+
+.header-volver-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
+.header-volver-container .btn-volver {
+    padding: 6px 16px;
+    font-size: 13px;
+    border-radius: 6px;
+}
 /*==================================================================================*/
 /* 6. LOGIN: Estilos para formulario de inicio de sesión                           */
 /*==================================================================================*/

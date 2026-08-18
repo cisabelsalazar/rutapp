@@ -9,100 +9,20 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    
-    <style>
-        
-        .admin-content {
-            padding: 20px ;
-            overflow: hidden ;
-        }
-
-        .tabla-estudiantes-container {
-            width: 100% ;
-            max-width: 1000px ;
-            margin: 0 auto ;
-        }
-
-       
-        .tabla-scroll {
-            overflow-x: auto ;
-            overflow-y: auto ;
-            max-height: 450px ;
-            background-color: rgba(255, 255, 255, 0.95) ;
-            border-radius: 8px ;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) ;
-        }
-
-       
-        .tabla-scroll table {
-            width: 100% ;
-            border-collapse: collapse ;
-            table-layout: auto ;
-        }
-
-        
-        .tabla-scroll th, 
-        .tabla-scroll td {
-            padding: 12px 10px ;
-            vertical-align: middle ;
-            font-size: 14px ;
-            text-align: center ;
-            
-        }
-
-       
-        .tabla-scroll th:nth-child(1), .tabla-scroll td:nth-child(1) { width: 60px; }  /* Avatar */
-        .tabla-scroll th:nth-child(2), .tabla-scroll td:nth-child(2) { width: 25%; text-align: left; } /* Nombre */
-        .tabla-scroll th:nth-child(3), .tabla-scroll td:nth-child(3) { width: 15%; } /* Grado */
-        .tabla-scroll th:nth-child(4), .tabla-scroll td:nth-child(4) { width: 15%; } /* Ruta */
-        .tabla-scroll th:nth-child(5), .tabla-scroll td:nth-child(5) { width: 20%; } /* Estado */
-        .tabla-scroll th:nth-child(6), .tabla-scroll td:nth-child(6) { width: 20%; } /* Última ubicación */
-
-      
-        .tabla-scroll td .avatar,
-        .tabla-scroll td img {
-            width: 40px;
-            height: 40px;
-            min-width: 40px;
-            min-height: 40px;
-            max-width: 40px ;
-            max-height: 40px ;
-            border-radius: 50%;
-            object-fit: cover ;
-            display: block ;
-            margin: 0 auto ;
-        }
-
-        /* Estilo del Botón Volver arriba a la izquierda */
-        .header-volver-container {
-            display: flex ;
-            justify-content: flex-start;
-            margin-bottom: 10px ;
-        }
-
-        .header-volver-container .btn-volver {
-            padding: 6px 16px ;
-            font-size: 13px ;
-            border-radius: 6px;
-        }
-    </style>
 </head>
 
-<body class="bg-secundario vista-gestudiantes">
+<body class="bg-secundario vista-estudiantes">
 
     <!-- ===== HEADER ===== -->
     <header>
         {% include 'layout/header.html' %}
     </header>
 
-
     <main>
 
         <img src="{{ url_for('static', filename='img/imagen_padres.png') }}" alt="Imagen de fondo" class="Imagen" />
 
         <div class="admin-layout">
-
 
             <div class="admin-menu">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
@@ -122,7 +42,6 @@
 
             <div class="admin-content">
 
-
                 <div class="header-volver-container">
                     <a href="{{ url_for('padres') }}" class="btn btn-volver">
                         Volver
@@ -131,14 +50,14 @@
 
                 <div class="tabla-estudiantes-container">
 
-                    <h1 style="text-align: center; margin-bottom: 15px;">Estudiantes</h1>
+                    <h1>Estudiantes</h1>
 
                     <!-- Contenedor con scroll controlado y fondo estilizado -->
                     <div class="tabla-scroll">
                         <table>
                             <thead>
                                 <tr>
-                                    <th style="width: 60px;"></th>
+                                    <th></th>
                                     <th>Nombre</th>
                                     <th>Grado</th>
                                     <th>Ruta</th>
@@ -154,7 +73,7 @@
                                     <td>
                                         <img src="{{ url_for('static', filename='img/avatar h.png') }}" class="avatar" alt="Avatar">
                                     </td>
-                                    <td class="bold-text-estp" style="text-align: left !important;">{{ estudiante.nombre }}</td>
+                                    <td class="bold-text-estp td-nombre">{{ estudiante.nombre }}</td>
                                     <td>{{ estudiante.grado }}</td>
                                     <td>{{ estudiante.id_ruta }}</td>
                                     <td>
@@ -167,7 +86,7 @@
                                 {% endfor %}
                                 {% else %}
                                 <tr>
-                                    <td colspan="6" style="text-align: center; padding: 20px !important;">
+                                    <td colspan="6" class="td-empty">
                                         No hay estudiantes registrados para este usuario.
                                     </td>
                                 </tr>

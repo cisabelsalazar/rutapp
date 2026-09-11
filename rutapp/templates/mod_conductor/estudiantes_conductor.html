@@ -7,36 +7,33 @@
     <title>RUTAPP - Panel Conductor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+    <!-- Librería Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<!-- Clases utilizadas para estilos generales de la vista -->
-
-<body class="conductor-body vista-estudiantes">
+<body class=" vista-gestudiantes">
 
     <!-- Importa la macro reutilizable de botones -->
     {% from 'components/buttons_macro.html' import action_toolbar %}
 
     <!-- ===== HEADER ===== -->
     <header>
-        {# Incluye el encabezado (header) de la página #}
         {% include 'layout/header.html' %}
     </header>
 
     <!-- ===== CONTENIDO PRINCIPAL ===== -->
-    <main class="main-content">
+    <main>
 
         <!-- Imagen decorativa de fondo -->
-        <img src="{{ url_for('static', filename='img/fondocon.png') }}" alt="Imagen de fondo Login" class="Imagen" />
-
+        <img src="{{ url_for('static', filename='img/fondocon.png') }}" alt="Imagen de fondo Login"
+            class="Imagen" />
 
         <div class="conductor-layout">
 
-            <!-- ===== MENÚ LATERAL  ===== -->
-            <div class="conductor-menu">
-
+            <!-- ===== MENÚ LATERAL ===== -->
+            <div class="admin-menu">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-                <!-- Nombre dinámico del panel según el rol -->
                 <h2>Panel {{ nombre_panel }}</h2>
 
                 <ul>
@@ -49,7 +46,6 @@
                         </a>
                     </li>
                 </ul>
-
             </div>
 
             <!-- Contenedor con scroll para la tabla -->
@@ -116,11 +112,14 @@
                         </table>
                     </div>
                 </div>
+
             </div>
+
         </div>
+
     </main>
+
     <footer class="footer">
-        {# ===== FOOTER ===== #}
         {% include 'layout/footer.html' %}
     </footer>
 </body>

@@ -27,7 +27,6 @@
             <ul>
                 <li><a href="{{ url_for('padres') }}">Dashboard</a></li>
                 <li><a href="{{ url_for('ver_ruta') }}">Ver Ruta</a></li>
-                <li><a href="{{ url_for('informacion_conductor') }}">Conductor</a></li>
                 <li><a href="{{ url_for('reportar_inasistencia') }}">Inasistencia</a></li>
                 <li>
                     <a href="{{ url_for('logout') }}" class="btn-logout">
@@ -51,7 +50,7 @@
                     <div class="route-info">
                         <label>Ruta asignada</label>
                         <div class="input-group">
-                            <input type="text" value="Ruta 301" readonly>
+                            <input type="text" value="{{ datos.nombre_ruta if datos else 'Sin ruta asignada' }}" readonly>
                         </div>
 
                         <div class="stops-section">
@@ -60,16 +59,23 @@
                                 <li>Ruta en curso</li>
                                 <li>Última parada: Calle del Pilar</li>
                                 <li>Tiempo estimado: 8 minutos</li>
-                                <li></li>Estudiante: Pendiente de recoger</li>
+                                <li>
+                                    Estudiante: 
+                                    {% if datos and datos.estado_estudiante == 'en parada' %}
+                                        Pendiente de recoger
+                                    {% else %}
+                                        Recogido
+                                    {% endif %}
+                                </li>
                             </ul>
                         </div>
 
                         <div class="stops-section">
                             <label>Conductor asignado</label>
                             <ul class="stops-list">
-                                <li>Carlos Pérez</li>
-                                <li>3101234567</li>
-                                <li>Ruta segura y monitoreada</li>
+                                <li>Conductor: {{ datos.nombre_conductor if datos.nombre_conductor else 'No asignado' }}</li>
+                                <li>Teléfono: {{ datos.telefono_conductor if datos.telefono_conductor else 'N/A' }}</li>
+                                <li>Vehículo: {{ datos.id_vehiculo if datos.id_vehiculo else 'N/A' }}</li>
                             </ul>
                         </div>
                     </div>
@@ -86,7 +92,7 @@
 
                 <!-- ===== BOTONES ===== -->
                 <footer class="card-ubication">
-                    <a href="{{ url_for('informacion_conductor') }}" class="btn">Ver conductor</a>
+                    
 
                     <a href="{{ url_for('padres') }}" class="btn btn-volver">
                         Volver

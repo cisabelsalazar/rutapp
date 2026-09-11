@@ -267,3 +267,27 @@ INSERT INTO `rutapp_bd`.`rol_permiso` (`id_rol`, `id_permiso`) VALUES ('4', '12'
 
 -- select md5('12345') from dual;
 INSERT INTO `rutapp_bd`.`usuario` (`id_usuario`, `nombre_usuario`, `hash_password`, `nombres_y_apellidos`, `correo`, `telefono`, `id_rol`) VALUES ('1', 'SuperAdministrador', md5('12345'), 'Cristina Salazar', 'isabelsalazar1589@gmail.com', '3164539219', '1');
+
+ALTER TABLE RUTA 
+ADD COLUMN estado VARCHAR(20) NOT NULL DEFAULT 'Activa',
+ADD COLUMN id_vehiculo INT DEFAULT NULL,
+ADD CONSTRAINT fk_ruta_vehiculo 
+    FOREIGN KEY (id_vehiculo) REFERENCES VEHICULO(id_vehiculo);
+    
+    CREATE TABLE PARADA (
+    id_parada INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_parada VARCHAR(100) NOT NULL,
+    direccion VARCHAR(255)
+);
+
+CREATE TABLE RUTA_PARADA (
+    id_ruta INT,
+    id_parada INT,
+    orden INT, -- para indicar el orden de la parada en la ruta
+    PRIMARY KEY (id_ruta, id_parada),
+    FOREIGN KEY (id_ruta) REFERENCES RUTA(id_ruta),
+    FOREIGN KEY (id_parada) REFERENCES PARADA(id_parada)
+);
+
+ALTER TABLE ruta 
+ADD COLUMN en_curso BOOLEAN NOT NULL DEFAULT FALSE;

@@ -10,6 +10,9 @@ import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
 import hashlib
 
+from flask import render_template
+from flask_login import login_required, current_user
+from flask import Flask, render_template, request, jsonify
 #==========================================
 # CONFIGURACIÓN DE LA APLICACIÓN FLASK
 #==========================================
@@ -24,7 +27,7 @@ app.secret_key = "rutapp_secreto"   # Clave secreta para manejar sesiones y flas
 conexion = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Cristina+-2026",
+    password="12345",
     database="rutapp_bd"
 )
 
@@ -270,7 +273,7 @@ def superadministrador():
     return render_template(
         'mod_admin/supadmin.html',
         **estadisticas # Desempaqueta el diccionario de estadísticas para pasarlo a la plantilla
-    )
+)
 
 
 # ==========================================
@@ -1061,62 +1064,133 @@ def editar_alerta(id_alerta):
 # GESTIONAR ALERTAS (Panel conductor)
 #===========================================
 
-@app.route('/conductor/alertas', methods=['GET', 'POST'])#Revisado por Cristina OK#
+@app.route('/conductor/alertas', methods=['GET', 'POST'])
 def alertas_conductor():
-    cursor = conexion.cursor(dictionary=True)# Crear cursor para interactuar con la base de datos
+    cursor = conexion.cursor(dictionary=True)
+    id_conductor = session.get('usuario') # ID del conductor logueado
 
-    id_conductor = session.get('usuario') # Obtener el ID del conductor desde la sesión
+    # --- 1. OBTENER LA RUTA ASIGNADA AL CONDUCTOR ---
+    cursor.execute("SELECT id_ruta FROM RUTA WHERE id_conductor = %s", (id_conductor,))
+    ruta_asiganada = cursor.fetchone()
 
-    #Crear alerta
+    # Si el conductor no tiene ruta asignada, evitamos errores devolviendo una lista vacía
+    if not ruta_asiganada:
+        cursor.close()
+        flash('No tienes ninguna ruta asignada actualmente.', 'warning')
+        return render_template('mod_conductor/alertas_conductor.html', alertas=[], filtro_activo='sin_leer')
+
+    id_ruta = ruta_asiganada['id_ruta']
+
+    # --- 2. CREAR ALERTA (POST) ---
     if request.method == 'POST':
         id_estudiante = request.form.get('id_estudiante')
-        id_ruta = request.form.get('id_ruta')
         tipo_alerta = request.form.get('tipo_alerta')
         mensaje = request.form.get('mensaje')
 
         consulta_insert = """
-        INSERT INTO ALERTAS(
-        id_usuario_emisor,
-        id_estudiante,
-        id_ruta,
-        tipo_alerta,
-        mensaje
-        )
-        VALUES (%s, %s, %s, %s, %s)
+            INSERT INTO ALERTAS (
+                id_usuario_emisor,
+                id_estudiante,
+                id_ruta,
+                tipo_alerta,
+                mensaje
+            )
+            VALUES (%s, %s, %s, %s, %s)
         """
 
-        cursor.execute(consulta_insert,(
+        cursor.execute(consulta_insert, (
             id_conductor,
             id_estudiante,
-            id_ruta,
+            id_ruta, # Usamos la ruta asignada automáticamente
             tipo_alerta,
             mensaje
         ))
-
+       
         conexion.commit()
         cursor.close()
         flash('Alerta creada correctamente', 'success')
         return redirect(url_for('alertas_conductor'))
     
-    #Mostrar alertas enviadas por el conductor
-    consulta="""
-    SELECT *
-    FROM ALERTAS
-    WHERE id_usuario_emisor = %s
-    ORDER BY fecha_hora DESC
-    """
+    # --- 3. CONSULTAR Y FILTRAR ALERTAS DE LA RUTA (GET) ---
+    filtro = request.args.get('filtro', 'sin_leer')
 
-    cursor.execute(consulta, (id_conductor,))
+    consulta_base = "SELECT * FROM ALERTAS WHERE id_ruta = %s"
+    
+    # Filtro según el estado seleccionado
+    if filtro == 'sin_leer':
+        consulta_base += " AND (estado IS NULL OR estado = '' OR estado = 'nueva')"
+    elif filtro == 'leidas':
+        consulta_base += " AND estado = 'leida'"
+    elif filtro == 'resueltas':
+        consulta_base += " AND estado = 'resuelta'"
+        
+    consulta_base += " ORDER BY fecha_hora DESC"
+    
+    cursor.execute(consulta_base, (id_ruta,))
     alertas = cursor.fetchall()
+    cursor.close() # Siempre cerrar el cursor al terminar
+    
+    return render_template('mod_conductor/alertas_conductor.html', alertas=alertas, filtro_activo=filtro, id_ruta=id_ruta)
+# --- NUEVA RUTA PARA LIMPIAR SELECCIONADAS ---
+@app.route('/conductor/alertas/limpiar', methods=['POST'])
+def limpiar_alertas():
+    cursor = conexion.cursor()
+    # Obtenemos la lista de IDs de alertas que se marcaron en los checkboxes
+    ids_a_eliminar = request.form.getlist('alertas_seleccionadas')
 
+    if ids_a_eliminar:
+        # Genera marcadores dinámicos (%s, %s, ...) según la cantidad de IDs
+        format_strings = ','.join(['%s'] * len(ids_a_eliminar))
+        consulta_delete = f"DELETE FROM ALERTAS WHERE id_alerta IN ({format_strings})"
+        
+        cursor.execute(consulta_delete, tuple(ids_a_eliminar))
+        conexion.commit()
+        flash('Alertas eliminadas correctamente', 'success')
+    else:
+        flash('No seleccionaste ninguna alerta', 'warning')
+        
     cursor.close()
-
-    return render_template('mod_conductor/alertas_conductor.html', alertas=alertas)
+    return redirect(url_for('alertas_conductor'))
 
 
 @app.route('/conductor/compartir_ubicacion')
 def compartir_ubicacion():  
     return "<h2>Módulo en construcción</h2>"
+
+# RUTA PARA PROCESAR LAS ACCIONES
+
+@app.route('/alerta/<accion>/<int:alerta_id>', methods=['POST'])
+def procesar_alerta(accion, alerta_id):
+    try:
+        nuevo_estado = None
+        if accion == 'leer':
+            nuevo_estado = 'leida'
+        elif accion == 'resolver':
+            nuevo_estado = 'resuelta'
+        else:
+            return jsonify({"status": "error", "message": "Acción no válida"}), 400
+
+        # Declaramos que use la variable 'conexion' que definiste globalmente en tu app.py
+        global conexion 
+        
+        # Abrimos el cursor
+        cursor = conexion.cursor()
+        
+        # Ejecutamos la consulta usando el nombre exacto de tu tabla (¿es 'alertas' o 'ALERTAS'?)
+        # Nota: MySQL en Windows no distingue mayúsculas, pero en Linux/Base de datos sí. 
+        # En tu consulta INSERT usaste 'ALERTAS' en mayúsculas. Asegurémonos de usar el mismo nombre:
+        cursor.execute("UPDATE ALERTAS SET estado = %s WHERE id_alerta = %s", (nuevo_estado, alerta_id))
+        
+        # Guardamos los cambios
+        conexion.commit()
+        cursor.close()
+
+        print(f"¡Éxito! Alerta {alerta_id} guardada en MySQL como {nuevo_estado}")
+        return jsonify({"status": "success", "message": "Estado actualizado correctamente"})
+
+    except Exception as e:
+        print("❌ ERROR REAL EN FLASK:", str(e)) # <-- Esto nos dirá exactamente qué falla
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 
@@ -1126,26 +1200,42 @@ def compartir_ubicacion():
 
 @app.route('/padres/alertas')
 def alertas_padres():
+    # 1. Validar inicio de sesión
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    id_padre = session['usuario']
+    filtro = request.args.get('filtro', 'todas')  # Captura el filtro (por defecto 'todas')
+
     cursor = conexion.cursor(dictionary=True)
 
-     #Temporal: para luego conectamos con sesión del padre
-    id_estudiante = 7895462
-
+    # 2. Construir la consulta dinámica
     consulta = """
-    SELECT *
-    FROM ALERTAS
-    WHERE id_estudiante = %s
-    ORDER BY fecha_hora DESC
+        SELECT DISTINCT a.*
+        FROM ALERTAS a
+        LEFT JOIN padre_estudiante pe ON a.id_estudiante = pe.id_estudiante
+        WHERE (a.id_usuario_emisor = %s OR pe.id_padre = %s)
     """
-    cursor.execute(consulta, (id_estudiante,))
+
+    # Aplicar filtros según la selección del usuario
+    if filtro == 'sin_leer':
+        consulta += " AND (a.estado IS NULL OR a.estado = '' OR a.estado = 'nueva')"
+    elif filtro == 'leidas':
+        consulta += " AND a.estado = 'leida'"
+    elif filtro == 'resueltas':
+        consulta += " AND a.estado = 'resuelta'"
+
+    consulta += " ORDER BY a.fecha_hora DESC"
+
+    cursor.execute(consulta, (id_padre, id_padre))
     alertas = cursor.fetchall()
     cursor.close()
 
     return render_template(
-        'mod_padres/alertas_padres.html', 
-        alertas=alertas
+        'mod_padres/alertas_padres.html',
+        alertas=alertas,
+        filtro_activo=filtro
     )
-
 
 # ==========================================
 # MODULO CONDUCTOR
@@ -1162,13 +1252,36 @@ def conductor():
         
     return render_template('mod_conductor/conductor.html')
 
-@app.route('/conductor/mi_ruta')#Revisado por Cristina OK#
+#============================================
+# Ruta para ver la ruta en el panel conductor
+#=============================================
+
+@app.route('/conductor/mi_ruta')
 def mi_ruta():
-    # if 'usuario' not in session:
-    #     return redirect(url_for('login'))
-    # if session['rol'] != 3:
-    #     return "Acceso no autorizado"
-    return render_template('mod_conductor/mi_ruta.html')
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    
+    id_usuario = session['usuario']
+
+    cursor = conexion.cursor(dictionary=True)
+    
+
+    cursor.execute("SELECT * FROM RUTA WHERE id_conductor = %s", (id_usuario,))
+    ruta = cursor.fetchone()
+
+    if not ruta:
+        return "No tienes ruta asignada"
+
+    cursor.execute("""
+    SELECT p.nombre_parada, rp.orden
+    FROM PARADA p
+    JOIN RUTA_PARADA rp ON p.id_parada = rp.id_parada
+    WHERE rp.id_ruta = %s
+    ORDER BY rp.orden
+""", (ruta['id_ruta'],))
+    paradas = cursor.fetchall()
+
+    return render_template('mod_conductor/mi_ruta.html', ruta=ruta, paradas=paradas)
 
 #============================================
 # Ruta para visualisar estudiantes en el panel conductor
@@ -1176,30 +1289,39 @@ def mi_ruta():
 
 @app.route('/conductor/estudiantes')
 def estudiantes_conductor():
-    
-    cursor = conexion.cursor(dictionary=True) # Importante: dictionary=True
-    # Consulta para traer alertas con datos de los estudiantes y rutas
-    
-    consulta = """
-    SELECT 
-      nombre,
-      grado,
-      direccion,
-      telefono,
-      id_ruta,
-      estado
-      FROM estudiante
-    """
-    cursor.execute(consulta)
-    
-    # Obtenemos los datos
-    estudiantes_bd = cursor.fetchall()
-    
+    # 1. Validar que el usuario esté en sesión
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
 
-    # Pasamos la variable al HTML
+    id_usuario = session['usuario']
+
+    cursor = conexion.cursor(dictionary=True)
+
+    # 2. Consulta filtrando por el conductor en sesión
+    # (Asegúrate de ajustar los nombres de tablas y columnas según tu modelo de BD)
+    consulta = """
+        SELECT 
+            e.nombre,
+            e.grado,
+            e.direccion,
+            e.telefono,
+            e.id_ruta,
+            e.estado
+        FROM estudiante e
+        INNER JOIN ruta r ON e.id_ruta = r.id_ruta
+        WHERE r.id_conductor = %s
+    """
+
+    # 3. Ejecutar la consulta pasando el ID del usuario en una tupla
+    cursor.execute(consulta, (id_usuario,))
+
+    # 4. Obtener los resultados
+    estudiantes_bd = cursor.fetchall()
+
     return render_template(
-        'mod_conductor/estudiantes_conductor.html', 
-        estudiantes_bd=estudiantes_bd)
+        'mod_conductor/estudiantes_conductor.html',
+        estudiantes_bd=estudiantes_bd
+    )
 
 #==============================================
 #======== Ruta para abordar estudiante=========#
@@ -1241,40 +1363,66 @@ def padres():
 @app.route('/reportar_inasistencia', methods=['GET', 'POST'])
 def reportar_inasistencia():
     cursor = conexion.cursor(dictionary=True)
-
-    #Temporal: luego conectamos con sesión del padre
     id_padre = session.get('usuario')
 
     if request.method == 'POST':
-        estudiante = request.form.get('estudiante')
+        id_estudiante = request.form.get('estudiante')
         fecha = request.form.get('fecha')
         motivo = request.form.get('motivo')
         observacion = request.form.get('observacion')
 
-        mensaje = f"Inasistencia reportada para{estudiante} el día {fecha}. Motivo: {motivo}. Observación{observacion}"
+        # 1. Buscar la ruta asignada al estudiante seleccionado (Tabla: estudiante)
+        consulta_ruta = "SELECT id_ruta FROM estudiante WHERE id_estudiante = %s"
+        cursor.execute(consulta_ruta, (id_estudiante,))
+        resultado_estudiante = cursor.fetchone()
+        
+        # Extraemos la id_ruta si el estudiante tiene una asignada
+        id_ruta = resultado_estudiante['id_ruta'] if resultado_estudiante else None
 
+        # 2. Mensaje de la alerta
+        mensaje = f"Inasistencia reportada el día {fecha}. Motivo: {motivo}. Observación: {observacion}"
+
+        # 3. Guardar la alerta con id_estudiante e id_ruta
         consulta_insert = """
-        INSERT INTO ALERTAS(
-            id_usuario_emisor,
-            tipo_alerta,
-             mensaje
-        )
-        VALUES (%s, %s, %s)
+            INSERT INTO ALERTAS (id_usuario_emisor, tipo_alerta, mensaje, id_estudiante, id_ruta)
+            VALUES (%s, %s, %s, %s, %s)
         """
-        cursor.execute(consulta_insert, (
-            id_padre,
-            'inasistencia',
-            mensaje
-        ))
 
+        cursor.execute(consulta_insert, (id_padre, 'inasistencia', mensaje, id_estudiante, id_ruta))
         conexion.commit()
         cursor.close()
 
         flash('Inasistencia reportada correctamente', 'success')
         return redirect(url_for('alertas_padres'))
-    cursor.close()
-    return render_template('mod_padres/reportar_inasistencia.html')
 
+    # Petición GET: Traer estudiantes usando la tabla 'estudiante'
+    consulta_estudiantes = """
+        SELECT e.* 
+        FROM estudiante e
+        INNER JOIN padre_estudiante pe ON e.id_estudiante = pe.id_estudiante
+        WHERE pe.id_padre = %s
+    """
+    
+    cursor.execute(consulta_estudiantes, (id_padre,))
+    estudiantes = cursor.fetchall()
+    cursor.close()
+
+    return render_template('mod_padres/reportar_inasistencia.html', estudiantes=estudiantes)
+    # ==============================================================
+    # --- CONSULTA GET CON JOIN A LA TABLA INTERMEDIA ---
+    # ==============================================================
+    consulta_estudiantes = """
+        SELECT e.* 
+        FROM ESTUDIANTE e
+        INNER JOIN padre_estudiante pe ON e.id_estudiante = pe.id_estudiante
+        WHERE pe.id_padre = %s
+    """
+    
+    cursor.execute(consulta_estudiantes, (id_padre,))
+    estudiantes = cursor.fetchall()
+    cursor.close()
+
+    return render_template('mod_padres/reportar_inasistencia.html', estudiantes=estudiantes)
 # ==========================================
 # VER INFORMACION CONDUCTOR
 # ==========================================
@@ -1325,19 +1473,88 @@ def informacion_conductor():
 # ==========================================
 # VER ESTUDIANTE
 # ==========================================
-
-@app.route('/estudiantes_padre')
+@app.route('/padres/estudiantes_padre')
 def estudiantes_padre():
-    return "<h2>Módulo de rutas en construcción</h2>"
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    id_padre = session['usuario']
+
+    cursor = conexion.cursor(dictionary=True)
+    
+    consulta = """
+    SELECT e.nombre, e.grado, e.id_ruta, e.estado 
+    FROM estudiante e
+    INNER JOIN padre_estudiante pe ON e.id_estudiante = pe.id_estudiante
+    WHERE pe.id_padre = %s
+"""
+    cursor.execute(consulta, (id_padre,))
+    estudiantes = cursor.fetchall()
+
+    return render_template('mod_padres/estudiantes_padre.html', estudiantes=estudiantes)
+    
 # ==========================================
-# VER RECORRIDO RUTA ESCOLAR
+# VER RUTA
 # ==========================================
 
 @app.route('/padres/ver_ruta')
 def ver_ruta():
-    return render_template('mod_padres/ver_ruta.html')
+    # Cambiado a 'usuario' que es como lo guardas al iniciar sesión
+    id_padre = session['usuario'] 
+    
+    cursor = conexion.cursor(dictionary=True)
+    
+    query = """
+        SELECT 
+            e.estado AS estado_estudiante,
+            r.nombre_ruta,
+            r.id_vehiculo,
+            u.nombres_y_apellidos AS nombre_conductor,
+            u.telefono AS telefono_conductor
+        FROM padre_estudiante pe
+        JOIN estudiante e ON pe.id_estudiante = e.id_estudiante
+        JOIN ruta r ON e.id_ruta = r.id_ruta
+        LEFT JOIN usuario u ON r.id_conductor = u.id_usuario
+        WHERE pe.id_padre = %s
+        LIMIT 1
+    """
+    cursor.execute(query, (id_padre,))
+    datos = cursor.fetchone()
+    cursor.close()
+    
+    return render_template('mod_padres/ver_ruta.html', datos=datos)
+#===========================================
+# FORMULARIO CREAR VEHICULO
+#===========================================
 
+@app.route('/crear_vehiculo')
+def crear_vehiculo():
 
+    cursor = conexion.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT id_usuario, nombres_y_apellidos
+        FROM usuario
+        WHERE id_rol = 3
+        ORDER BY nombres_y_apellidos
+    """)  #Selecciona conductor para asignar
+
+    conductores = cursor.fetchall()
+    
+    cursor.execute("""
+        SELECT estado
+        FROM vehiculo
+    """)  #Selecciona estados para asignar
+
+    estados = cursor.fetchall()
+
+    cursor.close()
+
+    return render_template(
+        'mod_admin/crear_vehiculo.html',
+        conductores=conductores,
+        estados=estados
+    )
 # ==========================================
 # MODULO VEHÍCULOS Y RUTAS
 # RESPONSABLE: Desarrollo CRISTINA SALAZAR
@@ -1420,39 +1637,6 @@ def gestion_vehiculos():
         placa_actual = placa_actual,
         conductor_actual = conductor_actual,
         estado_actual = estado_actual
-    )
-
-#===========================================
-# FORMULARIO CREAR VEHICULO
-#===========================================
-
-@app.route('/crear_vehiculo')
-def crear_vehiculo():
-
-    cursor = conexion.cursor(dictionary=True)
-
-    cursor.execute("""
-        SELECT id_usuario, nombres_y_apellidos
-        FROM usuario
-        WHERE id_rol = 3
-        ORDER BY nombres_y_apellidos
-    """)  #Selecciona conductor para asignar
-
-    conductores = cursor.fetchall()
-    
-    cursor.execute("""
-        SELECT estado
-        FROM vehiculo
-    """)  #Selecciona estados para asignar
-
-    estados = cursor.fetchall()
-
-    cursor.close()
-
-    return render_template(
-        'mod_admin/crear_vehiculo.html',
-        conductores=conductores,
-        estados=estados
     )
 
 

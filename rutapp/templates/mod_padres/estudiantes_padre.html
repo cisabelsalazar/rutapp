@@ -7,83 +7,105 @@
     <title>RUTAPP - Panel Padre de Familia</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<body class="conductor_body">
+<body class="bg-secundario vista-estudiantes">
 
-    <div class="padre-layout">
+    <!-- ===== HEADER ===== -->
+    <header>
+        {% include 'layout/header.html' %}
+    </header>
 
-        <div class="padre-menu">
-            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+    <main>
 
-            <h2>Panel Padre de Familia</h2>
+        <img src="{{ url_for('static', filename='img/imagen_padres.png') }}" alt="Imagen de fondo" class="Imagen" />
 
-            <ul>
-                <li><a href="{{ url_for('padres') }}">Dashboard</a></li>
-                <li><a href="{{ url_for('informacion_conductor') }}">Información del conductor</a></li>
-                <li><a href="{{ url_for('estudiantes_padre') }}">Estudiantes</a></li>
-                <li>Estado de la ruta</li>
-                <li>Reportar inasistencia</li>
-                <li>Cerrar sesión</li>
-            </ul>
-        </div>
-        <main class="content-estp">
-            <section class="header-section-estp">
-                <h1>Estudiantes</h1>
-            </section>
+        <div class="admin-layout">
 
-            <div class="table-card-estp">
-                <div class="table-header-estp">
-                    <div class="search-container-estp">
-                        <input type="text" placeholder="Buscar:">
-                        <button><i class="fas fa-search-estp"></i></button>
-                    </div>
+            <div class="admin-menu">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
+
+                <h2>Panel Padre</h2>
+
+                <ul>
+                    <li><a href="{{ url_for('padres') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('reportar_inasistencia') }}">Inasistencia</a></li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="btn-logout">
+                            Cerrar sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-content">
+
+                <div class="header-volver-container">
+                    <a href="{{ url_for('padres') }}" class="btn btn-volver">
+                        Volver
+                    </a>
                 </div>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Nombre</th>
-                            <th>Grado</th>
-                            <th>Escuela</th>
-                            <th>Estado</th>
-                            <th>Última ubicación</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><img src="{{ url_for('static', filename='img/avatar h.png') }}" class="avatar"></td>
-                            <td class="bold-text-estp">Mateo Pérez</td>
-                            <td>5º</td>
-                            <td>Colegio Primaria<br><span class="sub-text-estp">San Martín</span></td>
-                            <td><span class="status-badge-estp">A bordo</span></td>
-                            <td><a href="#" class="link-location-estp">Ver ubicación</a></td>
-                        </tr>
-                        <tr>
-                            <td><img src="{{ url_for('static', filename='img/avatar f.png') }}" class="avatar"></td>
-                            <td class="bold-text-estp">Laura perez</td>
-                            <td>3º</td>
-                            <td>Escuela Primaria<br><span class="sub-text-estp">San Martín</span></td>
-                            <td><span class="status-badge-estp">A bordo</span></td>
-                            <td><a href="#" class="link-location">Ver ubicación</a></td>
-                        </tr>
+                <div class="tabla-estudiantes-container">
 
-                    </tbody>
-                </table>
+                    <h1>Estudiantes</h1>
+
+                    <!-- Contenedor con scroll controlado y fondo estilizado -->
+                    <div class="tabla-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Nombre</th>
+                                    <th>Grado</th>
+                                    <th>Ruta</th>
+                                    <th>Estado</th>
+                                    <th>Última ubicación</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% if estudiantes %}
+                                {% for estudiante in estudiantes %}
+                                <tr>
+                                    <td>
+                                        <img src="{{ url_for('static', filename='img/avatar h.png') }}" class="avatar" alt="Avatar">
+                                    </td>
+                                    <td class="bold-text-estp td-nombre">{{ estudiante.nombre }}</td>
+                                    <td>{{ estudiante.grado }}</td>
+                                    <td>{{ estudiante.id_ruta }}</td>
+                                    <td>
+                                        <span class="status-badge-estp">{{ estudiante.estado }}</span>
+                                    </td>
+                                    <td>
+                                       <a href="{{ url_for('ver_ruta') }}" class="btn">Ver ubicación</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="6" class="td-empty">
+                                        No hay estudiantes registrados para este usuario.
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
             </div>
-    </div>
+
+        </div>
+
     </main>
+
     <footer class="footer">
-        {# ===== FOOTER ===== #}
         {% include 'layout/footer.html' %}
     </footer>
-
-
 </body>
 
 </html>
-
-
-
-</div>

@@ -984,14 +984,6 @@ table {
     text-align: center;
 }
 
-.vista-estudiantes .btn-volver {
-    margin-left: 0; /*ajusta para que el botón vuelva a su posición original*/
-    position: absolute; /*posiciona el botón de forma absoluta dentro del contenedor de la tabla*/
-    top: 80px; /*ajusta la posición vertical del botón*/
-    left: 20px; /*ajusta la posición horizontal del botón*/
-
-}
-
 
 /* ===== BÚSQUEDA: Caja de búsqueda de estudiantes ===== */
 .search-box {
@@ -1021,6 +1013,11 @@ table {
 
 /* ===== TABLA ESTUDIANTES: Estilos para tabla de datos ===== */
 
+.students-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
 
 .students-table thead tr {
     border-bottom: 2px solid #f1f2f6;
@@ -2607,10 +2604,12 @@ tabla Gestion de Rutas módulos admin y superadmin===== */
     top:130px; /* ajusta la posición vertical del botón */
     right: 100px; /* ajusta la posición horizontal del botón */
 }
-
+/*BOTON VOLVER VISTA ESTUDIANTES MODULO CONDUCTOR*/
 .vista-estudiantes .btn-volver {
-    position: static; 
-    margin-left: 0;
+    position: fixed;
+    top: 100px;
+    right: 200px;
+    margin-left: 0; /* anula el margin del botón general */
 }
 
 
@@ -2620,10 +2619,11 @@ tabla Gestion de Rutas módulos admin y superadmin===== */
     padding: 12px;  /* aumenta el padding para que el botón sea más grande */
 }
 
+/*Boton volver vista alertas modulo conductor*/
 .vista-alertas .btn-volver {
     position: absolute;
     top: 150px;
-    right: 150px;
+    right: 330px;
     margin-right: 0;
 
 }

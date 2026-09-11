@@ -1,152 +1,39 @@
+<!---ALERTAS MODULO PADRE DE FAMILIA-->
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <title>Alertas Padres</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
 </head>
 
-<body class="padre-body bg-secundario gvista-alertas">
+<body class=" padre-body bg-secundario">
 
     <!-- ===== HEADER ===== -->
     <header>
         {% include 'layout/header.html' %}
     </header>
-    
-    <img src="{{ url_for('static', filename='img/imagen_padres.png') }}" alt="Imagen de fondo" class="Imagen" />
+
 
     <div class="padre-layout">
-        <!-- ===== MENÚ PADRE ===== -->
-        <aside class="padre-menu">
-            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-            <h2>Panel Padre</h2>
+            <!-- Menú lateral -->
+            <div class="padre-menu">
+                <img src="{{ url_for('static', filename='img/imagen_padres.png') }}" alt="Imagen de fondo" class="Imagen" />
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-            <ul>
-                <li><a href="{{ url_for('padres') }}">Dashboard</a></li>
-                <li><a href="{{ url_for('ver_ruta') }}">Ver Ruta</a></li>
-                <li><a href="{{ url_for('reportar_inasistencia') }}">Inasistencia</a></li>
-                <li>
-                    <a href="{{ url_for('logout') }}" class="btn-logout">
-                        Cerrar sesión
-                    </a>
-                </li>
-            </ul>
-        </aside>
+                <h2>Panel Padre de Familia</h2>
 
-        <!-- ===== CONTENIDO PRINCIPAL CENTRADO ===== -->
-        <main class="main-content" style="width: 100%; padding: 60px 20px 20px 20px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">
-            
-            <div class="tabla-alertas-container" style="width: 85%; max-width: 1100px; margin: 0 auto;">
-                
-                <h1 style="text-align: center; margin-bottom: 25px;">Alertas del Estudiante</h1>
-
-                <!-- ===== BOTONES DE FILTRADO ===== -->
-                <div class="filtros-alertas" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
-                    <a href="{{ url_for('alertas_padres', filtro='todas') }}" 
-                       class="{% if filtro_activo == 'todas' or not filtro_activo %}filtro-activo{% endif %}">
-                        Todas
-                    </a>
-                    <a href="{{ url_for('alertas_padres', filtro='sin_leer') }}" 
-                       class="{% if filtro_activo == 'sin_leer' %}filtro-activo{% endif %}">
-                        Nuevas
-                    </a>
-                    <a href="{{ url_for('alertas_padres', filtro='leidas') }}" 
-                       class="{% if filtro_activo == 'leidas' %}filtro-activo{% endif %}">
-                        Leídas
-                    </a>
-                    <a href="{{ url_for('alertas_padres', filtro='resueltas') }}" 
-                       class="{% if filtro_activo == 'resueltas' %}filtro-activo{% endif %}">
-                        Resueltas
-                    </a>
-                </div>
-
-                <!-- ===== TABLA DE ALERTAS (COLUMNAS DE IGUAL TAMAÑO) ===== -->
-                <div class="tabla-scroll" style="width: 100%;">
-                    <table style="width: 100%; table-layout: fixed; border-collapse: collapse;">
-                        <thead>
-                            <tr>
-                                <th style="width: 16.66%; text-align: center;">Tipo</th>
-                                <th style="width: 16.66%; text-align: center;">Mensaje</th>
-                                <th style="width: 16.66%; text-align: center;">Hora</th>
-                                <th style="width: 16.66%; text-align: center;">Estado</th>
-                                <th style="width: 16.66%; text-align: center;">Observación Admin</th>
-                                <th style="width: 16.66%; text-align: center;">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if alertas %}
-                                {% for alerta in alertas %}
-                                <tr>
-                                    <td style="word-wrap: break-word; text-align: center;">{{ alerta.tipo_alerta }}</td>
-                                    <td style="word-wrap: break-word; text-align: center;">{{ alerta.mensaje }}</td>
-                                    <td style="word-wrap: break-word; text-align: center;">{{ alerta.fecha_hora.strftime('%I:%M %p') if alerta.fecha_hora else '' }}</td>
-                                    <td style="word-wrap: break-word; text-align: center;">{{ alerta.estado if alerta.estado else 'nueva' }}</td>
-                                    <td style="word-wrap: break-word; text-align: center;">{{ alerta.observacion_admin or 'Sin observación' }}</td>
-                                    <td style="word-wrap: break-word; text-align: center;">
-                                        <div class="acciones" style="display: flex; justify-content: center;">
-                                            {% if alerta.estado == 'leida' or alerta.estado == 'resuelta' %}
-                                                <button type="button" class="btn-read" style="opacity: 0.6;" disabled>
-                                                    Leída ✔
-                                                </button>
-                                            {% else %}
-                                                <button type="button" class="btn-read" data-id="{{ alerta.id_alerta }}" onclick="procesarAlerta(this, 'leer')">
-                                                    Marcar leída
-                                                </button>
-                                            {% endif %}
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            {% else %}
-                                <tr>
-                                    <td colspan="6" style="text-align: center; padding: 15px;">No hay alertas registradas para este filtro</td>
-                                </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- ===== BOTONES INFERIORES ===== -->
-                <div class="contenedor-btn-abajo" style="margin-top: 25px; display: flex; justify-content: center; gap: 15px;">
-                    <a href="{{ url_for('reportar_inasistencia') }}" class="btn rep-inasistencia">Reportar inasistencia</a>
-                    <a href="{{ url_for('padres') }}" class="btn btn-volver">
-                        Volver
-                    </a>
-                </div>
-
+                <ul class="padre-menu">
+                    <li><a href="{{ url_for('padres') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('informacion_conductor') }}">Información conductor</a></li>
+                    <!-- <li><a href="{{ url_for('estudiantes_padre') }}">Estudiantes</a></li> -->
+                    <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar sesión</a></li>
+                </ul>
             </div>
-        </main>
+        </div>
     </div>
-
-    <footer class="footer">
-        {% include 'layout/footer.html' %}
-    </footer>
-
-    <!-- ===== SCRIPT PARA PROCESAR ACCIONES (AJAX) ===== -->
-    <script>
-        function procesarAlerta(boton, accion) {
-            const alertaId = boton.getAttribute('data-id');
-            if (!alertaId || alertaId === "None" || alertaId === "") return;
-
-            fetch(`/alerta/${accion}/${alertaId}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    boton.disabled = true;
-                    boton.innerText = accion === 'leer' ? 'Leída ✔' : 'Resuelto ✔';
-                    boton.style.opacity = '0.6';
-                }
-            })
-            .catch(error => console.error('Error al actualizar la alerta:', error));
-        }
-    </script>
-
 </body>
-
-</html>

@@ -1525,6 +1525,96 @@ td {
     box-sizing: border-box;
 }
 
+/* ===== Tabla estudiantes_padre===== */
+
+.tabla-estudiantes-container {
+    width: 95%;
+    max-width: 1100px;
+    margin: 20px auto;
+}
+
+.tabla-scroll {
+    overflow-x: auto;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.tabla-scroll table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.85); 
+    text-align: center;
+}
+
+
+.tabla-scroll thead tr {
+    background-color: #2b5266;
+    color: #ffffff;
+}
+
+.tabla-scroll th {
+    padding: 12px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
+.tabla-scroll td {
+    padding: 10px 8px;
+    font-size: 13px;
+    color: #222222;
+    border-bottom: 1px solid #d0d7de;
+    border-right: 1px solid #d0d7de;
+    vertical-align: middle;
+}
+
+.tabla-scroll td:last-child {
+    border-right: none;
+}
+
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+
+
+.tabla-scroll .btn {
+    display: inline-block;
+    padding: 6px 14px;
+    background-color: #ffffff;
+    color: #1b5e20; 
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    border: 1px solid #2e7d32;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    transition: all 0.15s ease-in-out;
+}
+
+.tabla-scroll .btn:hover {
+    background-color: #e8f5e9;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.tabla-scroll .btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+
+.status-badge-estp {
+    font-weight: 500;
+    color: #1a252f;
+}
+
 /*==================================================================================*/
 /* 9. SECCION ESTILOS GLOBALES PARA FORMULARIOS */
 /*==================================================================================*/

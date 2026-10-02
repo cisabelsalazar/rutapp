@@ -51,11 +51,11 @@
                         <select id="estudiante" name="estudiante" required>
                             <option value="">Seleccione</option>
                             {% if estudiantes %}
-                               {% for est in estudiantes %}
-                                   <option value="{{ est.id_estudiante }}">{{ est.nombre }}</option>
-                               {% endfor %}
+                            {% for est in estudiantes %}
+                            <option value="{{ est.id_estudiante }}">{{ est.nombre }}</option>
+                            {% endfor %}
                             {% else %}
-                                <option value="" disabled>No tiene estudiantes asignados</option>
+                            <option value="" disabled>No tiene estudiantes asignados</option>
                             {% endif %}
                         </select>
                     </div>
@@ -87,7 +87,8 @@
                             Enviar reporte
                         </button>
 
-                        <a href="{{ url_for('alertas_padres') }}" class="btn btn-volver"> <!-- Botón para volver vista alertas-->
+                        <a href="{{ url_for('padres') }}" class="btn btn-volver">
+                            <!-- Botón para volver vista alertas-->
                             Cancelar
                         </a>
                     </div>

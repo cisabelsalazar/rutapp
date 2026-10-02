@@ -59,23 +59,25 @@ http://localhost:5000
 
 ## Integrantes del proyecto
 
-* Cristina Salazar – Autenticación, gestión de usuarios y administración del sistema.
-* Camilo Ocampo – Gestión de vehículos.
-* Víctor Velandia – Gestión de rutas.
-* Carolina Epiayu –  SALE DEL EQUIPO DE TRABAJO 25/03/2026
+* Cristina Salazar – Autenticación, gestión de usuarios, estudiantes, vehiculos, rutas alaertas y administración del sistema.
+* Camilo Ocampo – Modulo Padres de Familia.
+* Víctor Velandia – Modulo conductores.
+
 
 ## Estado del proyecto
 
-✔ Autenticación de usuarios  
+✔ Panel administrador
+⬜ Gestión de usuarios
+⬜ Gestión de estudiantes
+⬜ Gestión de vehículos
+⬜ Gestión de rutas
+⬜ Gestión de añlertas
+
 ✔ Panel de administrador  
 ✔ Gestión de usuarios  
 
 En desarrollo:
 
-⬜ Gestión de vehículos  
-⬜ Gestión de rutas  
-⬜ Monitoreo de rutas  
-⬜ Sistema de alertas
 
 ## Proyecto académico
 

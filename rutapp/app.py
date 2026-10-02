@@ -27,7 +27,7 @@ app.secret_key = "rutapp_secreto"   # Clave secreta para manejar sesiones y flas
 conexion = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="12345",
+    password= "Cristina+-2026",
     database="rutapp_bd"
 )
 
@@ -64,9 +64,19 @@ def obtener_url_volver():
     elif session ['rol'] == 3:
         return url_for('conductor')
     elif session ['rol'] == 4:
-        return url_for('padre de familia')
+        return url_for('padres')
     else:
         return url_for('login')
+
+# #===========================================
+# #RUTA PARA BOTON REPORTAR INASISTENCIA
+# #===========================================
+
+# def obtener_url_reporte_inasistencia():
+#     if session['rol'] == 4:
+#         return url_for('reportar_inasistencia')
+#     else:
+#         return url_for('login')
 
 # ==========================================
 # RUTA GLOBAL VOLVER AL PANEL
@@ -87,7 +97,7 @@ def volver_panel():
     elif rol == 3:
         return redirect(url_for('conductor'))
     elif rol == 4:
-        return redirect(url_for('padre de familia'))
+        return redirect(url_for('padres'))
     return redirect(url_for('login'))
 
 # ==========================================
@@ -154,7 +164,8 @@ def valida_login():
             elif usuario['id_rol'] == 4:
                 return redirect(url_for('padres'))
 
-    return "Usuario o contraseña incorrectos"
+    flash('Usuario o contraseña incorrectos', 'error')
+    return redirect(url_for('login'))
 
 #===========================================
 # RUTA PARA RECUPERAR CONTRASEÑA
@@ -1200,41 +1211,58 @@ def procesar_alerta(accion, alerta_id):
 
 @app.route('/padres/alertas')
 def alertas_padres():
+
+    estado_actual = request.args.get("estado")
+
     # 1. Validar inicio de sesión
     if 'usuario' not in session:
-        return redirect(url_for('login'))
+            return redirect(url_for('login'))
 
-    id_padre = session['usuario']
-    filtro = request.args.get('filtro', 'todas')  # Captura el filtro (por defecto 'todas')
+    if session ['rol'] != 4:
+            return "Acceso no autorizado", 403
+        
+
+    botones = [
+                {
+            "texto": "Reportar Inasistencia",
+            "url": url_for('reportar_inasistencia'),
+            "class": "btn-primary"
+        },
+        {
+            "texto": "Volver",
+            "url": obtener_url_volver(),
+            "class": "btn-secundary"
+        }
+
+    ]
 
     cursor = conexion.cursor(dictionary=True)
 
-    # 2. Construir la consulta dinámica
+    # 2. Construir la consulta dinámica    
     consulta = """
-        SELECT DISTINCT a.*
-        FROM ALERTAS a
-        LEFT JOIN padre_estudiante pe ON a.id_estudiante = pe.id_estudiante
-        WHERE (a.id_usuario_emisor = %s OR pe.id_padre = %s)
+    SELECT DISTINCT a.*
+    FROM ALERTAS a
+    LEFT JOIN padre_estudiante pe ON a.id_estudiante = pe.id_estudiante
+    WHERE (a.id_usuario_emisor = %s OR pe.id_padre = %s)
     """
 
-    # Aplicar filtros según la selección del usuario
-    if filtro == 'sin_leer':
-        consulta += " AND (a.estado IS NULL OR a.estado = '' OR a.estado = 'nueva')"
-    elif filtro == 'leidas':
-        consulta += " AND a.estado = 'leida'"
-    elif filtro == 'resueltas':
-        consulta += " AND a.estado = 'resuelta'"
+    parametros = [session['usuario'], session['usuario']]
+
+    if estado_actual:
+        consulta += " AND a.estado = %s"
+        parametros.append(estado_actual)
 
     consulta += " ORDER BY a.fecha_hora DESC"
 
-    cursor.execute(consulta, (id_padre, id_padre))
+    cursor.execute(consulta, parametros)
     alertas = cursor.fetchall()
     cursor.close()
 
     return render_template(
         'mod_padres/alertas_padres.html',
         alertas=alertas,
-        filtro_activo=filtro
+        estado_actual=estado_actual,
+        botones=botones 
     )
 
 # ==========================================

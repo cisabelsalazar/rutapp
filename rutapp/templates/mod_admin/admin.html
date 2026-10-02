@@ -6,11 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>RUTAPP - Panel Administrador</title>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
 </head>
 
@@ -87,73 +84,69 @@
 
             </div>
 
-                <div class="text-informativo">
-                    <h3 class="titulo-estadisticas">
-                        Estadísticas del sistema
-                    </h3>
+            <div class="text-informativo">
+                <h3 class="titulo-estadisticas">
+                    Estadísticas del sistema
+                </h3>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="dashboard-card">
+                    <img src="{{ url_for('static', filename='img/usuarios.png') }}" alt="usuarios"
+                        class="icon-dashboard">
+                    <h1>{{ total_usuarios }}</h1>
+                    <h2>Total Usuarios</h2>
                 </div>
 
-                <div class="dashboard-stats">
-                    <div class="dashboard-card">
-                        <img src="{{ url_for('static', filename='img/usuarios.png') }}" alt="usuarios"
-                            class="icon-dashboard">
-                        <h1>{{ total_usuarios }}</h1>
-                        <h2>Total Usuarios</h2>
-                    </div>
-
-                    <div class="dashboard-card">
-                        <img src="{{ url_for('static', filename='img/vehiculos.png') }}" alt="vehiculos"
-                            class="icon-dashboard">
-                        <h1>{{ total_vehiculos }}</h1>
-                        <h2>Total Vehículos</h2>
-                    </div>
-
-                    <div class="dashboard-card">
-                        <img src="{{ url_for('static', filename='img/rutas.png') }}" alt="rutas" class="icon-dashboard">
-                        <h1>{{ total_rutas}}</h1>
-                        <h2>Total Rutas</h2>
-                    </div>
-
-                    <div class="dashboard-card">
-                        <img src="{{ url_for('static', filename='img/estudiantes.png') }}" 
-                            alt="estudiantes"
-                            class="icon-dashboard">
-                        <h1>{{ total_estudiantes}}</h1>
-                        <h2>Total Estudiantes</h2>
-                    </div>
+                <div class="dashboard-card">
+                    <img src="{{ url_for('static', filename='img/vehiculos.png') }}" alt="vehiculos"
+                        class="icon-dashboard">
+                    <h1>{{ total_vehiculos }}</h1>
+                    <h2>Total Vehículos</h2>
                 </div>
 
-                <div class="text-informativo">
-                    <h3 class="titulo-estadisticas">
-                        Actividad Actual
-                    </h3>
+                <div class="dashboard-card">
+                    <img src="{{ url_for('static', filename='img/rutas.png') }}" alt="rutas" class="icon-dashboard">
+                    <h1>{{ total_rutas}}</h1>
+                    <h2>Total Rutas</h2>
                 </div>
 
-                <div class="dashboard-stats">
-                    <div class="dashboard-card-disp">
-                        <img src="{{ url_for('static', filename='img/vehiculo_disponible.png') }}"
-                            alt="vehiculo_disponible" 
-                            class="icon-dashboard-disp">
-                        <h1>{{ vehiculos_disponibles }}</h1>
-                        <h2>Vehiculos Disponibles</h2>
-                    </div>
-
-                    <div class="dashboard-card-disp">
-                        <img src="{{ url_for('static', filename='img/ruta_activa.png') }}" 
-                            alt="ruta_activa"
-                            class="icon-dashboard-disp">
-                        <h1>{{ rutas_activas }}</h1>
-                        <h2>Rutas Activas </h2>
-                    </div>
-
-                    <div class="dashboard-card-disp">
-                        <img src="{{ url_for('static', filename='img/alerta_pendiente.png') }}"
-                            alt="alerta_pendiente"
-                            class="icon-dashboard">
-                        <h1>{{ alertas_pendientes }}</h1>
-                        <h2>Alertas Pendientes</h2>
-                    </div>
+                <div class="dashboard-card">
+                    <img src="{{ url_for('static', filename='img/estudiantes.png') }}" alt="estudiantes"
+                        class="icon-dashboard">
+                    <h1>{{ total_estudiantes}}</h1>
+                    <h2>Total Estudiantes</h2>
                 </div>
+            </div>
+
+            <div class="text-informativo">
+                <h3 class="titulo-estadisticas">
+                    Actividad Actual
+                </h3>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="dashboard-card-disp">
+                    <img src="{{ url_for('static', filename='img/vehiculo_disponible.png') }}" alt="vehiculo_disponible"
+                        class="icon-dashboard-disp">
+                    <h1>{{ vehiculos_disponibles }}</h1>
+                    <h2>Vehiculos Disponibles</h2>
+                </div>
+
+                <div class="dashboard-card-disp">
+                    <img src="{{ url_for('static', filename='img/ruta_activa.png') }}" alt="ruta_activa"
+                        class="icon-dashboard-disp">
+                    <h1>{{ rutas_activas }}</h1>
+                    <h2>Rutas Activas </h2>
+                </div>
+
+                <div class="dashboard-card-disp">
+                    <img src="{{ url_for('static', filename='img/alerta_pendiente.png') }}" alt="alerta_pendiente"
+                        class="icon-dashboard">
+                    <h1>{{ alertas_pendientes }}</h1>
+                    <h2>Alertas Pendientes</h2>
+                </div>
+            </div>
 
             </div>
 

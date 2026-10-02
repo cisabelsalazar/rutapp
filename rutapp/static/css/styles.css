@@ -22,13 +22,17 @@ body.supadmin-page {
 
 main {
     flex: 1;
-    height: 100vh; /*Contenido principal con altura controlada (probando si es óptimo)*/
+    height: 100vh;
+    /*Contenido principal con altura controlada (probando si es óptimo)*/
 }
 
-.main-container { /*Contenedor principal*/
-    height: 100vh; /* 100% del alto de la ventana visual */
+.main-container {
+    /*Contenedor principal*/
+    height: 100vh;
+    /* 100% del alto de la ventana visual */
     display: flex;
- /*   overflow: hidden;*/ /*scroll null*/
+    /*   overflow: hidden;*/
+    /*scroll null*/
 }
 
 /*=============/*==================================================================================*/
@@ -120,7 +124,7 @@ main {
     margin-top: 30px;
     display: flex;
     gap: 20px;
-    
+
 }
 
 /*===========================================*/
@@ -128,7 +132,7 @@ main {
 /*===========================================*/
 
 .dashboard-card {
-    
+
     background-color: rgba(69, 162, 181, 0.7);
     border-radius: 12px;
     border: 2px solid #216c8f;
@@ -137,6 +141,7 @@ main {
     text-align: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
+
 .dashboard-card:hover {
     background-color: #bbcace;
 
@@ -169,7 +174,7 @@ main {
     font-size: 30px;
     color: black;
     font-weight: bold;
-    
+
 }
 
 .dashboard-card h2 {
@@ -185,7 +190,7 @@ main {
     font-weight: bold;
 }
 
-.icon-dashboard{
+.icon-dashboard {
     width: 60px;
     height: 60px;
 }
@@ -195,7 +200,7 @@ main {
 /*===========================================*/
 
 .dashboard-card-disp {
-    
+
     background-color: rgba(239, 213, 133, 0.697);
     border-radius: 12px;
     border: 2px solid #eece50;
@@ -204,6 +209,7 @@ main {
     text-align: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
+
 .dashboard-card-disp:hover {
     background-color: #bbcace;
 }
@@ -216,7 +222,7 @@ main {
     font-size: 30px;
     color: black;
     font-weight: bold;
-    
+
 }
 
 .dashboard-card-disp h2 {
@@ -232,37 +238,50 @@ main {
     font-weight: bold;
 }
 
-.icon-dashboard-disp{
+.icon-dashboard-disp {
     width: 90px;
-    height:60px;
+    height: 60px;
 }
 
 /*==================================================================================*/
 /* 5. IMAGEN DE FONDO GLOBAL: Imagen fija de fondo con opacidad variable           */
 /*==================================================================================*/
 .Imagen {
-    position: fixed;/* Fija la imagen al fondo */
-    top: 0;/* Posición superior */
-    left: 0;/* Posición izquierda */
-    width: 100%;/* Ocupa todo el ancho de la pantalla */
-    height: 100%;/* Ocupa toda la pantalla */
-    object-fit: cover;/* Asegura que la imagen cubra todo el fondo sin distorsión */
-    z-index: -1;/* Coloca la imagen detrás de todo el contenido */
-    transition: 0.3s;/* Transición suave para cambios de opacidad */
+    position: fixed;
+    /* Fija la imagen al fondo */
+    top: 0;
+    /* Posición superior */
+    left: 0;
+    /* Posición izquierda */
+    width: 100%;
+    /* Ocupa todo el ancho de la pantalla */
+    height: 100%;
+    /* Ocupa toda la pantalla */
+    object-fit: cover;
+    /* Asegura que la imagen cubra todo el fondo sin distorsión */
+    z-index: -1;
+    /* Coloca la imagen detrás de todo el contenido */
+    transition: 0.3s;
+    /* Transición suave para cambios de opacidad */
 }
 
-.bg-home .Imagen {/* Opacidad para la página de inicio */
-    opacity: 0.9;/* Imagen más visible en la página de inicio */
+.bg-home .Imagen {
+    /* Opacidad para la página de inicio */
+    opacity: 0.9;
+    /* Imagen más visible en la página de inicio */
 }
 
-.bg-secundario .Imagen { /* Opacidad para páginas secundarias */
-    opacity: 0.2;/* Imagen más tenue en páginas secundarias */
+.bg-secundario .Imagen {
+    /* Opacidad para páginas secundarias */
+    opacity: 0.2;
+    /* Imagen más tenue en páginas secundarias */
 }
 
-.vista-gestudiantes .Imagen,
+/*.vista-gestudiantes .Imagen,
 .vista-alertas .Imagen {
-    opacity: 0.9; /* O 1 si prefieres sin ninguna transparencia */
-}
+    opacity: 0.9;
+    /* O 1 si prefieres sin ninguna transparencia */
+/*}*/
 
 /*==================================================================================*/
 /* 6. LOGIN: Estilos para formulario de inicio de sesión                           */
@@ -272,9 +291,9 @@ main {
     max-width: 380px;
     padding: 25px;
     margin: 80px auto;
-    background-color: rgba(245,245,245,0.75);
+    background-color: rgba(245, 245, 245, 0.75);
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .logo {
@@ -363,14 +382,18 @@ main {
 /* ===== ACCIONES DEL FORMULARIO LOGIN: Botón y enlace de recuperación ===== */
 .form-actions {
     display: flex;
-    flex-direction: column; /* Texto debajo del botón */
-    align-items: center;    /* Centra elementos horizontalmente */
-    gap: 5px;               /* Espacio entre botón y texto */
+    flex-direction: column;
+    /* Texto debajo del botón */
+    align-items: center;
+    /* Centra elementos horizontalmente */
+    gap: 5px;
+    /* Espacio entre botón y texto */
     margin-top: 15px;
 }
 
 .form-actions button {
-    width: 70%;           /* Tamaño botón inicio de sesión */
+    width: 70%;
+    /* Tamaño botón inicio de sesión */
     padding: 12px;
     border-radius: 8px;
     background-color: #2d84c7;
@@ -392,7 +415,7 @@ main {
     height: 100%;
     margin: 0;
     overflow: auto; /*Permite scroll vertical*/
-  /*  overflow: hidden; /* Elimina el scroll por completo */
+/*  overflow: hidden; /* Elimina el scroll por completo */
 /*}*/
 
 .admin-layout,
@@ -400,7 +423,8 @@ main {
 .padre-layout {
     display: flex;
     height: 100vh;
-    overflow: hidden; /* bloquea scroll global */
+    overflow: hidden;
+    /* bloquea scroll global */
 }
 
 /* ===== MENÚ LATERAL DE LOS MODULOS: Barra de navegación lateral ===== */
@@ -449,14 +473,16 @@ main {
 
 .admin-menu ul,
 .conductor-menu ul,
-.padre-menu ul { /*Estilo botones del menu lateral*/
+.padre-menu ul {
+    /*Estilo botones del menu lateral*/
     list-style: none;
     padding: 0;
 }
 
 .admin-menu li,
 .conductor-menu li,
-.padre-menu li { /*Estilo botones del menu lateral*/
+.padre-menu li {
+    /*Estilo botones del menu lateral*/
     padding: 12px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -479,7 +505,8 @@ main {
     transition: background-color 0.3s;
 }
 
-.admin-menu a:visited, /*Estilo de visitado*/
+.admin-menu a:visited,
+/*Estilo de visitado*/
 .conductor-menu a:visited,
 .padre-menu a:visited {
     color: white;
@@ -560,11 +587,11 @@ main {
 
 /* ===== MAPA ADMIN: Estilos para mapa en panel admin ===== */
 .mapa-admin {
-    width: 100%;           
+    width: 100%;
     max-width: 600px;
-    height: 400px;         
-    margin: 0 auto;        
-    border-radius: 15px;   
+    height: 400px;
+    margin: 0 auto;
+    border-radius: 15px;
     display: block;
 }
 
@@ -574,10 +601,10 @@ main {
 /*==================================================================================*/
 .conductor-body {
     background-image: url('../img/fondocon.png');
-    background-size: cover;  
-    background-position: center; 
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed; 
+    background-attachment: fixed;
 }
 
 /* ===== LAYOUT CONDUCTOR Y PADRE: Estructura flex del panel ===== */
@@ -588,14 +615,15 @@ main {
 .padre-layout {
     display: flex;
     min-height: 100vh;
-    height: auto; /* Se expande si el contenido crece */
+    height: auto;
+    /* Se expande si el contenido crece */
 }
 
 /*===== Imagen fondo modulo padres======*/
 
 .vista-padres {
 
-    background-size: 100%;        
+    background-size: 100%;
     background-position: center;
     background-repeat: no-repeat;
     min-height: 100vh;
@@ -635,8 +663,8 @@ main {
 
 .mapa-conductor {
     width: 100%;
-    height: 100%;        
-    min-height: 350px;   
+    height: 100%;
+    min-height: 350px;
     border-radius: 12px;
 }
 
@@ -670,10 +698,10 @@ main {
     display: flex;
     width: 95%;
     height: 90vh;
-    background: #1d4ec1; 
+    background: #1d4ec1;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 /* ===== SIDEBAR DE RUTA: Barra lateral de información de ruta ===== */
@@ -719,7 +747,7 @@ main {
     transition: 0.3s;
 }
 
-.sidebar li.active a, 
+.sidebar li.active a,
 .sidebar li a:hover {
     background-color: #2980b9;
     color: white;
@@ -831,10 +859,10 @@ input[type="text"]:focus {
     border-radius: 10px;
     overflow: hidden;
     position: relative;
-    background: rgba(245, 245, 245, 0.75); 
-    aspect-ratio: 1 / 1; 
+    background: rgba(245, 245, 245, 0.75);
+    aspect-ratio: 1 / 1;
     width: 100%;
-    max-width: 450px; 
+    max-width: 450px;
     margin: 0 auto;
 }
 
@@ -931,7 +959,7 @@ input[type="text"]:focus {
     font-size: 0.9rem;
     opacity: 0.8;
     cursor: pointer;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     transition: opacity 0.3s, color 0.3s;
 }
 
@@ -944,13 +972,16 @@ input[type="text"]:focus {
 .main-content {
     flex-grow: 1;
     display: flex;
-    justify-content: center;   /* Centra horizontal */
-    align-items: center;       /* Centra vertical */
+    justify-content: center;
+    /* Centra horizontal */
+    align-items: center;
+    /* Centra vertical */
     padding: 40px;
     overflow-y: auto;
 }
+
 /*=======================================================================*/
-           /* ===== ESTILO GENERAL PARA TODAS LAS TABLAS ===== */
+/* ===== ESTILO GENERAL PARA TODAS LAS TABLAS ===== */
 /*=======================================================================*/
 
 .table-container {
@@ -958,10 +989,12 @@ input[type="text"]:focus {
     width: 95%;
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     overflow-x: auto;
-    margin: 30px auto 0 auto;    /* 30px de margen arriba, centrado horizontalmente */
-    max-width: 900px;           /* Define un ancho máximo si deseas que no se estire demasiado */
+    margin: 30px auto 0 auto;
+    /* 30px de margen arriba, centrado horizontalmente */
+    max-width: 900px;
+    /* Define un ancho máximo si deseas que no se estire demasiado */
     width: 100%;
 }
 
@@ -1059,13 +1092,15 @@ table {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 5px;
-    padding-right: 80px; /*Posicion del boton sobre la tabla*/
+    padding-right: 80px;
+    /*Posicion del boton sobre la tabla*/
 }
 
 .action-toolbar {
     display: flex;
     gap: 10px;
 }
+
 .btn-volver:hover {
     background-color: #a72828;
     color: white;
@@ -1093,7 +1128,7 @@ table {
 
 .btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* ===== BOTÓN SUBIR: Para subir archivos/estudiantes ===== */
@@ -1110,7 +1145,7 @@ table {
 
 .btn-subir:hover {
     background-color: #218838;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 /* ===== BADGE: Etiquetas de estado ===== */
@@ -1121,15 +1156,19 @@ table {
     display: inline-block;
 }
 
-.bg-success { 
-    background-color: #d4edda; 
-    color: #155724; 
-} /* Estado: Abordo */
+.bg-success {
+    background-color: #d4edda;
+    color: #155724;
+}
 
-.bg-warning { 
-    background-color: #fff3cd; 
-    color: #856404; 
-} /* Estado: En parada */
+/* Estado: Abordo */
+
+.bg-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+/* Estado: En parada */
 /*==================================================================================*/
 /* 8.3 PANEL "ALERTAS_CONDUCTOR": Gestión de alertas y notificaciones            */
 /*==================================================================================*/
@@ -1140,7 +1179,7 @@ table {
     background: var(--bg-card, rgba(245, 245, 245, 0.75));
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 /* ===== ENCABEZADO ALERTAS: Título y botón limpiar ===== */
@@ -1168,16 +1207,25 @@ table {
 }
 
 .vista-alertas .btn-volver {
-    margin-left: 0; /*ajusta para que el botón vuelva a su posición original*/
-    display:inline-flex; /*mantiene el botón en línea con el título*/
-    align-items: center; /*centra verticalmente el texto del botón*/
-    position: fixed; /*posiciona el botón de forma absoluta dentro del contenedor de la tabla*/
-    top: 147px; /*ajusta la posición vertical del botón*/
-    right: 440px; /*ajusta la posición horizontal del botón*/
-    padding-bottom: 9px; /*ajusta el padding para alinear mejor con el título*/
+    margin-left: 0;
+    /*ajusta para que el botón vuelva a su posición original*/
+    display: inline-flex;
+    /*mantiene el botón en línea con el título*/
+    align-items: center;
+    /*centra verticalmente el texto del botón*/
+    position: fixed;
+    /*posiciona el botón de forma absoluta dentro del contenedor de la tabla*/
+    top: 147px;
+    /*ajusta la posición vertical del botón*/
+    right: 440px;
+    /*ajusta la posición horizontal del botón*/
+    padding-bottom: 9px;
+    /*ajusta el padding para alinear mejor con el título*/
 
 }
-.vista-alertas h1 {/*ajusta el título para que se alinee mejor con el botón volver*/
+
+.vista-alertas h1 {
+    /*ajusta el título para que se alinee mejor con el botón volver*/
     font-size: 4 rem;
     color: #2c3e50;
     flex-grow: 1;
@@ -1185,7 +1233,8 @@ table {
 }
 
 
-.form-alerta-conductor textarea {/* Estilos para el textarea de alerta */
+.form-alerta-conductor textarea {
+    /* Estilos para el textarea de alerta */
     width: 100%;
     min-height: 90px;
     padding: 12px;
@@ -1199,7 +1248,8 @@ table {
     transition: border 0.3s ease;
 }
 
-.form-alerta-conductor textarea:focus {/* Estilos para el textarea al enfocarse */
+.form-alerta-conductor textarea:focus {
+    /* Estilos para el textarea al enfocarse */
     border-color: #2d84c7;
     box-shadow: 0 0 5px rgba(45, 132, 199, 0.3);
 }
@@ -1239,8 +1289,8 @@ table {
 
 /* ===== TABLA ALERTAS: Contenedor de tabla de alertas ===== */
 /*estilos tabla Alertas módulo conductor*/
-.table-container-aler { 
-    overflow-x: auto; 
+.table-container-aler {
+    overflow-x: auto;
 }
 
 table {
@@ -1283,7 +1333,7 @@ td {
 }
 
 /* ===== BADGES ESTADO: Indicadores de estado de alerta ===== */
-.badge-retraso { 
+.badge-retraso {
     background-color: #e0303b;
     color: white;
     padding: 7px 13px;
@@ -1292,7 +1342,7 @@ td {
     font-size: 13px;
 }
 
-.badge-incidente { 
+.badge-incidente {
     background-color: #f06292;
     color: white;
     padding: 7px 13px;
@@ -1301,7 +1351,7 @@ td {
     font-size: 13px;
 }
 
-.badge-ausente { 
+.badge-ausente {
     background-color: #f3c26c;
     color: white;
     padding: 7px 13px;
@@ -1311,9 +1361,9 @@ td {
 }
 
 /* ===== BOTONES ACCIONES: Botones para marcar como leído/resuelto ===== */
-.actions-aler { 
-    display: flex; 
-    gap: 8px; 
+.actions-aler {
+    display: flex;
+    gap: 8px;
 }
 
 .btn-read {
@@ -1327,9 +1377,10 @@ td {
     transition: filter 0.2s;
 }
 
-.btn-read:hover{
+.btn-read:hover {
     background-color: #279a9e;
-    transform: translateY(-2px); /*El boton se mueve hacia arriba un poco*/
+    transform: translateY(-2px);
+    /*El boton se mueve hacia arriba un poco*/
 }
 
 .btn-resolve {
@@ -1343,8 +1394,8 @@ td {
     transition: filter 0.2s;
 }
 
-.btn-read:hover, 
-.btn-resolve:hover, 
+.btn-read:hover,
+.btn-resolve:hover,
 .btn-clear:hover {
     filter: brightness(0.9);
 }
@@ -1377,7 +1428,7 @@ td {
     width: 400px;
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     padding: 10px;
 }
 
@@ -1417,12 +1468,12 @@ td {
 /* ===== BOTONES INFORMACIÓN: Botones de contacto ===== */
 .button-group-infocon {
     margin-top: 25px;
-    display: flex;       
-    flex-direction: row; 
-    flex-wrap: nowrap;  
-    gap: 8px;           
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 8px;
     align-items: center;
-    justify-content: space-between; 
+    justify-content: space-between;
     width: 100%;
 }
 
@@ -1453,23 +1504,23 @@ td {
     align-items: center;
 }
 
-.wa { 
-    background-color: #25d366; 
+.wa {
+    background-color: #25d366;
 }
 
 .btn-call {
-    background-color: #4a69bd; 
-    flex-grow: 1; 
-    white-space: nowrap; 
-    font-size: 13px;    
+    background-color: #4a69bd;
+    flex-grow: 1;
+    white-space: nowrap;
+    font-size: 13px;
     padding: 10px 5px;
 }
 
-.btn-msg { 
-    background-color: #4a69bd; 
-    flex-grow: 1; 
-    white-space: nowrap; 
-    font-size: 13px;    
+.btn-msg {
+    background-color: #4a69bd;
+    flex-grow: 1;
+    white-space: nowrap;
+    font-size: 13px;
     padding: 10px 5px;
 }
 
@@ -1485,7 +1536,7 @@ td {
 }
 
 /* Forzar que el menú mantenga un ancho fijo y no se encoja */
-.padre-menu {
+/*.padre-menu {
     width: 250px;
     min-width: 250px;
     background-color: rgba(45, 59, 92, 0.95);
@@ -1493,14 +1544,16 @@ td {
     padding: 20px;
     display: flex;
     flex-direction: column;
-}
+}*/
 
 /* Área de contenido para la tabla ocupando el espacio restante */
 .content-estp {
     flex: 1;
     padding: 40px;
     box-sizing: border-box;
-}/* Asegura que el contenedor alinee el menú y el contenido de la tabla de lado a lado */
+}
+
+/* Asegura que el contenedor alinee el menú y el contenido de la tabla de lado a lado */
 .padre-layout {
     display: flex;
     width: 100%;
@@ -1508,7 +1561,7 @@ td {
 }
 
 /* Forzar que el menú mantenga un ancho fijo y no se encoja */
-.padre-menu {
+/*.padre-menu {
     width: 250px;
     min-width: 250px;
     background-color: rgba(45, 59, 92, 0.95);
@@ -1516,7 +1569,7 @@ td {
     padding: 20px;
     display: flex;
     flex-direction: column;
-}
+}*/
 
 /* Área de contenido para la tabla ocupando el espacio restante */
 .content-estp {
@@ -1533,16 +1586,16 @@ td {
     margin: 20px auto;
 }
 
-.tabla-scroll {
+/*.tabla-scroll {
     overflow-x: auto;
     border-radius: 4px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
+}*/
 
 .tabla-scroll table {
     width: 100%;
     border-collapse: collapse;
-    background-color: rgba(255, 255, 255, 0.85); 
+    background-color: rgba(255, 255, 255, 0.85);
     text-align: center;
 }
 
@@ -1588,7 +1641,7 @@ td {
     display: inline-block;
     padding: 6px 14px;
     background-color: #ffffff;
-    color: #1b5e20; 
+    color: black;
     text-decoration: none;
     font-size: 12px;
     font-weight: bold;
@@ -1596,6 +1649,14 @@ td {
     border: 1px solid #2e7d32;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     transition: all 0.15s ease-in-out;
+}
+
+.tabla-scroll .btn-editar {
+    border: 1px solid #409956;
+}
+
+.tabla-scroll .btn-eliminar {
+    border: 1px solid #a72828;
 }
 
 .tabla-scroll .btn:hover {
@@ -1608,6 +1669,7 @@ td {
     transform: translateY(1px);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
+
 
 
 .status-badge-estp {
@@ -1625,31 +1687,49 @@ td {
 
 .form-crear_usuarios,
 .form-editar_usuario,
-.form-crear_estudiante, 
-.form-editar_estudiante{
+.form-crear_estudiante,
+.form-editar_estudiante {
 
-    width: 30%; /* Ancho fijo del formulario */
-    margin: 120px auto; /* Espaciado superior y centrado horizontal */
-    padding: 10px; /* Espacio interno entre el contenido y el borde */
-    border-radius: 12px; /* Bordes redondeados para apariencia moderna */
-    box-shadow: 0px 0px 20px rgba(0,0,0,0.2);    /* Sombra suave para dar profundidad visual */
-    background-color: rgba(255, 255, 255, 0.7);    /* Fondo blanco semitransparente */
-    height: 550px;    /* Altura fija para mantener uniformidad visual */
-    display:block;    /* Permite que el formulario ocupe toda la línea disponible */
-    position: relative;    /* Permite mover el formulario respecto a su posición original */
-    left: 25%;    /* Desplaza el formulario hacia la derecha */
-    transform: translate(-50%); /* Ajusta el posicionamiento horizontal para centrar visualmente */
+    width: 30%;
+    /* Ancho fijo del formulario */
+    margin: 120px auto;
+    /* Espaciado superior y centrado horizontal */
+    padding: 10px;
+    /* Espacio interno entre el contenido y el borde */
+    border-radius: 12px;
+    /* Bordes redondeados para apariencia moderna */
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    /* Sombra suave para dar profundidad visual */
+    background-color: rgba(255, 255, 255, 0.7);
+    /* Fondo blanco semitransparente */
+    height: 550px;
+    /* Altura fija para mantener uniformidad visual */
+    display: block;
+    /* Permite que el formulario ocupe toda la línea disponible */
+    position: relative;
+    /* Permite mover el formulario respecto a su posición original */
+    left: 25%;
+    /* Desplaza el formulario hacia la derecha */
+    transform: translate(-50%);
+    /* Ajusta el posicionamiento horizontal para centrar visualmente */
 }
 
 /* Estilos específicos para formulario de inasistencia, con altura ajustada para contenido más compacto */
 .form-inasistencia {
-    width: 100%;/* Ancho fijo para consistencia */
-    margin: 20px auto; /* Centrado horizontal */
-    padding: 60px;/* Espaciado interno */
-    border-radius: 12px;/* Bordes redondeados */
-    box-shadow: 0px 0px 20px rgba(0,0,0,0.2);/* Sombra para profundidad */
-    background-color: rgba(255, 255, 255, 0.779);/* Fondo semitransparente */
-    height: 380px;/* Altura fija para mantener consistencia */
+    width: 100%;
+    /* Ancho fijo para consistencia */
+    margin: 20px auto;
+    /* Centrado horizontal */
+    padding: 60px;
+    /* Espaciado interno */
+    border-radius: 12px;
+    /* Bordes redondeados */
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    /* Sombra para profundidad */
+    background-color: rgba(255, 255, 255, 0.779);
+    /* Fondo semitransparente */
+    height: 380px;
+    /* Altura fija para mantener consistencia */
 }
 
 .form-crear_usuarios .form-group,
@@ -1693,84 +1773,123 @@ td {
     outline: none;
 }
 
-.form-crear_usuarios h1,/* Estilo específico para título de formulario de creación de usuarios */
-.form-editar_usuario h1,/* Estilo específico para título de formulario de edición de usuarios */
+.form-crear_usuarios h1,
+/* Estilo específico para título de formulario de creación de usuarios */
+.form-editar_usuario h1,
+/* Estilo específico para título de formulario de edición de usuarios */
 .form-crear_estudiante h1,
-.form-editar_estudiante h1 {/* Estilo específico para título de formulario de creación de estudiantes */
+.form-editar_estudiante h1 {
+    /* Estilo específico para título de formulario de creación de estudiantes */
     text-align: center;
     margin-bottom: 20px;
     color: rgb(85, 82, 82);
-    margin-top:0;
+    margin-top: 0;
 }
 
-.form-inasistencia h1 {/* Estilo específico para título de formulario de inasistencia */
+.form-inasistencia h1 {
+    /* Estilo específico para título de formulario de inasistencia */
     text-align: center;
     margin-bottom: 20px;
     color: rgb(85, 82, 82);
-    margin-top:-15px;
+    margin-top: -15px;
 }
 
 /*=== Estilos para el select de rol 
       en el formulario editar usuario ===*/
 
-.filtro-editar-usuario select{
+.filtro-editar-usuario select {
 
-    width:30%;    /* El select ocupa todo el ancho disponible del contenedor */
-    padding:6px;    /* Espaciado interno para mejorar la visualización */
-    border-radius:8px;    /* Bordes redondeados */
-    border:2px solid #216c8f;    /* Borde azul personalizado */
-    background-color:#fff;    /* Fondo blanco */
-    font-size:12px;    /* Tamaño del texto */
-    font-weight:bold;    /* Texto en negrilla */
-    color:#333;    /* Color del texto */
-    cursor:pointer;    /* Cambia el cursor al pasar sobre el select */
-    outline:none;    /* Elimina el borde predeterminado del navegador */
-    transition:0.3s ease;    /* Suaviza cambios visuales como hover o focus */
+    width: 30%;
+    /* El select ocupa todo el ancho disponible del contenedor */
+    padding: 6px;
+    /* Espaciado interno para mejorar la visualización */
+    border-radius: 8px;
+    /* Bordes redondeados */
+    border: 2px solid #216c8f;
+    /* Borde azul personalizado */
+    background-color: #fff;
+    /* Fondo blanco */
+    font-size: 12px;
+    /* Tamaño del texto */
+    font-weight: bold;
+    /* Texto en negrilla */
+    color: #333;
+    /* Color del texto */
+    cursor: pointer;
+    /* Cambia el cursor al pasar sobre el select */
+    outline: none;
+    /* Elimina el borde predeterminado del navegador */
+    transition: 0.3s ease;
+    /* Suaviza cambios visuales como hover o focus */
 }
 
 /*=== Efecto visual al seleccionar el campo ===*/
 
-.filtro-editar-usuario select:focus{
+.filtro-editar-usuario select:focus {
 
-    border-color:#17485f;    /* Cambia el color del borde al enfocar el select */
-    box-shadow:0px 0px 8px rgba(33,108,143,0.4);    /* Agrega un efecto de iluminación alrededor */
+    border-color: #17485f;
+    /* Cambia el color del borde al enfocar el select */
+    box-shadow: 0px 0px 8px rgba(33, 108, 143, 0.4);
+    /* Agrega un efecto de iluminación alrededor */
 }
 
 
 /*=== Estilos para el select de rol 
       en el formulario crear y editar estudiante ===*/
 
-.filtro-editar-estudiante select{
+.filtro-editar-estudiante select {
 
-    width:40%;    /* El select ocupa todo el ancho disponible del contenedor */
-    padding:6px;    /* Espaciado interno para mejorar la visualización */
-    border-radius:8px;    /* Bordes redondeados */
-    border:2px solid #216c8f;    /* Borde azul personalizado */
-    background-color:#fff;    /* Fondo blanco */
-    font-size:12px;    /* Tamaño del texto */
-    font-weight:bold;    /* Texto en negrilla */
-    color:#333;    /* Color del texto */
-    cursor:pointer;    /* Cambia el cursor al pasar sobre el select */
-    outline:none;    /* Elimina el borde predeterminado del navegador */
-    transition:0.3s ease;    /* Suaviza cambios visuales como hover o focus */
+    width: 40%;
+    /* El select ocupa todo el ancho disponible del contenedor */
+    padding: 6px;
+    /* Espaciado interno para mejorar la visualización */
+    border-radius: 8px;
+    /* Bordes redondeados */
+    border: 2px solid #216c8f;
+    /* Borde azul personalizado */
+    background-color: #fff;
+    /* Fondo blanco */
+    font-size: 12px;
+    /* Tamaño del texto */
+    font-weight: bold;
+    /* Texto en negrilla */
+    color: #333;
+    /* Color del texto */
+    cursor: pointer;
+    /* Cambia el cursor al pasar sobre el select */
+    outline: none;
+    /* Elimina el borde predeterminado del navegador */
+    transition: 0.3s ease;
+    /* Suaviza cambios visuales como hover o focus */
 }
 
 /*================*/
 /*ESTILO PARA FORMULARIO RECUPERAR CONTRASEÑA LOGIN*/
 /*===================*/
-.form-recuperar-password{
+.form-recuperar-password {
 
-    width: 40%; /* Ancho fijo del formulario */
-    margin: 200px auto; /* Espaciado superior y centrado horizontal */
-    padding: 50px; /* Espacio interno entre el contenido y el borde */
-    border-radius: 12px; /* Bordes redondeados para apariencia moderna */
-    box-shadow: 0px 0px 20px rgba(0,0,0,0.2);    /* Sombra suave para dar profundidad visual */
-    background-color: rgba(255, 255, 255, 0.7);    /* Fondo blanco semitransparente */
-    height: 220px;    /* Altura fija para mantener uniformidad visual */
-    display:block;    /* Permite que el formulario ocupe toda la línea disponible */
-    position: relative;    /* Permite mover el formulario respecto a su posición original */
-    left: 30%;    /* Desplaza el formulario hacia la derecha */
-    transform: translate(-50%); /* Ajusta el posicionamiento horizontal para centrar visualmente */
+    width: 40%;
+    /* Ancho fijo del formulario */
+    margin: 200px auto;
+    /* Espaciado superior y centrado horizontal */
+    padding: 50px;
+    /* Espacio interno entre el contenido y el borde */
+    border-radius: 12px;
+    /* Bordes redondeados para apariencia moderna */
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    /* Sombra suave para dar profundidad visual */
+    background-color: rgba(255, 255, 255, 0.7);
+    /* Fondo blanco semitransparente */
+    height: 220px;
+    /* Altura fija para mantener uniformidad visual */
+    display: block;
+    /* Permite que el formulario ocupe toda la línea disponible */
+    position: relative;
+    /* Permite mover el formulario respecto a su posición original */
+    left: 30%;
+    /* Desplaza el formulario hacia la derecha */
+    transform: translate(-50%);
+    /* Ajusta el posicionamiento horizontal para centrar visualmente */
 }
 
 .form-recuperar-password .form-group {
@@ -1789,18 +1908,19 @@ td {
 .form-recuperar-password input {
     width: 30%;
     flex: 1;
-    padding:10px;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     transition: border-color 0.2s;
 }
 
 
-.form-recuperar-password h2 {/* Estilo específico para título de formulario de inasistencia */
+.form-recuperar-password h2 {
+    /* Estilo específico para título de formulario de inasistencia */
     text-align: center;
     margin-bottom: 20px;
     color: rgb(85, 82, 82);
-    margin-top:-15px;
+    margin-top: -15px;
 }
 
 /*ESTILO BOTON RECUPERAR CONTRASEÑA*/
@@ -1809,16 +1929,18 @@ td {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px; /* Espacio entre botón y texto */
+    gap: 5px;
+    /* Espacio entre botón y texto */
     margin-top: 20px;
     font-size: 0.9rem;
     text-decoration: none;
     transition: text-decoration 0.3s;
-    
+
 }
 
 .forgot-password-button {
-    width: 40%;           /* Tamaño botón inicio de sesión */
+    width: 40%;
+    /* Tamaño botón inicio de sesión */
     padding: 6px 10px;
     border-radius: 8px;
     background-color: white;
@@ -1827,30 +1949,42 @@ td {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s;
-     box-shadow: 0px 4px 0px #9da2a5, 0px 8px 10px rgba(0,0,0,0.3);
+    box-shadow: 0px 4px 0px #9da2a5, 0px 8px 10px rgba(0, 0, 0, 0.3);
 }
 
 .forgot-password-button:hover {
     background-color: #2d84c7;
-    color: white; /*Cambia de color la letra al pasar el cursor*/
+    color: white;
+    /*Cambia de color la letra al pasar el cursor*/
 }
 
 /*==================================================*/
 /*ESTILO PARA FORMULARIO RECUPERAR CONTRASEÑA LOGIN*/
 /*================================================*/
-.form-nueva-password{
+.form-nueva-password {
 
-    width: 40%; /* Ancho fijo del formulario */
-    margin: 200px auto; /* Espaciado superior y centrado horizontal */
-    padding: 50px; /* Espacio interno entre el contenido y el borde */
-    border-radius: 12px; /* Bordes redondeados para apariencia moderna */
-    box-shadow: 0px 0px 20px rgba(0,0,0,0.2);    /* Sombra suave para dar profundidad visual */
-    background-color: rgba(255, 255, 255, 0.7);    /* Fondo blanco semitransparente */
-    height: 280px;    /* Altura fija para mantener uniformidad visual */
-    display:block;    /* Permite que el formulario ocupe toda la línea disponible */
-    position: relative;    /* Permite mover el formulario respecto a su posición original */
-    left: 30%;    /* Desplaza el formulario hacia la derecha */
-    transform: translate(-50%); /* Ajusta el posicionamiento horizontal para centrar visualmente */
+    width: 40%;
+    /* Ancho fijo del formulario */
+    margin: 200px auto;
+    /* Espaciado superior y centrado horizontal */
+    padding: 50px;
+    /* Espacio interno entre el contenido y el borde */
+    border-radius: 12px;
+    /* Bordes redondeados para apariencia moderna */
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    /* Sombra suave para dar profundidad visual */
+    background-color: rgba(255, 255, 255, 0.7);
+    /* Fondo blanco semitransparente */
+    height: 280px;
+    /* Altura fija para mantener uniformidad visual */
+    display: block;
+    /* Permite que el formulario ocupe toda la línea disponible */
+    position: relative;
+    /* Permite mover el formulario respecto a su posición original */
+    left: 30%;
+    /* Desplaza el formulario hacia la derecha */
+    transform: translate(-50%);
+    /* Ajusta el posicionamiento horizontal para centrar visualmente */
 }
 
 .form-nueva-password .form-group {
@@ -1869,18 +2003,19 @@ td {
 .form-nueva-password input {
     width: 30%;
     flex: 1;
-    padding:10px;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     transition: border-color 0.2s;
 }
 
 
-.form-nueva-password h2 {/* Estilo específico para título de formulario de inasistencia */
+.form-nueva-password h2 {
+    /* Estilo específico para título de formulario de inasistencia */
     text-align: center;
     margin-bottom: 20px;
     color: rgb(85, 82, 82);
-    margin-top:-15px;
+    margin-top: -15px;
 }
 
 
@@ -1889,25 +2024,33 @@ td {
 /*==================================================================================*/
 /* ===== CONTENEDOR TABLA USUARIOS: Contenedor principal de tabla ===== */
 
-.tabla-scroll { /*Control interno Scroll tablas admin, supadmin y alertas*/
+.tabla-scroll {
+    /*Control interno Scroll tablas admin, supadmin y alertas*/
     width: 92%;
     max-width: 1400px;
     max-height: 500px;
     overflow-y: auto;
     margin: 0 auto;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.70);
 }
 
 /*=============================================================*/
 /*10.1 Estilos para tabla de GESTION DE USUARIOS en modulo Admin y Superadmin*/
 /*============================================================*/
 
-.tabla-usuarios-container{ /*tabla usuarios modulo administrador y supadmin*/
+.tabla-usuarios-container {
+    /*tabla usuarios modulo administrador y supadmin*/
 
     display: flex;
-    flex-direction: column;      /* Apila el h1 y la tabla */
-    align-items: center;         /* Centra todo horizontalmente */
-    margin: 30px auto;           /* Espacio superior e inferior */
-    width: 95%;                  /* Ocupa casi todo el ancho */
+    flex-direction: column;
+    /* Apila el h1 y la tabla */
+    align-items: center;
+    /* Centra todo horizontalmente */
+    margin: 30px auto;
+    /* Espacio superior e inferior */
+    width: 95%;
+    /* Ocupa casi todo el ancho */
     overflow-y: auto;
     max-height: 600px;
     box-sizing: border-box;
@@ -1923,12 +2066,16 @@ td {
     padding: 10px 0;
 }
 
-.tabla-usuarios-container table { /*Estilo tabla vista gestion de usuarios*/
-    width: 100%;                  /* Ancho de la tabla */
-    max-width: 1400px;           /* Ancho máximo */
-    border-collapse: collapse;   /* Elimina espacio entre celdas */
+.tabla-usuarios-container table {
+    /*Estilo tabla vista gestion de usuarios*/
+    width: 100%;
+    /* Ancho de la tabla */
+    max-width: 1400px;
+    /* Ancho máximo */
+    border-collapse: collapse;
+    /* Elimina espacio entre celdas */
     background-color: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .tabla-usuarios-container th {
@@ -1937,49 +2084,56 @@ td {
     padding: 12px;
     text-align: center;
     font-weight: bold;
-    position: sticky; /*El encabezado queda fijo al hacer scroll*/
+    position: sticky;
+    /*El encabezado queda fijo al hacer scroll*/
     top: 0;
-    z-index: 10; /*Evita que otras filas pasen por encima del encabezado.*/
-    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
-    
+    z-index: 10;
+    /*Evita que otras filas pasen por encima del encabezado.*/
+    word-break: break-word;
+    /* Evita que textos largos expandan la tabla horizontalmente */
+
 }
 
 
 .tabla-usuarios-container td {
     border: 1px solid #ccc;
-    padding: 12px;   /*Define tamaño alto de celda*/
-    font-size: 13px; /*Define tamaño de texto*/
+    padding: 12px;
+    /*Define tamaño alto de celda*/
+    font-size: 13px;
+    /*Define tamaño de texto*/
     text-align: center;
     color: #333;
-    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+    word-break: break-word;
+    /* Evita que textos largos expandan la tabla horizontalmente */
 }
 
-.tabla-usuarios-container tr:hover { /*Sombreado al pasar el cursor sobre la fila de la tabla*/
+.tabla-usuarios-container tr:hover {
+    /*Sombreado al pasar el cursor sobre la fila de la tabla*/
     background-color: #eaf4f8;
 }
 
 /*===== Estilos para ajuste tamaño columnas 
 tabla Usuarios módulos admin y superadmin===== */
 
-.tabla-usuarios-container th:nth-child(1){
+.tabla-usuarios-container th:nth-child(1) {
     width: 65px;
 }
 
 .tabla-usuarios-container td:nth-child(2),
-.tabla-usuarios-container th:nth-child(3){
+.tabla-usuarios-container th:nth-child(3) {
     width: 100px;
 }
 
-.tabla-usuarios-container td:nth-child(4){
+.tabla-usuarios-container td:nth-child(4) {
     width: 150px;
 }
 
 .tabla-usuarios-container td:nth-child(5) {
     width: 80px;
-    
+
 }
 
-.tabla-usuarios-container td:nth-child(6){
+.tabla-usuarios-container td:nth-child(6) {
     width: 90px;
 }
 
@@ -1991,63 +2145,91 @@ tabla Usuarios módulos admin y superadmin===== */
       Módulo Administrador y Superadministrador ===*/
 
 /* Contenedor principal del filtro */
-.filtros-usuarios{
-    position: relative; /* Permite posicionar el ícono dentro del contenedor */
+.filtros-usuarios {
+    position: relative;
+    /* Permite posicionar el ícono dentro del contenedor */
 }
 
 /* Estilo del ícono de filtro */
-.filtros-usuarios i{
-    position:absolute; /* Posiciona el ícono sobre el select */
-    left:12px; /* Espacio desde el borde izquierdo */
-    top:50%; /* Centra verticalmente el ícono */
-    transform:translateY(-50%); /* Ajuste fino del centrado vertical */
-    color:#aaa7a7; /* Color gris claro del ícono */
-    pointer-events:none; /* Evita que el ícono bloquee el clic del select */
+.filtros-usuarios i {
+    position: absolute;
+    /* Posiciona el ícono sobre el select */
+    left: 12px;
+    /* Espacio desde el borde izquierdo */
+    top: 50%;
+    /* Centra verticalmente el ícono */
+    transform: translateY(-50%);
+    /* Ajuste fino del centrado vertical */
+    color: #aaa7a7;
+    /* Color gris claro del ícono */
+    pointer-events: none;
+    /* Evita que el ícono bloquee el clic del select */
 }
 
 /* Estilos del select desplegable */
 .filtros-usuarios select {
-    padding:6px 10px 8px 35px; /* Espacio interno, dejando lugar para el ícono */
-    border-radius: 8px; /* Bordes redondeados */
-    border: 2px solid #216c8f; /* Borde azul */
-    font-weight: bold; /* Texto en negrilla */
-    font-size: 12px; /* Tamaño del texto */
+    padding: 6px 10px 8px 35px;
+    /* Espacio interno, dejando lugar para el ícono */
+    border-radius: 8px;
+    /* Bordes redondeados */
+    border: 2px solid #216c8f;
+    /* Borde azul */
+    font-weight: bold;
+    /* Texto en negrilla */
+    font-size: 12px;
+    /* Tamaño del texto */
 }
 
 /* Contenedor auxiliar para alinear ícono y select */
-.filtro-select{
-    display:flex; /* Organiza elementos en línea horizontal */
-    align-items:center; /* Centra verticalmente los elementos */
-    gap:8px; /* Espacio entre elementos */
+.filtro-select {
+    display: flex;
+    /* Organiza elementos en línea horizontal */
+    align-items: center;
+    /* Centra verticalmente los elementos */
+    gap: 8px;
+    /* Espacio entre elementos */
 }
 
 /* Barra superior de la vista de usuarios */
-.top-bar-usuarios{
-    display:flex; /* Organiza toolbar y filtros horizontalmente */
-    justify-content:space-between; /* Separa elementos a izquierda y derecha */
-    align-items:center; /* Centra verticalmente */
-    margin-bottom:15px; /* Espacio inferior antes de la tabla */
-    width:90%; /* Reduce ligeramente el ancho para mejor distribución */
+.top-bar-usuarios {
+    display: flex;
+    /* Organiza toolbar y filtros horizontalmente */
+    justify-content: space-between;
+    /* Separa elementos a izquierda y derecha */
+    align-items: center;
+    /* Centra verticalmente */
+    margin-bottom: 15px;
+    /* Espacio inferior antes de la tabla */
+    width: 90%;
+    /* Reduce ligeramente el ancho para mejor distribución */
 }
 
 /* Ajustes específicos para toolbar dentro de top-bar */
-.top-bar-usuarios .toolbar-container{
-    width:auto; /* El ancho se ajusta automáticamente al contenido */
-    padding: 0; /* Elimina padding lateral */
-    margin:0; /* Elimina márgenes externos */
+.top-bar-usuarios .toolbar-container {
+    width: auto;
+    /* El ancho se ajusta automáticamente al contenido */
+    padding: 0;
+    /* Elimina padding lateral */
+    margin: 0;
+    /* Elimina márgenes externos */
 }
 
 /*=============================================================*/
 /* Estilos para tabla de GESTION DE ESTUDIANTES en modulo Admin y Superadmin*/
 /*============================================================*/
 
-.tabla-estudiantes-container{ /*tabla usuarios modulo administrador y supadmin*/
+.tabla-estudiantes-container {
+    /*tabla usuarios modulo administrador y supadmin*/
 
     display: flex;
-    flex-direction: column;      /* Apila el h1 y la tabla */
-    align-items: center;         /* Centra todo horizontalmente */
-    margin: 30px auto;           /* Espacio superior e inferior */
-    width: 100%;                  /* Ocupa casi todo el ancho */
+    flex-direction: column;
+    /* Apila el h1 y la tabla */
+    align-items: center;
+    /* Centra todo horizontalmente */
+    margin: 30px auto;
+    /* Espacio superior e inferior */
+    width: 100%;
+    /* Ocupa casi todo el ancho */
     overflow-y: auto;
     max-height: 600px;
     box-sizing: border-box;
@@ -2063,12 +2245,16 @@ tabla Usuarios módulos admin y superadmin===== */
     padding: 10px 0;
 }
 
-.tabla-estudiantes-container table { /*Estilo tabla vista gestion de usuarios*/
-    width: 100%;                  /* Ancho de la tabla */
-    max-width: 1400px;           /* Ancho máximo */
-    border-collapse: collapse;   /* Elimina espacio entre celdas */
+.tabla-estudiantes-container table {
+    /*Estilo tabla vista gestion de usuarios*/
+    width: 100%;
+    /* Ancho de la tabla */
+    max-width: 1400px;
+    /* Ancho máximo */
+    border-collapse: collapse;
+    /* Elimina espacio entre celdas */
     background-color: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .tabla-estudiantes-container th {
@@ -2077,148 +2263,195 @@ tabla Usuarios módulos admin y superadmin===== */
     padding: 12px;
     text-align: center;
     font-weight: bold;
-    position: sticky; /*El encabezado queda fijo al hacer scroll*/
+    position: sticky;
+    /*El encabezado queda fijo al hacer scroll*/
     top: 0;
-    z-index: 10; /*Evita que otras filas pasen por encima del encabezado.*/
-    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
-    
+    z-index: 10;
+    /*Evita que otras filas pasen por encima del encabezado.*/
+    word-break: break-word;
+    /* Evita que textos largos expandan la tabla horizontalmente */
+
 }
 
 
 .tabla-estudiantes-container td {
     border: 1px solid #ccc;
-    padding: 12px;   /*Define tamaño alto de celda*/
-    font-size: 13px; /*Define tamaño de texto*/
+    padding: 12px;
+    /*Define tamaño alto de celda*/
+    font-size: 13px;
+    /*Define tamaño de texto*/
     text-align: center;
     color: #333;
-    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+    word-break: break-word;
+    /* Evita que textos largos expandan la tabla horizontalmente */
 }
 
-.tabla-estudiantes-container tr:hover { /*Sombreado al pasar el cursor sobre la fila de la tabla*/
+.tabla-estudiantes-container tr:hover {
+    /*Sombreado al pasar el cursor sobre la fila de la tabla*/
     background-color: #eaf4f8;
 }
 
 /*===== Estilos para ajuste tamaño columnas 
 tabla Usuarios módulos admin y superadmin===== */
 
-.tabla-estudiantes-container th:nth-child(1){
+.tabla-estudiantes-container th:nth-child(1) {
     width: 90px;
 }
 
 .tabla-estudiantes-container td:nth-child(2),
-.tabla-estudiantes-container th:nth-child(3){
+.tabla-estudiantes-container th:nth-child(3) {
     width: 90px;
 }
 
-.tabla-estudiantes-container td:nth-child(4){
+.tabla-estudiantes-container td:nth-child(4) {
     width: 100px;
 }
 
 .tabla-estudiantes-container td:nth-child(5) {
     width: 60px;
-    
+
 }
 
-.tabla-estudiantes-container td:nth-child(6){
+.tabla-estudiantes-container td:nth-child(6) {
     width: 60px;
 }
 
 .tabla-estudiantes-container td:nth-child(7) {
     width: 100px;
 }
+
 .tabla-estudiantes-container td:nth-child(8) {
     width: 100px;
 }
 
-/* ==========================================
-ALERTAS PADRE DE FAMILIA
-   
+/* ==========================================*/
+/* ALERTAS PADRE DE FAMILIA*/
+/* ==========================================  */
 
 /* Contenedor principal de la sección */
 .padre-content-alertas {
+    flex-grow: 1;
+    padding: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    margin-top: 10px; /* Sube el contenido lo más alto posible */
+    margin-left: 220px;
+    margin-top: 60px;
+    width: calc(100% - 220px);
+    overflow-y: auto;
+}
+
+.tablapadre-alertas-container {
+    /*tabla usuarios modulo administrador y supadmin*/
+
+    display: flex;
+    flex-direction: column;
+    /* Apila el h1 y la tabla */
+    align-items: center;
+    /* Centra todo horizontalmente */
+    margin: 0px auto;
+    /* Espacio superior e inferior */
+    width: 95%;
+    /* Ocupa casi todo el ancho */
+    overflow-y: auto;
+    max-height: 600px;
     box-sizing: border-box;
 }
 
-/* Título de alertas exclusivo */
-.titulo-alertas-padre {
-    font-size: 24px;
+.tablapadre-alertas-container h1 {
     text-align: center;
-    margin-top: 0;
     margin-bottom: 20px;
     color: #2c4b62;
-    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 10px 0;
 }
 
-/* Contenedor específico para la tabla en la vista de padres */
-.tabla-padre-alertas-container {
-    width: 95%;
-    max-width: 1400px;
-    margin: 0 auto 30px auto; /* 0 arriba para pegarse al tope */
-    overflow-y: auto;
-    max-height: 500px;
-    box-sizing: border-box;
-}
-
-/* Estructura interna de la tabla basada en tus estilos */
-.tabla-padre-alertas-container table {
+.tablapadre-alertas-container table {
     width: 100%;
+    max-width: 1400px;
     border-collapse: collapse;
-    background-color: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background-color: rgba(255, 255, 255, 0.55) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.tabla-padre-alertas-container th {
+
+.tablapadre-alertas-container th {
     background-color: #295a6b;
     color: white;
-    padding: 15px;
+    padding: 12px;
     text-align: center;
     font-weight: bold;
     position: sticky;
+    /*El encabezado queda fijo al hacer scroll*/
     top: 0;
     z-index: 10;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /*Evita que otras filas pasen por encima del encabezado.*/
+    word-break: break-word;
+    /* Evita que textos largos expandan la tabla horizontalmente */
 
 }
 
-.tabla-padre-alertas-container td {
+.tablapadre-alertas-container td {
     border: 1px solid #ccc;
     padding: 12px;
+    /*Define tamaño alto de celda*/
     font-size: 13px;
+    /*Define tamaño de texto*/
     text-align: center;
     color: #333;
     word-break: break-word;
+    /* Evita que textos largos expandan la tabla horizontalmente */
 }
 
-.tabla-padre-alertas-container tr:hover {
+.tablapadre-alertas-container tr:hover {
+    /*Sombreado al pasar el cursor sobre la fila de la tabla*/
     background-color: #eaf4f8;
 }
+
+/*===== Ajuste tamaño columnas tabla Alertas módulos padre de familia===== */
+
+.tablapadre-alertas-container th:nth-child(1),
+.tablapadre-alertas-container th:nth-child(3),
+.tablapadre-alertas-container td:nth-child(4) {
+    width: 80px;
+}
+
+.tablapadre-alertas-container td:nth-child(2),
+.tablapadre-alertas-container td:nth-child(5) {
+    width: 250px;
+    text-align: justify;
+}
+
+
 
 /* Distribución y espaciado de los botones inferiores */
 .botones-alertas-padre {
     display: flex;
-    gap: 20px; /* Espacio entre el botón de reporte y volver */
+    gap: 20px;
+    /* Espacio entre el botón de reporte y volver */
     justify-content: center;
     margin-bottom: 30px;
     width: 100%;
 }
+
 /*=============================================================*/
 /*Estilos para tabla CENTRO DE GESTION DE ALERTAS en modulo Admin y Superadmin*/
 /*============================================================*/
 
-.tabla-alertas-container{ /*tabla usuarios modulo administrador y supadmin*/
+.tabla-alertas-container {
+    /*tabla usuarios modulo administrador y supadmin*/
 
     display: flex;
-    flex-direction: column;      /* Apila el h1 y la tabla */
-    align-items: center;         /* Centra todo horizontalmente */
-    margin: 30px auto;           /* Espacio superior e inferior */
-    width: 95%;                  /* Ocupa casi todo el ancho */
+    flex-direction: column;
+    /* Apila el h1 y la tabla */
+    align-items: center;
+    /* Centra todo horizontalmente */
+    margin: 30px auto;
+    /* Espacio superior e inferior */
+    width: 95%;
+    /* Ocupa casi todo el ancho */
     overflow-y: auto;
     max-height: 600px;
     box-sizing: border-box;
@@ -2234,12 +2467,16 @@ ALERTAS PADRE DE FAMILIA
     padding: 10px 0;
 }
 
-.tabla-alertas-container table { /*Estilo tabla vista gestion de usuarios*/
-    width: 100%;                  /* Ancho de la tabla */
-    max-width: 1400px;           /* Ancho máximo */
-    border-collapse: collapse;   /* Elimina espacio entre celdas */
+.tabla-alertas-container table {
+    /*Estilo tabla vista gestion de usuarios*/
+    width: 100%;
+    /* Ancho de la tabla */
+    max-width: 1400px;
+    /* Ancho máximo */
+    border-collapse: collapse;
+    /* Elimina espacio entre celdas */
     background-color: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .tabla-alertas-container th {
@@ -2248,23 +2485,30 @@ ALERTAS PADRE DE FAMILIA
     padding: 12px;
     text-align: center;
     font-weight: bold;
-    position: sticky; /*El encabezado queda fijo al hacer scroll*/
+    position: sticky;
+    /*El encabezado queda fijo al hacer scroll*/
     top: 0;
-    z-index: 10; /*Evita que otras filas pasen por encima del encabezado.*/
-    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
-    
+    z-index: 10;
+    /*Evita que otras filas pasen por encima del encabezado.*/
+    word-break: break-word;
+    /* Evita que textos largos expandan la tabla horizontalmente */
+
 }
 
 .tabla-alertas-container td {
     border: 1px solid #ccc;
-    padding: 12px;   /*Define tamaño alto de celda*/
-    font-size: 13px; /*Define tamaño de texto*/
+    padding: 12px;
+    /*Define tamaño alto de celda*/
+    font-size: 13px;
+    /*Define tamaño de texto*/
     text-align: center;
     color: #333;
-    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+    word-break: break-word;
+    /* Evita que textos largos expandan la tabla horizontalmente */
 }
 
-.tabla-alertas-container tr:hover { /*Sombreado al pasar el cursor sobre la fila de la tabla*/
+.tabla-alertas-container tr:hover {
+    /*Sombreado al pasar el cursor sobre la fila de la tabla*/
     background-color: #eaf4f8;
 }
 
@@ -2272,11 +2516,11 @@ ALERTAS PADRE DE FAMILIA
 
 .tabla-alertas-container th:nth-child(1),
 .tabla-alertas-container td:nth-child(2),
-.tabla-alertas-container th:nth-child(3){
+.tabla-alertas-container th:nth-child(3) {
     width: 100px;
 }
 
-.tabla-alertas-container td:nth-child(4){
+.tabla-alertas-container td:nth-child(4) {
     width: 85px;
 }
 
@@ -2313,7 +2557,8 @@ ALERTAS PADRE DE FAMILIA
 
 .filtros-alertas a:hover {
     background-color: #279a9e;
-    transform: translateY(-2px); /*El boton se mueve hacia arriba un poco*/
+    transform: translateY(-2px);
+    /*El boton se mueve hacia arriba un poco*/
 }
 
 .filtro-activo {
@@ -2351,11 +2596,13 @@ ALERTAS PADRE DE FAMILIA
     animation: aparecer 0.3s ease;
 
 }
+
 @keyframes aparecer {
     from {
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -2398,8 +2645,10 @@ ALERTAS PADRE DE FAMILIA
 /* ===== CELDAS ACCIONES: Botones de acción en tabla ===== */
 .acciones {
     display: flex;
-    justify-content: center;     /* Centra los botones en la celda */
-    gap: 10px;                   /* Separación entre botones */
+    justify-content: center;
+    /* Centra los botones en la celda */
+    gap: 10px;
+    /* Separación entre botones */
 }
 
 .acciones a {
@@ -2408,7 +2657,7 @@ ALERTAS PADRE DE FAMILIA
     font-size: 12px;
     text-decoration: none;
     cursor: pointer;
-    box-shadow: 0px 4px 0px rgba(0,0,0,0.2), 0px 8px 10px rgba(0,0,0,0.1);
+    box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2), 0px 8px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
 }
 
@@ -2420,12 +2669,13 @@ ALERTAS PADRE DE FAMILIA
 /* ===== BOTÓN CREAR: Estilo para botón crear usuario ===== */
 .tabla-usuarios-container .btn-crear {
     display: inline-block;
-    margin: 15px 10px 0 10px;   /* Separa entre ellos y de la tabla */
+    margin: 15px 10px 0 10px;
+    /* Separa entre ellos y de la tabla */
     padding: 10px 15px;
     border-radius: 5px;
     font-weight: bold;
     text-decoration: none;
-    box-shadow: 0px 4px 0px rgba(0,0,0,0.2), 0px 8px 10px rgba(0,0,0,0.1);
+    box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.2), 0px 8px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.2s;
 }
 
@@ -2444,13 +2694,18 @@ ALERTAS PADRE DE FAMILIA
 /*ESTILO PARA TABLA DE GESTION DE RUTAS*/
 /*======================================================*/
 
-.tabla-rutas-container{ /*tabla rutas modulo administrador y supadmin*/
+.tabla-rutas-container {
+    /*tabla rutas modulo administrador y supadmin*/
 
     display: flex;
-    flex-direction: column;      /* Apila el h1 y la tabla */
-    align-items: center;         /* Centra todo horizontalmente */
-    margin: 30px auto;           /* Espacio superior e inferior */
-    width: 100%;                  /* Ocupa casi todo el ancho */
+    flex-direction: column;
+    /* Apila el h1 y la tabla */
+    align-items: center;
+    /* Centra todo horizontalmente */
+    margin: 30px auto;
+    /* Espacio superior e inferior */
+    width: 100%;
+    /* Ocupa casi todo el ancho */
     overflow-y: auto;
     max-height: 600px;
     box-sizing: border-box;
@@ -2466,12 +2721,16 @@ ALERTAS PADRE DE FAMILIA
     padding: 10px 0;
 }
 
-.tabla-rutas-container table { /*Estilo tabla vista gestion de usuarios*/
-    width: 100%;                  /* Ancho de la tabla */
-    max-width: 1400px;           /* Ancho máximo */
-    border-collapse: collapse;   /* Elimina espacio entre celdas */
+.tabla-rutas-container table {
+    /*Estilo tabla vista gestion de usuarios*/
+    width: 100%;
+    /* Ancho de la tabla */
+    max-width: 1400px;
+    /* Ancho máximo */
+    border-collapse: collapse;
+    /* Elimina espacio entre celdas */
     background-color: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .tabla-rutas-container th {
@@ -2480,62 +2739,70 @@ ALERTAS PADRE DE FAMILIA
     padding: 12px;
     text-align: center;
     font-weight: bold;
-    position: sticky; /*El encabezado queda fijo al hacer scroll*/
+    position: sticky;
+    /*El encabezado queda fijo al hacer scroll*/
     top: 0;
-    z-index: 10; /*Evita que otras filas pasen por encima del encabezado.*/
-    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
-    
+    z-index: 10;
+    /*Evita que otras filas pasen por encima del encabezado.*/
+    word-break: break-word;
+    /* Evita que textos largos expandan la tabla horizontalmente */
+
 }
 
 
 .tabla-rutas-container td {
     border: 1px solid #ccc;
-    padding: 12px;   /*Define tamaño alto de celda*/
-    font-size: 13px; /*Define tamaño de texto*/
+    padding: 12px;
+    /*Define tamaño alto de celda*/
+    font-size: 13px;
+    /*Define tamaño de texto*/
     text-align: center;
     color: #333;
-    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+    word-break: break-word;
+    /* Evita que textos largos expandan la tabla horizontalmente */
 }
 
-.tabla-rutas-container tr:hover { /*Sombreado al pasar el cursor sobre la fila de la tabla*/
+.tabla-rutas-container tr:hover {
+    /*Sombreado al pasar el cursor sobre la fila de la tabla*/
     background-color: #eaf4f8;
 }
 
 /*===== Estilos para ajuste tamaño columnas 
 tabla Gestion de Rutas módulos admin y superadmin===== */
 
-.tabla-rutas-container th:nth-child(1){
+.tabla-rutas-container th:nth-child(1) {
     width: 65px;
 }
 
-.tabla-rutas-container td:nth-child(2){
+.tabla-rutas-container td:nth-child(2) {
     width: 100px;
 }
 
-.tabla-rutas-container th:nth-child(3){
+.tabla-rutas-container th:nth-child(3) {
     width: 150px;
 }
 
-.tabla-rutas-container td:nth-child(4){
+.tabla-rutas-container td:nth-child(4) {
     width: 70px;
 }
 
 .tabla-rutas-container td:nth-child(5) {
     width: 80px;
-    
+
 }
 
-.tabla-rutas-container td:nth-child(6){
+.tabla-rutas-container td:nth-child(6) {
     width: 90px;
 }
 
-.tabla-rutas-container td:nth-child(7){
+.tabla-rutas-container td:nth-child(7) {
     width: 120px;
 }
 
 .tabla-rutas-container td:nth-child(8) {
     width: 150px;
 }
+
 .tabla-rutas-container td:nth-child(9) {
     width: 80px;
 }
@@ -2544,13 +2811,18 @@ tabla Gestion de Rutas módulos admin y superadmin===== */
 /*ESTILO PARA TABLA DE GESTION DE VEHICULOS*/
 /*======================================================*/
 
-.tabla-vehiculos-container{ /*tabla rutas modulo administrador y supadmin*/
+.tabla-vehiculos-container {
+    /*tabla rutas modulo administrador y supadmin*/
 
     display: flex;
-    flex-direction: column;      /* Apila el h1 y la tabla */
-    align-items: center;         /* Centra todo horizontalmente */
-    margin: 30px auto;           /* Espacio superior e inferior */
-    width: 100%;                  /* Ocupa casi todo el ancho */
+    flex-direction: column;
+    /* Apila el h1 y la tabla */
+    align-items: center;
+    /* Centra todo horizontalmente */
+    margin: 30px auto;
+    /* Espacio superior e inferior */
+    width: 100%;
+    /* Ocupa casi todo el ancho */
     overflow-y: auto;
     max-height: 600px;
     box-sizing: border-box;
@@ -2566,12 +2838,16 @@ tabla Gestion de Rutas módulos admin y superadmin===== */
     padding: 10px 0;
 }
 
-.tabla-vehiculos-container table { /*Estilo tabla vista gestion de usuarios*/
-    width: 100%;                  /* Ancho de la tabla */
-    max-width: 1400px;           /* Ancho máximo */
-    border-collapse: collapse;   /* Elimina espacio entre celdas */
+.tabla-vehiculos-container table {
+    /*Estilo tabla vista gestion de usuarios*/
+    width: 100%;
+    /* Ancho de la tabla */
+    max-width: 1400px;
+    /* Ancho máximo */
+    border-collapse: collapse;
+    /* Elimina espacio entre celdas */
     background-color: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .tabla-vehiculos-container th {
@@ -2580,24 +2856,31 @@ tabla Gestion de Rutas módulos admin y superadmin===== */
     padding: 12px;
     text-align: center;
     font-weight: bold;
-    position: sticky; /*El encabezado queda fijo al hacer scroll*/
+    position: sticky;
+    /*El encabezado queda fijo al hacer scroll*/
     top: 0;
-    z-index: 10; /*Evita que otras filas pasen por encima del encabezado.*/
-    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
-    
+    z-index: 10;
+    /*Evita que otras filas pasen por encima del encabezado.*/
+    word-break: break-word;
+    /* Evita que textos largos expandan la tabla horizontalmente */
+
 }
 
 
 .tabla-vehiculos-container td {
     border: 1px solid #ccc;
-    padding: 12px;   /*Define tamaño alto de celda*/
-    font-size: 13px; /*Define tamaño de texto*/
+    padding: 12px;
+    /*Define tamaño alto de celda*/
+    font-size: 13px;
+    /*Define tamaño de texto*/
     text-align: center;
     color: #333;
-    word-break: break-word; /* Evita que textos largos expandan la tabla horizontalmente */
+    word-break: break-word;
+    /* Evita que textos largos expandan la tabla horizontalmente */
 }
 
-.tabla-vehiculos-container tr:hover { /*Sombreado al pasar el cursor sobre la fila de la tabla*/
+.tabla-vehiculos-container tr:hover {
+    /*Sombreado al pasar el cursor sobre la fila de la tabla*/
     background-color: #eaf4f8;
 }
 
@@ -2605,34 +2888,35 @@ tabla Gestion de Rutas módulos admin y superadmin===== */
 tabla Gestion de Rutas módulos admin y superadmin===== */
 
 .tabla-vehiculos-container th:nth-child(1),
-.tabla-vehiculos-container td:nth-child(2){
+.tabla-vehiculos-container td:nth-child(2) {
     width: 100px;
 }
 
-.tabla-vehiculos-container th:nth-child(3){
+.tabla-vehiculos-container th:nth-child(3) {
     width: 120px;
 }
 
-.tabla-vehiculos-container td:nth-child(4){
+.tabla-vehiculos-container td:nth-child(4) {
     width: 90px;
 }
 
 .tabla-vehiculos-container td:nth-child(5) {
     width: 120px;
-    
+
 }
 
-.tabla-vehiculos-container td:nth-child(6){
+.tabla-vehiculos-container td:nth-child(6) {
     width: 120px;
 }
 
-.tabla-vehiculos-container td:nth-child(7){
+.tabla-vehiculos-container td:nth-child(7) {
     width: 120px;
 }
 
 .tabla-vehiculos-container td:nth-child(8) {
     width: 150px;
 }
+
 .tabla-vehiculos-container td:nth-child(9) {
     width: 100px;
 }
@@ -2650,7 +2934,7 @@ tabla Gestion de Rutas módulos admin y superadmin===== */
     font-size: 12px;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0px 4px 0px #9da2a5, 0px 8px 10px rgba(0,0,0,0.3);
+    box-shadow: 0px 4px 0px #9da2a5, 0px 8px 10px rgba(0, 0, 0, 0.3);
     background-color: rgba(245, 245, 245, 0.75);
     border: 2px solid #216c8f;
     font-weight: bold;
@@ -2680,33 +2964,48 @@ tabla Gestion de Rutas módulos admin y superadmin===== */
 
 
 .vista-usuario .btn-crear,
-.vista-gestudiantes .btn-crear {/* Estilos específicos para botón crear en vistas de usuario y estudiantes */
-    margin-left: 0; /* anula el margin del botón general */
-    position: absolute; /* posiciona el botón de forma absoluta dentro del contenedor de la tabla */
-    top: 130px; /* ajusta la posición vertical del botón */
-    right: 170px; /* ajusta la posición horizontal del botón */
+.vista-gestudiantes .btn-crear {
+    /* Estilos específicos para botón crear en vistas de usuario y estudiantes */
+    margin-left: 0;
+    /* anula el margin del botón general */
+    position: absolute;
+    /* posiciona el botón de forma absoluta dentro del contenedor de la tabla */
+    top: 130px;
+    /* ajusta la posición vertical del botón */
+    right: 170px;
+    /* ajusta la posición horizontal del botón */
 }
 
 .vista-usuario .btn-volver,
-.vista-gestudiantes .btn-volver {/* Estilos específicos para botón volver en vistas de usuario y estudiantes */
-    margin-left: 0; /* anula el margin del botón general */
-    position: absolute; /* posiciona el botón de forma absoluta dentro del contenedor de la tabla */
-    top:130px; /* ajusta la posición vertical del botón */
-    right: 100px; /* ajusta la posición horizontal del botón */
+.vista-gestudiantes .btn-volver {
+    /* Estilos específicos para botón volver en vistas de usuario y estudiantes */
+    margin-left: 0;
+    /* anula el margin del botón general */
+    position: absolute;
+    /* posiciona el botón de forma absoluta dentro del contenedor de la tabla */
+    top: 130px;
+    /* ajusta la posición vertical del botón */
+    right: 100px;
+    /* ajusta la posición horizontal del botón */
 }
+
 /*BOTON VOLVER VISTA ESTUDIANTES MODULO CONDUCTOR*/
 .vista-estudiantes .btn-volver {
     position: fixed;
     top: 100px;
     right: 200px;
-    margin-left: 0; /* anula el margin del botón general */
+    margin-left: 0;
+    /* anula el margin del botón general */
 }
 
 
 .vista-mi-ruta .btn-volver {
-    margin-left: 0; /* anula el margin del botón general */
-    gap: 15px; /* agrega espacio entre el ícono y el texto */
-    padding: 12px;  /* aumenta el padding para que el botón sea más grande */
+    margin-left: 0;
+    /* anula el margin del botón general */
+    gap: 15px;
+    /* agrega espacio entre el ícono y el texto */
+    padding: 12px;
+    /* aumenta el padding para que el botón sea más grande */
 }
 
 /*Boton volver vista alertas modulo conductor*/

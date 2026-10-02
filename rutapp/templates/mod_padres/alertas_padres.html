@@ -1,39 +1,118 @@
-<!---ALERTAS MODULO PADRE DE FAMILIA-->
+<!-- ESTUDIANTES MODULO PADRE DE FAMILIA -->
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
-    <title>Alertas Padres</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUTAPP - Panel Padre de Familia</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<body class=" padre-body bg-secundario">
+<body class="bg-secundario vista-usuario">
+
+    {%from 'components/buttons_macro.html' import action_toolbar %}
 
     <!-- ===== HEADER ===== -->
     <header>
         {% include 'layout/header.html' %}
     </header>
 
+    <main>
 
-    <div class="padre-layout">
+        <img src="{{ url_for('static', filename='img/imagen_padres.png') }}" alt="Imagen de fondo" class="Imagen" />
 
-            <!-- Menú lateral -->
-            <div class="padre-menu">
-                <img src="{{ url_for('static', filename='img/imagen_padres.png') }}" alt="Imagen de fondo" class="Imagen" />
+        <div class="admin-layout">
+
+            <div class="admin-menu">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo RUTAPP" class="logo">
 
-                <h2>Panel Padre de Familia</h2>
+                <h2>Panel Padre</h2>
 
-                <ul class="padre-menu">
+                <ul>
                     <li><a href="{{ url_for('padres') }}">Dashboard</a></li>
-                    <li><a href="{{ url_for('informacion_conductor') }}">Información conductor</a></li>
-                    <!-- <li><a href="{{ url_for('estudiantes_padre') }}">Estudiantes</a></li> -->
-                    <li><a href="{{ url_for('logout') }}" class="btn-logout">Cerrar sesión</a></li>
+                    <li><a href="{{ url_for('reportar_inasistencia') }}">Inasistencia</a></li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="btn-logout">
+                            Cerrar sesión
+                        </a>
+                    </li>
                 </ul>
             </div>
-        </div>
-    </div>
+
+            <div class="padre-content-alertas">
+
+                <div class="tablapadre-alertas-container table">
+
+                    <h1>Alertas del Estudiante</h1>
+
+                    <div class="toolbar-container">
+                        {{ action_toolbar(botones) }}
+                    </div>
+
+                    <div class="filtros-alertas">
+
+                        <a href="{{ url_for('alertas_padres') }}" class="{% if not filtro %}filtro-activo{% endif %}">
+                            Todas
+                        </a>
+
+                        <a href="{{ url_for('alertas_padres', estado='nueva') }}"
+                            class="{% if filtro == 'sin leer' %}filtro{% endif %}">
+                            Sin leer
+                        </a>
+
+                        <a href="{{ url_for('alertas_padres', estado='leida') }}"
+                            class="{% if filtro == 'leida' %}filtro{% endif %}">
+                            Leídas
+                        </a>
+
+                        <a href="{{ url_for('alertas_padres', estado='resuelta') }}"
+                            class="{% if filtro == 'resuelta' %}filtro{% endif %}">
+                            Resueltas
+                        </a>
+                    </div>
+
+
+                    <div class="tabla-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Mensaje</th>
+                                    <th>Hora</th>
+                                    <th>Estado</th>
+                                    <th>Observación Admin</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% if alertas %}
+                                {% for alerta in alertas %}
+                                <tr>
+                                    <td>{{ alerta.tipo_alerta }}</td>
+                                    <td>{{ alerta.mensaje }}</td>
+                                    <td>{{ alerta.fecha_hora.strftime('%I:%M %p') }}</td>
+                                    <td>{{ alerta.estado }}</td>
+                                    <td>{{ alerta.observacion_admin or 'Sin observación' }}</td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="5">No hay alertas para este estudiante</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+    </main>
+
+    <footer class="footer">
+        {% include 'layout/footer.html' %}
+    </footer>
 </body>
+
+</html>

@@ -1,3 +1,4 @@
+<!-- ESTUDIANTES MODULO PADRE DE FAMILIA -->
 <!DOCTYPE html>
 <html lang="es">
 
@@ -7,7 +8,6 @@
     <title>RUTAPP - Panel Padre de Familia</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.ico') }}">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
@@ -71,7 +71,8 @@
                                 {% for estudiante in estudiantes %}
                                 <tr>
                                     <td>
-                                        <img src="{{ url_for('static', filename='img/avatar h.png') }}" class="avatar" alt="Avatar">
+                                        <img src="{{ url_for('static', filename='img/avatar h.png') }}" class="avatar"
+                                            alt="Avatar">
                                     </td>
                                     <td class="bold-text-estp td-nombre">{{ estudiante.nombre }}</td>
                                     <td>{{ estudiante.grado }}</td>
@@ -80,7 +81,7 @@
                                         <span class="status-badge-estp">{{ estudiante.estado }}</span>
                                     </td>
                                     <td>
-                                       <a href="{{ url_for('ver_ruta') }}" class="btn">Ver ubicación</a>
+                                        <a href="{{ url_for('ver_ruta') }}" class="btn">Ver ubicación</a>
                                     </td>
                                 </tr>
                                 {% endfor %}
